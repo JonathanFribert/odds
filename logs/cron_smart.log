@@ -1,0 +1,13 @@
+== Thu Oct 16 18:24:34 CEST 2025 :: scheduler start :: job=smart ==
+APIFOOTBALL_KEY=42a6c9***  ODDSAPI_KEY=7a9e62***
+PROJ_ROOT=/Users/mycomputer/Desktop/odds_value_ai
+windows: NEAR=0 MID=0 DAY=2 next_ko=2025-10-17 20:30 CEST
+ℹ️ mapping returned 0 fixtures for range — proceeding without mapping filter (league/season/date may not match window)
+ℹ️ targeting bookmakers: ['888sport', 'betano', 'nordicbet', 'unibet'] -> IDs [16, 21, 27, 32]
+ℹ️ timezone: Europe/Copenhagen
+… 25/25 processed; rows so far: 25
+ℹ️ fixtures with no odds found: 25/25
+ℹ️ processed fixtures: 25; with odds: 25
+✅ saved API-Football odds → /Users/mycomputer/Desktop/odds_value_ai/data/odds_history/apifootball_live_odds_20251016_1624.csv (rows=25)
+📦 also saved Parquet → /Users/mycomputer/Desktop/odds_value_ai/data/odds_history/apifootball_live_odds_20251016_1624.parquet
+== Thu Oct 16 18:24:51 CEST 2025 :: scheduler end :: job=smart :: rc=0 ==

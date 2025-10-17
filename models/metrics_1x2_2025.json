@@ -1,0 +1,35 @@
+{
+  "n_train": 163,
+  "n_val": 41,
+  "features": [
+    "home_form5_pts",
+    "home_form5_gd",
+    "away_form5_pts",
+    "away_form5_gd",
+    "home_goals_for_avg",
+    "home_goals_against_avg",
+    "home_win_rate",
+    "home_draw_rate",
+    "home_loss_rate",
+    "home_cs_rate",
+    "home_fts_rate",
+    "away_goals_for_avg",
+    "away_goals_against_avg",
+    "away_win_rate",
+    "away_draw_rate",
+    "away_loss_rate",
+    "away_cs_rate",
+    "away_fts_rate",
+    "h2h_games",
+    "h2h_pts_home",
+    "h2h_gd_home",
+    "h2h_win_rate_home"
+  ],
+  "metrics": {
+    "log_loss": 0.9506580110023813,
+    "brier_h": 0.14311360021172873,
+    "brier_d": 0.170890138605482,
+    "brier_a": 0.19808141957708175,
+    "brier_avg": 0.1706950527980975
+  }
+}

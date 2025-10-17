@@ -1,0 +1,135 @@
+== MORNING RUN 20251017_0052 ==
+
+=== League 1/3 → 39 (season 2025) ===
+→ Fetching fixtures: Premier League (39) season=2025
+   fixtures received: 380
+✅ saved 380 rows → /Users/mycomputer/Desktop/odds_value_ai/data/fixtures/soccer_epl_2025.csv
+   standings payload groups: 1
+   ➕ standings → /Users/mycomputer/Desktop/odds_value_ai/data/fixtures/soccer_epl_2025_standings.csv (20)
+   … teamstats rows so far: 5
+   … teamstats rows so far: 10
+   … teamstats rows so far: 15
+   ➕ teamstats → /Users/mycomputer/Desktop/odds_value_ai/data/fixtures/soccer_epl_2025_teamstats.csv (20)
+   ⚠️ empty response from /injuries params={'league': 39, 'season': 2025, 'date': '2025-09-17'} paging={'current': 1, 'total': 1}
+   injuries payload items: 0 (since last 30d)
+   ⚠️ no injuries in last 30 days for this league/season (common in breaks)
+
+=== League 2/3 → 140 (season 2025) ===
+→ Fetching fixtures: La Liga (140) season=2025
+   fixtures received: 380
+✅ saved 380 rows → /Users/mycomputer/Desktop/odds_value_ai/data/fixtures/soccer_spain_la_liga_2025.csv
+   standings payload groups: 1
+   ➕ standings → /Users/mycomputer/Desktop/odds_value_ai/data/fixtures/soccer_spain_la_liga_2025_standings.csv (20)
+   … teamstats rows so far: 5
+   … teamstats rows so far: 10
+   … teamstats rows so far: 15
+   ➕ teamstats → /Users/mycomputer/Desktop/odds_value_ai/data/fixtures/soccer_spain_la_liga_2025_teamstats.csv (20)
+   ⚠️ empty response from /injuries params={'league': 140, 'season': 2025, 'date': '2025-09-17'} paging={'current': 1, 'total': 1}
+   injuries payload items: 0 (since last 30d)
+   ⚠️ no injuries in last 30 days for this league/season (common in breaks)
+
+=== League 3/3 → 78 (season 2025) ===
+→ Fetching fixtures: Bundesliga (78) season=2025
+   fixtures received: 306
+✅ saved 306 rows → /Users/mycomputer/Desktop/odds_value_ai/data/fixtures/soccer_germany_bundesliga_2025.csv
+   standings payload groups: 1
+   ➕ standings → /Users/mycomputer/Desktop/odds_value_ai/data/fixtures/soccer_germany_bundesliga_2025_standings.csv (18)
+   … teamstats rows so far: 5
+   … teamstats rows so far: 10
+   … teamstats rows so far: 15
+   ➕ teamstats → /Users/mycomputer/Desktop/odds_value_ai/data/fixtures/soccer_germany_bundesliga_2025_teamstats.csv (18)
+   ⚠️ empty response from /injuries params={'league': 78, 'season': 2025, 'date': '2025-09-17'} paging={'current': 1, 'total': 1}
+   injuries payload items: 0 (since last 30d)
+   ⚠️ no injuries in last 30 days for this league/season (common in breaks)
+   → fetching /fixtures/statistics for upcoming fixtures (home/away)…
+   … capping stats fetch to first 40 fixtures (of 242)
+      progress: 1/40 (fixture=1379045)
+      progress: 5/40 (fixture=1379041)
+      progress: 10/40 (fixture=1379048)
+      progress: 15/40 (fixture=1379052)
+      progress: 20/40 (fixture=1379054)
+      progress: 25/40 (fixture=1379065)
+      progress: 30/40 (fixture=1379066)
+      progress: 35/40 (fixture=1379071)
+      progress: 40/40 (fixture=1379074)
+   ensured schema: added 28 empty stats columns (as NA)
+   stats columns present: 0; missing (ignored): 28
+   → fetching /fixtures/statistics for upcoming fixtures (home/away)…
+   … capping stats fetch to first 40 fixtures (of 242)
+      progress: 1/40 (fixture=1379045)
+      progress: 5/40 (fixture=1379041)
+      progress: 10/40 (fixture=1379048)
+      progress: 15/40 (fixture=1379052)
+      progress: 20/40 (fixture=1379054)
+      progress: 25/40 (fixture=1379065)
+      progress: 30/40 (fixture=1379066)
+      progress: 35/40 (fixture=1379071)
+      progress: 40/40 (fixture=1379074)
+   ensured schema: added 2 empty stats columns (as NA)
+   stats columns present: 30; missing (ignored): 0
+   ➕ upcoming_set → /Users/mycomputer/Desktop/odds_value_ai/data/features/upcoming_set.parquet (242)
+   → attaching goals snapshot for season=2025 leagues=[39, 78, 140]
+   ➕ labels: OU2.5 positives=109, AH(Home -0.5) positives=95
+   ➕ train_set → /Users/mycomputer/Desktop/odds_value_ai/data/features/train_set.parquet (204)
+/Users/mycomputer/Desktop/odds_value_ai/scripts/train_models.py:41: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+/Users/mycomputer/Desktop/odds_value_ai/.venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:205: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/mycomputer/Desktop/odds_value_ai/.venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:205: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/mycomputer/Desktop/odds_value_ai/.venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:205: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+/Users/mycomputer/Desktop/odds_value_ai/scripts/train_models.py:41: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+/Users/mycomputer/Desktop/odds_value_ai/.venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:205: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/mycomputer/Desktop/odds_value_ai/.venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:205: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/mycomputer/Desktop/odds_value_ai/.venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:205: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+/Users/mycomputer/Desktop/odds_value_ai/scripts/train_models.py:41: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+  return datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+🔎 loading: /Users/mycomputer/Desktop/odds_value_ai/data/features/train_set.parquet
+✅ train_set loaded: shape=(204, 57)
+[feat] dropping 5 all-NaN columns (e.g., ['home_loss_rate', 'away_loss_rate', 'h2h_pts_home', 'h2h_gd_home', 'h2h_win_rate_home'])
+[1x2] dropping 1 zero-variance cols (e.g., ['h2h_games'])
+[1x2] ✅ saved model → /Users/mycomputer/Desktop/odds_value_ai/models/model_1x2.pkl
+[1x2] 📊 metrics → /Users/mycomputer/Desktop/odds_value_ai/models/metrics_1x2.json
+[feat] dropping 5 all-NaN columns (e.g., ['home_loss_rate', 'away_loss_rate', 'h2h_pts_home', 'h2h_gd_home', 'h2h_win_rate_home'])
+[ou25] dropping 1 zero-variance cols (e.g., ['h2h_games'])
+[ou25] ✅ saved model → /Users/mycomputer/Desktop/odds_value_ai/models/model_ou25.pkl
+[ou25] 📊 metrics → /Users/mycomputer/Desktop/odds_value_ai/models/metrics_ou25.json
+[feat] dropping 5 all-NaN columns (e.g., ['home_loss_rate', 'away_loss_rate', 'h2h_pts_home', 'h2h_gd_home', 'h2h_win_rate_home'])
+[ah_home_m0_5] dropping 1 zero-variance cols (e.g., ['h2h_games'])
+[ah_home_m0_5] ✅ saved model → /Users/mycomputer/Desktop/odds_value_ai/models/model_ah_home_m0_5.pkl
+[ah_home_m0_5] 📊 metrics → /Users/mycomputer/Desktop/odds_value_ai/models/metrics_ah_home_m0_5.json
+/Users/mycomputer/Desktop/odds_value_ai/scripts/predict_upcoming.py:755: FutureWarning: Downcasting object dtype arrays on .fillna, .ffill, .bfill is deprecated and will change in a future version. Call result.infer_objects(copy=False) instead. To opt-in to the future behavior, set `pd.set_option('future.no_silent_downcasting', True)`
+  up[c] = up[c].fillna(up[aux])
+/Users/mycomputer/Desktop/odds_value_ai/.venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:205: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/mycomputer/Desktop/odds_value_ai/.venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:205: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/mycomputer/Desktop/odds_value_ai/.venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:205: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+[debug] rows after date filter: 87
+[debug] sport_key counts: {'soccer_spain_la_liga': 30, 'soccer_epl': 30, 'soccer_germany_bundesliga': 27}
+[debug] date range in up: 2025-10-17 18:30:00+00:00 → 2025-11-03 20:00:00+00:00
+[debug] rows with any odds after API-Football merge: 27
+[proba] using models/model_1x2.pkl (features from artifact)
+⚠️ Upcoming missing 2 training features (e.g., ['home_goals', 'away_goals']). Filling 0.
+[debug] rows with full p_hat after scoring: 87
+⚠️ OddsAPI soccer_epl HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI soccer_germany_bundesliga HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI soccer_spain_la_liga HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+⚠️ No live odds returned from OddsAPI. Falling back to any existing entry odds as implied.
+[debug] rows with any_odds: 27, with full_p: 87, with both: 27
+⚠️ OddsAPI spreads soccer_epl HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI spreads soccer_germany_bundesliga HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI spreads soccer_spain_la_liga HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+📒 appended 25 picks to ledger → data/ledger/bets_ledger.csv
+🏦 also logged picks to Postgres (table=picks)
+ℹ️ picks by source: {'apifootball': 25}
+✅ saved picks → /Users/mycomputer/Desktop/odds_value_ai/data/picks/picks_20251017_0053.csv (rows=25)
+📝 also wrote summary → /Users/mycomputer/Desktop/odds_value_ai/data/picks/picks_20251017_0053.md
+🗄️  also logged 25 picks to SQLite → data/db/picks.sqlite
+== DONE MORNING 20251017_0052 ==

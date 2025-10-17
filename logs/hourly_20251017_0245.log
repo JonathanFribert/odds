@@ -1,0 +1,21 @@
+[debug] rows after date filter: 58
+[debug] sport_key counts: {'soccer_spain_la_liga': 20, 'soccer_epl': 20, 'soccer_germany_bundesliga': 18}
+[debug] date range in up: 2025-10-17 18:30:00+00:00 → 2025-10-27 20:00:00+00:00
+[debug] rows with any odds after API-Football merge: 27
+[proba] using models/model_1x2.pkl (features from artifact)
+⚠️ Upcoming missing 16 training features (e.g., ['home_goals', 'away_goals', 'home_blocked_shots', 'home_shots_insidebox', 'home_shots_outsidebox']). Filling 0.
+[debug] rows with full p_hat after scoring: 58
+⚠️ OddsAPI soccer_epl HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI soccer_germany_bundesliga HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI soccer_spain_la_liga HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+⚠️ No live odds returned from OddsAPI. Falling back to any existing entry odds as implied.
+[debug] rows with any_odds: 42, with full_p: 58, with both: 42
+⚠️ OddsAPI spreads soccer_epl HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI spreads soccer_germany_bundesliga HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI spreads soccer_spain_la_liga HTTP 401: {"message":"Usage quota has been reached. See usage plans at https://the-odds-api.com","error_code":"OUT_OF_USAGE_CREDITS","details_url":"https://the-odds-api.c (ODDSAPI_KEY=7a9e62…)
+📒 appended 20 picks to ledger → data/ledger/bets_ledger.csv
+🏦 also logged picks to Postgres (table=picks)
+ℹ️ picks by source: {'apifootball': 20}
+✅ saved picks → /Users/mycomputer/Desktop/odds_value_ai/data/picks/picks_20251017_0045.csv (rows=20)
+📝 also wrote summary → /Users/mycomputer/Desktop/odds_value_ai/data/picks/picks_20251017_0045.md
+🗄️  also logged 20 picks to SQLite → data/db/picks.sqlite

@@ -1,0 +1,381 @@
+fixture_id,league_id,league_name,season,date,status_short,status_long,home_id,home,away_id,away,goals_home,goals_away,result,sport_key,home_norm,away_norm
+1390824,140,La Liga,2025,2025-08-15 17:00:00+00:00,FT,Match Finished,547,Girona,728,Rayo Vallecano,1.0,3.0,A,soccer_spain_la_liga,girona,rayo vallecano
+1390828,140,La Liga,2025,2025-08-15 19:30:00+00:00,FT,Match Finished,533,Villarreal,718,Oviedo,2.0,0.0,H,soccer_spain_la_liga,villarreal,oviedo
+1390825,140,La Liga,2025,2025-08-16 17:30:00+00:00,FT,Match Finished,798,Mallorca,529,Barcelona,0.0,3.0,A,soccer_spain_la_liga,mallorca,barcelona
+1390827,140,La Liga,2025,2025-08-16 19:30:00+00:00,FT,Match Finished,532,Valencia,548,Real Sociedad,1.0,1.0,D,soccer_spain_la_liga,valencia,real sociedad
+1390819,140,La Liga,2025,2025-08-16 19:30:00+00:00,FT,Match Finished,542,Alaves,539,Levante,2.0,1.0,H,soccer_spain_la_liga,alaves,levante
+1390821,140,La Liga,2025,2025-08-17 15:00:00+00:00,FT,Match Finished,538,Celta Vigo,546,Getafe,0.0,2.0,A,soccer_spain_la_liga,celta vigo,getafe
+1390820,140,La Liga,2025,2025-08-17 17:30:00+00:00,FT,Match Finished,531,Athletic Club,536,Sevilla,3.0,2.0,H,soccer_spain_la_liga,athletic,sevilla
+1390823,140,La Liga,2025,2025-08-17 19:30:00+00:00,FT,Match Finished,540,Espanyol,530,Atletico Madrid,2.0,1.0,H,soccer_spain_la_liga,espanyol,atletico madrid
+1390822,140,La Liga,2025,2025-08-18 19:00:00+00:00,FT,Match Finished,797,Elche,543,Real Betis,1.0,1.0,D,soccer_spain_la_liga,elche,real betis
+1390826,140,La Liga,2025,2025-08-19 19:00:00+00:00,FT,Match Finished,541,Real Madrid,727,Osasuna,1.0,0.0,H,soccer_spain_la_liga,real madrid,osasuna
+1390831,140,La Liga,2025,2025-08-22 19:30:00+00:00,FT,Match Finished,543,Real Betis,542,Alaves,1.0,0.0,H,soccer_spain_la_liga,real betis,alaves
+1390833,140,La Liga,2025,2025-08-23 15:00:00+00:00,FT,Match Finished,798,Mallorca,538,Celta Vigo,1.0,1.0,D,soccer_spain_la_liga,mallorca,celta vigo
+1390830,140,La Liga,2025,2025-08-23 17:30:00+00:00,FT,Match Finished,530,Atletico Madrid,797,Elche,1.0,1.0,D,soccer_spain_la_liga,atletico madrid,elche
+1390832,140,La Liga,2025,2025-08-23 19:30:00+00:00,FT,Match Finished,539,Levante,529,Barcelona,2.0,3.0,A,soccer_spain_la_liga,levante,barcelona
+1390834,140,La Liga,2025,2025-08-24 15:00:00+00:00,FT,Match Finished,727,Osasuna,532,Valencia,1.0,0.0,H,soccer_spain_la_liga,osasuna,valencia
+1390838,140,La Liga,2025,2025-08-24 17:30:00+00:00,FT,Match Finished,533,Villarreal,547,Girona,5.0,0.0,H,soccer_spain_la_liga,villarreal,girona
+1390835,140,La Liga,2025,2025-08-24 17:30:00+00:00,FT,Match Finished,548,Real Sociedad,540,Espanyol,2.0,2.0,D,soccer_spain_la_liga,real sociedad,espanyol
+1390836,140,La Liga,2025,2025-08-24 19:30:00+00:00,FT,Match Finished,718,Oviedo,541,Real Madrid,0.0,3.0,A,soccer_spain_la_liga,oviedo,real madrid
+1390829,140,La Liga,2025,2025-08-25 17:30:00+00:00,FT,Match Finished,531,Athletic Club,728,Rayo Vallecano,1.0,0.0,H,soccer_spain_la_liga,athletic,rayo vallecano
+1390837,140,La Liga,2025,2025-08-25 19:30:00+00:00,FT,Match Finished,536,Sevilla,546,Getafe,1.0,2.0,A,soccer_spain_la_liga,sevilla,getafe
+1390871,140,La Liga,2025,2025-08-27 19:00:00+00:00,FT,Match Finished,538,Celta Vigo,543,Real Betis,1.0,1.0,D,soccer_spain_la_liga,celta vigo,real betis
+1390842,140,La Liga,2025,2025-08-29 17:30:00+00:00,FT,Match Finished,797,Elche,539,Levante,2.0,0.0,H,soccer_spain_la_liga,elche,levante
+1390848,140,La Liga,2025,2025-08-29 19:30:00+00:00,FT,Match Finished,532,Valencia,546,Getafe,3.0,0.0,H,soccer_spain_la_liga,valencia,getafe
+1390839,140,La Liga,2025,2025-08-30 15:00:00+00:00,FT,Match Finished,542,Alaves,530,Atletico Madrid,1.0,1.0,D,soccer_spain_la_liga,alaves,atletico madrid
+1390847,140,La Liga,2025,2025-08-30 17:00:00+00:00,FT,Match Finished,718,Oviedo,548,Real Sociedad,1.0,0.0,H,soccer_spain_la_liga,oviedo,real sociedad
+1390844,140,La Liga,2025,2025-08-30 17:30:00+00:00,FT,Match Finished,547,Girona,536,Sevilla,0.0,2.0,A,soccer_spain_la_liga,girona,sevilla
+1390846,140,La Liga,2025,2025-08-30 19:30:00+00:00,FT,Match Finished,541,Real Madrid,798,Mallorca,2.0,1.0,H,soccer_spain_la_liga,real madrid,mallorca
+1390841,140,La Liga,2025,2025-08-31 15:00:00+00:00,FT,Match Finished,538,Celta Vigo,533,Villarreal,1.0,1.0,D,soccer_spain_la_liga,celta vigo,villarreal
+1390840,140,La Liga,2025,2025-08-31 17:00:00+00:00,FT,Match Finished,543,Real Betis,531,Athletic Club,1.0,2.0,A,soccer_spain_la_liga,real betis,athletic
+1390843,140,La Liga,2025,2025-08-31 17:30:00+00:00,FT,Match Finished,540,Espanyol,727,Osasuna,1.0,0.0,H,soccer_spain_la_liga,espanyol,osasuna
+1390845,140,La Liga,2025,2025-08-31 19:30:00+00:00,FT,Match Finished,728,Rayo Vallecano,529,Barcelona,1.0,1.0,D,soccer_spain_la_liga,rayo vallecano,barcelona
+1390858,140,La Liga,2025,2025-09-12 19:00:00+00:00,FT,Match Finished,536,Sevilla,797,Elche,2.0,2.0,D,soccer_spain_la_liga,sevilla,elche
+1390854,140,La Liga,2025,2025-09-13 12:00:00+00:00,FT,Match Finished,546,Getafe,718,Oviedo,2.0,0.0,H,soccer_spain_la_liga,getafe,oviedo
+1390857,140,La Liga,2025,2025-09-13 14:15:00+00:00,FT,Match Finished,548,Real Sociedad,541,Real Madrid,1.0,2.0,A,soccer_spain_la_liga,real sociedad,real madrid
+1390849,140,La Liga,2025,2025-09-13 16:30:00+00:00,FT,Match Finished,531,Athletic Club,542,Alaves,0.0,1.0,A,soccer_spain_la_liga,athletic,alaves
+1390850,140,La Liga,2025,2025-09-13 19:00:00+00:00,FT,Match Finished,530,Atletico Madrid,533,Villarreal,2.0,0.0,H,soccer_spain_la_liga,atletico madrid,villarreal
+1390852,140,La Liga,2025,2025-09-14 12:00:00+00:00,FT,Match Finished,538,Celta Vigo,547,Girona,1.0,1.0,D,soccer_spain_la_liga,celta vigo,girona
+1390855,140,La Liga,2025,2025-09-14 14:15:00+00:00,FT,Match Finished,539,Levante,543,Real Betis,2.0,2.0,D,soccer_spain_la_liga,levante,real betis
+1390856,140,La Liga,2025,2025-09-14 16:30:00+00:00,FT,Match Finished,727,Osasuna,728,Rayo Vallecano,2.0,0.0,H,soccer_spain_la_liga,osasuna,rayo vallecano
+1390851,140,La Liga,2025,2025-09-14 19:00:00+00:00,FT,Match Finished,529,Barcelona,532,Valencia,6.0,0.0,H,soccer_spain_la_liga,barcelona,valencia
+1390853,140,La Liga,2025,2025-09-15 19:00:00+00:00,FT,Match Finished,540,Espanyol,798,Mallorca,3.0,2.0,H,soccer_spain_la_liga,espanyol,mallorca
+1390861,140,La Liga,2025,2025-09-19 19:00:00+00:00,FT,Match Finished,543,Real Betis,548,Real Sociedad,3.0,1.0,H,soccer_spain_la_liga,real betis,real sociedad
+1390863,140,La Liga,2025,2025-09-20 12:00:00+00:00,FT,Match Finished,547,Girona,539,Levante,0.0,4.0,A,soccer_spain_la_liga,girona,levante
+1390866,140,La Liga,2025,2025-09-20 14:15:00+00:00,FT,Match Finished,541,Real Madrid,540,Espanyol,2.0,0.0,H,soccer_spain_la_liga,real madrid,espanyol
+1390868,140,La Liga,2025,2025-09-20 16:30:00+00:00,FT,Match Finished,533,Villarreal,727,Osasuna,2.0,1.0,H,soccer_spain_la_liga,villarreal,osasuna
+1390859,140,La Liga,2025,2025-09-20 16:30:00+00:00,FT,Match Finished,542,Alaves,536,Sevilla,1.0,2.0,A,soccer_spain_la_liga,alaves,sevilla
+1390867,140,La Liga,2025,2025-09-20 19:00:00+00:00,FT,Match Finished,532,Valencia,531,Athletic Club,2.0,0.0,H,soccer_spain_la_liga,valencia,athletic
+1390865,140,La Liga,2025,2025-09-21 12:00:00+00:00,FT,Match Finished,728,Rayo Vallecano,538,Celta Vigo,1.0,1.0,D,soccer_spain_la_liga,rayo vallecano,celta vigo
+1390864,140,La Liga,2025,2025-09-21 14:15:00+00:00,FT,Match Finished,798,Mallorca,530,Atletico Madrid,1.0,1.0,D,soccer_spain_la_liga,mallorca,atletico madrid
+1390862,140,La Liga,2025,2025-09-21 16:30:00+00:00,FT,Match Finished,797,Elche,718,Oviedo,1.0,0.0,H,soccer_spain_la_liga,elche,oviedo
+1390860,140,La Liga,2025,2025-09-21 19:00:00+00:00,FT,Match Finished,529,Barcelona,546,Getafe,3.0,0.0,H,soccer_spain_la_liga,barcelona,getafe
+1390869,140,La Liga,2025,2025-09-23 17:00:00+00:00,FT,Match Finished,531,Athletic Club,547,Girona,1.0,1.0,D,soccer_spain_la_liga,athletic,girona
+1390872,140,La Liga,2025,2025-09-23 17:00:00+00:00,FT,Match Finished,540,Espanyol,532,Valencia,2.0,2.0,D,soccer_spain_la_liga,espanyol,valencia
+1390878,140,La Liga,2025,2025-09-23 19:30:00+00:00,FT,Match Finished,536,Sevilla,533,Villarreal,1.0,2.0,A,soccer_spain_la_liga,sevilla,villarreal
+1390874,140,La Liga,2025,2025-09-23 19:30:00+00:00,FT,Match Finished,539,Levante,541,Real Madrid,1.0,4.0,A,soccer_spain_la_liga,levante,real madrid
+1390873,140,La Liga,2025,2025-09-24 17:00:00+00:00,FT,Match Finished,546,Getafe,542,Alaves,1.0,1.0,D,soccer_spain_la_liga,getafe,alaves
+1390870,140,La Liga,2025,2025-09-24 19:30:00+00:00,FT,Match Finished,530,Atletico Madrid,728,Rayo Vallecano,3.0,2.0,H,soccer_spain_la_liga,atletico madrid,rayo vallecano
+1390876,140,La Liga,2025,2025-09-24 19:30:00+00:00,FT,Match Finished,548,Real Sociedad,798,Mallorca,1.0,0.0,H,soccer_spain_la_liga,real sociedad,mallorca
+1390875,140,La Liga,2025,2025-09-25 17:30:00+00:00,FT,Match Finished,727,Osasuna,797,Elche,1.0,1.0,D,soccer_spain_la_liga,osasuna,elche
+1390877,140,La Liga,2025,2025-09-25 19:30:00+00:00,FT,Match Finished,718,Oviedo,529,Barcelona,1.0,3.0,A,soccer_spain_la_liga,oviedo,barcelona
+1390884,140,La Liga,2025,2025-09-26 19:00:00+00:00,FT,Match Finished,547,Girona,540,Espanyol,0.0,0.0,D,soccer_spain_la_liga,girona,espanyol
+1390883,140,La Liga,2025,2025-09-27 12:00:00+00:00,FT,Match Finished,546,Getafe,539,Levante,1.0,1.0,D,soccer_spain_la_liga,getafe,levante
+1390879,140,La Liga,2025,2025-09-27 14:15:00+00:00,FT,Match Finished,530,Atletico Madrid,541,Real Madrid,5.0,2.0,H,soccer_spain_la_liga,atletico madrid,real madrid
+1390885,140,La Liga,2025,2025-09-27 16:30:00+00:00,FT,Match Finished,798,Mallorca,542,Alaves,1.0,0.0,H,soccer_spain_la_liga,mallorca,alaves
+1390888,140,La Liga,2025,2025-09-27 19:00:00+00:00,FT,Match Finished,533,Villarreal,531,Athletic Club,1.0,0.0,H,soccer_spain_la_liga,villarreal,athletic
+1390886,140,La Liga,2025,2025-09-28 12:00:00+00:00,FT,Match Finished,728,Rayo Vallecano,536,Sevilla,0.0,1.0,A,soccer_spain_la_liga,rayo vallecano,sevilla
+1390882,140,La Liga,2025,2025-09-28 14:15:00+00:00,FT,Match Finished,797,Elche,538,Celta Vigo,2.0,1.0,H,soccer_spain_la_liga,elche,celta vigo
+1390880,140,La Liga,2025,2025-09-28 16:30:00+00:00,FT,Match Finished,529,Barcelona,548,Real Sociedad,2.0,1.0,H,soccer_spain_la_liga,barcelona,real sociedad
+1390881,140,La Liga,2025,2025-09-28 19:00:00+00:00,FT,Match Finished,543,Real Betis,727,Osasuna,2.0,0.0,H,soccer_spain_la_liga,real betis,osasuna
+1390887,140,La Liga,2025,2025-09-30 18:00:00+00:00,FT,Match Finished,532,Valencia,718,Oviedo,1.0,2.0,A,soccer_spain_la_liga,valencia,oviedo
+1390894,140,La Liga,2025,2025-10-03 19:00:00+00:00,FT,Match Finished,727,Osasuna,546,Getafe,2.0,1.0,H,soccer_spain_la_liga,osasuna,getafe
+1390897,140,La Liga,2025,2025-10-04 12:00:00+00:00,FT,Match Finished,718,Oviedo,539,Levante,0.0,2.0,A,soccer_spain_la_liga,oviedo,levante
+1390893,140,La Liga,2025,2025-10-04 14:15:00+00:00,FT,Match Finished,547,Girona,532,Valencia,2.0,1.0,H,soccer_spain_la_liga,girona,valencia
+1390890,140,La Liga,2025,2025-10-04 16:30:00+00:00,FT,Match Finished,531,Athletic Club,798,Mallorca,2.0,1.0,H,soccer_spain_la_liga,athletic,mallorca
+1390895,140,La Liga,2025,2025-10-04 19:00:00+00:00,FT,Match Finished,541,Real Madrid,533,Villarreal,3.0,1.0,H,soccer_spain_la_liga,real madrid,villarreal
+1390889,140,La Liga,2025,2025-10-05 12:00:00+00:00,FT,Match Finished,542,Alaves,797,Elche,3.0,1.0,H,soccer_spain_la_liga,alaves,elche
+1390898,140,La Liga,2025,2025-10-05 14:15:00+00:00,FT,Match Finished,536,Sevilla,529,Barcelona,4.0,1.0,H,soccer_spain_la_liga,sevilla,barcelona
+1390892,140,La Liga,2025,2025-10-05 16:30:00+00:00,FT,Match Finished,540,Espanyol,543,Real Betis,1.0,2.0,A,soccer_spain_la_liga,espanyol,real betis
+1390896,140,La Liga,2025,2025-10-05 16:30:00+00:00,FT,Match Finished,548,Real Sociedad,728,Rayo Vallecano,0.0,1.0,A,soccer_spain_la_liga,real sociedad,rayo vallecano
+1390891,140,La Liga,2025,2025-10-05 19:00:00+00:00,FT,Match Finished,538,Celta Vigo,530,Atletico Madrid,1.0,1.0,D,soccer_spain_la_liga,celta vigo,atletico madrid
+1390906,140,La Liga,2025,2025-10-17 19:00:00+00:00,NS,Not Started,718,Oviedo,540,Espanyol,,,,soccer_spain_la_liga,oviedo,espanyol
+1390907,140,La Liga,2025,2025-10-18 12:00:00+00:00,NS,Not Started,536,Sevilla,798,Mallorca,,,,soccer_spain_la_liga,sevilla,mallorca
+1390901,140,La Liga,2025,2025-10-18 14:15:00+00:00,NS,Not Started,529,Barcelona,547,Girona,,,,soccer_spain_la_liga,barcelona,girona
+1390908,140,La Liga,2025,2025-10-18 16:30:00+00:00,NS,Not Started,533,Villarreal,543,Real Betis,,,,soccer_spain_la_liga,villarreal,real betis
+1390900,140,La Liga,2025,2025-10-18 19:00:00+00:00,NS,Not Started,530,Atletico Madrid,727,Osasuna,,,,soccer_spain_la_liga,atletico madrid,osasuna
+1390903,140,La Liga,2025,2025-10-19 12:00:00+00:00,NS,Not Started,797,Elche,531,Athletic Club,,,,soccer_spain_la_liga,elche,athletic
+1390902,140,La Liga,2025,2025-10-19 14:15:00+00:00,NS,Not Started,538,Celta Vigo,548,Real Sociedad,,,,soccer_spain_la_liga,celta vigo,real sociedad
+1390905,140,La Liga,2025,2025-10-19 16:30:00+00:00,NS,Not Started,539,Levante,728,Rayo Vallecano,,,,soccer_spain_la_liga,levante,rayo vallecano
+1390904,140,La Liga,2025,2025-10-19 19:00:00+00:00,NS,Not Started,546,Getafe,541,Real Madrid,,,,soccer_spain_la_liga,getafe,real madrid
+1390899,140,La Liga,2025,2025-10-20 19:00:00+00:00,NS,Not Started,542,Alaves,532,Valencia,,,,soccer_spain_la_liga,alaves,valencia
+1390917,140,La Liga,2025,2025-10-24 19:00:00+00:00,NS,Not Started,548,Real Sociedad,536,Sevilla,,,,soccer_spain_la_liga,real sociedad,sevilla
+1390912,140,La Liga,2025,2025-10-25 12:00:00+00:00,NS,Not Started,547,Girona,718,Oviedo,,,,soccer_spain_la_liga,girona,oviedo
+1390911,140,La Liga,2025,2025-10-25 14:15:00+00:00,NS,Not Started,540,Espanyol,797,Elche,,,,soccer_spain_la_liga,espanyol,elche
+1390909,140,La Liga,2025,2025-10-25 16:30:00+00:00,NS,Not Started,531,Athletic Club,546,Getafe,,,,soccer_spain_la_liga,athletic,getafe
+1390918,140,La Liga,2025,2025-10-25 19:00:00+00:00,NS,Not Started,532,Valencia,533,Villarreal,,,,soccer_spain_la_liga,valencia,villarreal
+1390913,140,La Liga,2025,2025-10-26 13:00:00+00:00,NS,Not Started,798,Mallorca,539,Levante,,,,soccer_spain_la_liga,mallorca,levante
+1390916,140,La Liga,2025,2025-10-26 15:15:00+00:00,NS,Not Started,541,Real Madrid,529,Barcelona,,,,soccer_spain_la_liga,real madrid,barcelona
+1390914,140,La Liga,2025,2025-10-26 17:30:00+00:00,NS,Not Started,727,Osasuna,538,Celta Vigo,,,,soccer_spain_la_liga,osasuna,celta vigo
+1390915,140,La Liga,2025,2025-10-26 20:00:00+00:00,NS,Not Started,728,Rayo Vallecano,542,Alaves,,,,soccer_spain_la_liga,rayo vallecano,alaves
+1390910,140,La Liga,2025,2025-10-27 20:00:00+00:00,NS,Not Started,543,Real Betis,530,Atletico Madrid,,,,soccer_spain_la_liga,real betis,atletico madrid
+1390923,140,La Liga,2025,2025-10-31 20:00:00+00:00,NS,Not Started,546,Getafe,547,Girona,,,,soccer_spain_la_liga,getafe,girona
+1390928,140,La Liga,2025,2025-11-01 13:00:00+00:00,NS,Not Started,533,Villarreal,728,Rayo Vallecano,,,,soccer_spain_la_liga,villarreal,rayo vallecano
+1390920,140,La Liga,2025,2025-11-01 15:15:00+00:00,NS,Not Started,530,Atletico Madrid,536,Sevilla,,,,soccer_spain_la_liga,atletico madrid,sevilla
+1390926,140,La Liga,2025,2025-11-01 17:30:00+00:00,NS,Not Started,548,Real Sociedad,531,Athletic Club,,,,soccer_spain_la_liga,real sociedad,athletic
+1390925,140,La Liga,2025,2025-11-01 20:00:00+00:00,NS,Not Started,541,Real Madrid,532,Valencia,,,,soccer_spain_la_liga,real madrid,valencia
+1390924,140,La Liga,2025,2025-11-02 13:00:00+00:00,NS,Not Started,539,Levante,538,Celta Vigo,,,,soccer_spain_la_liga,levante,celta vigo
+1390919,140,La Liga,2025,2025-11-02 15:15:00+00:00,NS,Not Started,542,Alaves,540,Espanyol,,,,soccer_spain_la_liga,alaves,espanyol
+1390921,140,La Liga,2025,2025-11-02 17:30:00+00:00,NS,Not Started,529,Barcelona,797,Elche,,,,soccer_spain_la_liga,barcelona,elche
+1390922,140,La Liga,2025,2025-11-02 20:00:00+00:00,NS,Not Started,543,Real Betis,798,Mallorca,,,,soccer_spain_la_liga,real betis,mallorca
+1390927,140,La Liga,2025,2025-11-03 20:00:00+00:00,NS,Not Started,718,Oviedo,727,Osasuna,,,,soccer_spain_la_liga,oviedo,osasuna
+1390932,140,La Liga,2025,2025-11-07 20:00:00+00:00,NS,Not Started,797,Elche,548,Real Sociedad,,,,soccer_spain_la_liga,elche,real sociedad
+1390934,140,La Liga,2025,2025-11-08 13:00:00+00:00,NS,Not Started,547,Girona,542,Alaves,,,,soccer_spain_la_liga,girona,alaves
+1390937,140,La Liga,2025,2025-11-08 15:15:00+00:00,NS,Not Started,536,Sevilla,727,Osasuna,,,,soccer_spain_la_liga,sevilla,osasuna
+1390930,140,La Liga,2025,2025-11-08 17:30:00+00:00,NS,Not Started,530,Atletico Madrid,539,Levante,,,,soccer_spain_la_liga,atletico madrid,levante
+1390933,140,La Liga,2025,2025-11-08 20:00:00+00:00,NS,Not Started,540,Espanyol,533,Villarreal,,,,soccer_spain_la_liga,espanyol,villarreal
+1390929,140,La Liga,2025,2025-11-09 13:00:00+00:00,NS,Not Started,531,Athletic Club,718,Oviedo,,,,soccer_spain_la_liga,athletic,oviedo
+1390936,140,La Liga,2025,2025-11-09 15:15:00+00:00,NS,Not Started,728,Rayo Vallecano,541,Real Madrid,,,,soccer_spain_la_liga,rayo vallecano,real madrid
+1390938,140,La Liga,2025,2025-11-09 17:30:00+00:00,NS,Not Started,532,Valencia,543,Real Betis,,,,soccer_spain_la_liga,valencia,real betis
+1390935,140,La Liga,2025,2025-11-09 17:30:00+00:00,NS,Not Started,798,Mallorca,546,Getafe,,,,soccer_spain_la_liga,mallorca,getafe
+1390931,140,La Liga,2025,2025-11-09 20:00:00+00:00,NS,Not Started,538,Celta Vigo,529,Barcelona,,,,soccer_spain_la_liga,celta vigo,barcelona
+1390940,140,La Liga,2025,2025-11-23 17:00:00+00:00,NS,Not Started,529,Barcelona,531,Athletic Club,,,,soccer_spain_la_liga,barcelona,athletic
+1390947,140,La Liga,2025,2025-11-23 17:00:00+00:00,NS,Not Started,532,Valencia,539,Levante,,,,soccer_spain_la_liga,valencia,levante
+1390948,140,La Liga,2025,2025-11-23 17:00:00+00:00,NS,Not Started,533,Villarreal,798,Mallorca,,,,soccer_spain_la_liga,villarreal,mallorca
+1390943,140,La Liga,2025,2025-11-23 17:00:00+00:00,NS,Not Started,540,Espanyol,536,Sevilla,,,,soccer_spain_la_liga,espanyol,sevilla
+1390939,140,La Liga,2025,2025-11-23 17:00:00+00:00,NS,Not Started,542,Alaves,538,Celta Vigo,,,,soccer_spain_la_liga,alaves,celta vigo
+1390941,140,La Liga,2025,2025-11-23 17:00:00+00:00,NS,Not Started,543,Real Betis,547,Girona,,,,soccer_spain_la_liga,real betis,girona
+1390944,140,La Liga,2025,2025-11-23 17:00:00+00:00,NS,Not Started,546,Getafe,530,Atletico Madrid,,,,soccer_spain_la_liga,getafe,atletico madrid
+1390946,140,La Liga,2025,2025-11-23 17:00:00+00:00,NS,Not Started,718,Oviedo,728,Rayo Vallecano,,,,soccer_spain_la_liga,oviedo,rayo vallecano
+1390945,140,La Liga,2025,2025-11-23 17:00:00+00:00,NS,Not Started,727,Osasuna,548,Real Sociedad,,,,soccer_spain_la_liga,osasuna,real sociedad
+1390942,140,La Liga,2025,2025-11-23 17:00:00+00:00,NS,Not Started,797,Elche,541,Real Madrid,,,,soccer_spain_la_liga,elche,real madrid
+1390950,140,La Liga,2025,2025-11-30 17:00:00+00:00,NS,Not Started,529,Barcelona,542,Alaves,,,,soccer_spain_la_liga,barcelona,alaves
+1390949,140,La Liga,2025,2025-11-30 17:00:00+00:00,NS,Not Started,530,Atletico Madrid,718,Oviedo,,,,soccer_spain_la_liga,atletico madrid,oviedo
+1390958,140,La Liga,2025,2025-11-30 17:00:00+00:00,NS,Not Started,536,Sevilla,543,Real Betis,,,,soccer_spain_la_liga,sevilla,real betis
+1390951,140,La Liga,2025,2025-11-30 17:00:00+00:00,NS,Not Started,538,Celta Vigo,540,Espanyol,,,,soccer_spain_la_liga,celta vigo,espanyol
+1390954,140,La Liga,2025,2025-11-30 17:00:00+00:00,NS,Not Started,539,Levante,531,Athletic Club,,,,soccer_spain_la_liga,levante,athletic
+1390952,140,La Liga,2025,2025-11-30 17:00:00+00:00,NS,Not Started,546,Getafe,797,Elche,,,,soccer_spain_la_liga,getafe,elche
+1390953,140,La Liga,2025,2025-11-30 17:00:00+00:00,NS,Not Started,547,Girona,541,Real Madrid,,,,soccer_spain_la_liga,girona,real madrid
+1390957,140,La Liga,2025,2025-11-30 17:00:00+00:00,NS,Not Started,548,Real Sociedad,533,Villarreal,,,,soccer_spain_la_liga,real sociedad,villarreal
+1390956,140,La Liga,2025,2025-11-30 17:00:00+00:00,NS,Not Started,728,Rayo Vallecano,532,Valencia,,,,soccer_spain_la_liga,rayo vallecano,valencia
+1390955,140,La Liga,2025,2025-11-30 17:00:00+00:00,NS,Not Started,798,Mallorca,727,Osasuna,,,,soccer_spain_la_liga,mallorca,osasuna
+1390960,140,La Liga,2025,2025-12-07 17:00:00+00:00,NS,Not Started,531,Athletic Club,530,Atletico Madrid,,,,soccer_spain_la_liga,athletic,atletico madrid
+1390967,140,La Liga,2025,2025-12-07 17:00:00+00:00,NS,Not Started,532,Valencia,536,Sevilla,,,,soccer_spain_la_liga,valencia,sevilla
+1390968,140,La Liga,2025,2025-12-07 17:00:00+00:00,NS,Not Started,533,Villarreal,546,Getafe,,,,soccer_spain_la_liga,villarreal,getafe
+1390963,140,La Liga,2025,2025-12-07 17:00:00+00:00,NS,Not Started,540,Espanyol,728,Rayo Vallecano,,,,soccer_spain_la_liga,espanyol,rayo vallecano
+1390965,140,La Liga,2025,2025-12-07 17:00:00+00:00,NS,Not Started,541,Real Madrid,538,Celta Vigo,,,,soccer_spain_la_liga,real madrid,celta vigo
+1390959,140,La Liga,2025,2025-12-07 17:00:00+00:00,NS,Not Started,542,Alaves,548,Real Sociedad,,,,soccer_spain_la_liga,alaves,real sociedad
+1390961,140,La Liga,2025,2025-12-07 17:00:00+00:00,NS,Not Started,543,Real Betis,529,Barcelona,,,,soccer_spain_la_liga,real betis,barcelona
+1390966,140,La Liga,2025,2025-12-07 17:00:00+00:00,NS,Not Started,718,Oviedo,798,Mallorca,,,,soccer_spain_la_liga,oviedo,mallorca
+1390964,140,La Liga,2025,2025-12-07 17:00:00+00:00,NS,Not Started,727,Osasuna,539,Levante,,,,soccer_spain_la_liga,osasuna,levante
+1390962,140,La Liga,2025,2025-12-07 17:00:00+00:00,NS,Not Started,797,Elche,547,Girona,,,,soccer_spain_la_liga,elche,girona
+1390971,140,La Liga,2025,2025-12-14 17:00:00+00:00,NS,Not Started,529,Barcelona,727,Osasuna,,,,soccer_spain_la_liga,barcelona,osasuna
+1390970,140,La Liga,2025,2025-12-14 17:00:00+00:00,NS,Not Started,530,Atletico Madrid,532,Valencia,,,,soccer_spain_la_liga,atletico madrid,valencia
+1390978,140,La Liga,2025,2025-12-14 17:00:00+00:00,NS,Not Started,536,Sevilla,718,Oviedo,,,,soccer_spain_la_liga,sevilla,oviedo
+1390972,140,La Liga,2025,2025-12-14 17:00:00+00:00,NS,Not Started,538,Celta Vigo,531,Athletic Club,,,,soccer_spain_la_liga,celta vigo,athletic
+1390974,140,La Liga,2025,2025-12-14 17:00:00+00:00,NS,Not Started,539,Levante,533,Villarreal,,,,soccer_spain_la_liga,levante,villarreal
+1390969,140,La Liga,2025,2025-12-14 17:00:00+00:00,NS,Not Started,542,Alaves,541,Real Madrid,,,,soccer_spain_la_liga,alaves,real madrid
+1390973,140,La Liga,2025,2025-12-14 17:00:00+00:00,NS,Not Started,546,Getafe,540,Espanyol,,,,soccer_spain_la_liga,getafe,espanyol
+1390977,140,La Liga,2025,2025-12-14 17:00:00+00:00,NS,Not Started,548,Real Sociedad,547,Girona,,,,soccer_spain_la_liga,real sociedad,girona
+1390976,140,La Liga,2025,2025-12-14 17:00:00+00:00,NS,Not Started,728,Rayo Vallecano,543,Real Betis,,,,soccer_spain_la_liga,rayo vallecano,real betis
+1390975,140,La Liga,2025,2025-12-14 17:00:00+00:00,NS,Not Started,798,Mallorca,797,Elche,,,,soccer_spain_la_liga,mallorca,elche
+1390979,140,La Liga,2025,2025-12-21 17:00:00+00:00,NS,Not Started,531,Athletic Club,540,Espanyol,,,,soccer_spain_la_liga,athletic,espanyol
+1390987,140,La Liga,2025,2025-12-21 17:00:00+00:00,NS,Not Started,532,Valencia,798,Mallorca,,,,soccer_spain_la_liga,valencia,mallorca
+1390988,140,La Liga,2025,2025-12-21 17:00:00+00:00,NS,Not Started,533,Villarreal,529,Barcelona,,,,soccer_spain_la_liga,villarreal,barcelona
+1390983,140,La Liga,2025,2025-12-21 17:00:00+00:00,NS,Not Started,539,Levante,548,Real Sociedad,,,,soccer_spain_la_liga,levante,real sociedad
+1390985,140,La Liga,2025,2025-12-21 17:00:00+00:00,NS,Not Started,541,Real Madrid,536,Sevilla,,,,soccer_spain_la_liga,real madrid,sevilla
+1390980,140,La Liga,2025,2025-12-21 17:00:00+00:00,NS,Not Started,543,Real Betis,546,Getafe,,,,soccer_spain_la_liga,real betis,getafe
+1390982,140,La Liga,2025,2025-12-21 17:00:00+00:00,NS,Not Started,547,Girona,530,Atletico Madrid,,,,soccer_spain_la_liga,girona,atletico madrid
+1390986,140,La Liga,2025,2025-12-21 17:00:00+00:00,NS,Not Started,718,Oviedo,538,Celta Vigo,,,,soccer_spain_la_liga,oviedo,celta vigo
+1390984,140,La Liga,2025,2025-12-21 17:00:00+00:00,NS,Not Started,727,Osasuna,542,Alaves,,,,soccer_spain_la_liga,osasuna,alaves
+1390981,140,La Liga,2025,2025-12-21 17:00:00+00:00,NS,Not Started,797,Elche,728,Rayo Vallecano,,,,soccer_spain_la_liga,elche,rayo vallecano
+1390998,140,La Liga,2025,2026-01-04 17:00:00+00:00,NS,Not Started,536,Sevilla,539,Levante,,,,soccer_spain_la_liga,sevilla,levante
+1390990,140,La Liga,2025,2026-01-04 17:00:00+00:00,NS,Not Started,538,Celta Vigo,532,Valencia,,,,soccer_spain_la_liga,celta vigo,valencia
+1390992,140,La Liga,2025,2026-01-04 17:00:00+00:00,NS,Not Started,540,Espanyol,529,Barcelona,,,,soccer_spain_la_liga,espanyol,barcelona
+1390996,140,La Liga,2025,2026-01-04 17:00:00+00:00,NS,Not Started,541,Real Madrid,543,Real Betis,,,,soccer_spain_la_liga,real madrid,real betis
+1390989,140,La Liga,2025,2026-01-04 17:00:00+00:00,NS,Not Started,542,Alaves,718,Oviedo,,,,soccer_spain_la_liga,alaves,oviedo
+1390997,140,La Liga,2025,2026-01-04 17:00:00+00:00,NS,Not Started,548,Real Sociedad,530,Atletico Madrid,,,,soccer_spain_la_liga,real sociedad,atletico madrid
+1390994,140,La Liga,2025,2026-01-04 17:00:00+00:00,NS,Not Started,727,Osasuna,531,Athletic Club,,,,soccer_spain_la_liga,osasuna,athletic
+1390995,140,La Liga,2025,2026-01-04 17:00:00+00:00,NS,Not Started,728,Rayo Vallecano,546,Getafe,,,,soccer_spain_la_liga,rayo vallecano,getafe
+1390991,140,La Liga,2025,2026-01-04 17:00:00+00:00,NS,Not Started,797,Elche,533,Villarreal,,,,soccer_spain_la_liga,elche,villarreal
+1390993,140,La Liga,2025,2026-01-04 17:00:00+00:00,NS,Not Started,798,Mallorca,547,Girona,,,,soccer_spain_la_liga,mallorca,girona
+1391000,140,La Liga,2025,2026-01-11 17:00:00+00:00,NS,Not Started,529,Barcelona,530,Atletico Madrid,,,,soccer_spain_la_liga,barcelona,atletico madrid
+1390999,140,La Liga,2025,2026-01-11 17:00:00+00:00,NS,Not Started,531,Athletic Club,541,Real Madrid,,,,soccer_spain_la_liga,athletic,real madrid
+1391007,140,La Liga,2025,2026-01-11 17:00:00+00:00,NS,Not Started,532,Valencia,797,Elche,,,,soccer_spain_la_liga,valencia,elche
+1391008,140,La Liga,2025,2026-01-11 17:00:00+00:00,NS,Not Started,533,Villarreal,542,Alaves,,,,soccer_spain_la_liga,villarreal,alaves
+1391006,140,La Liga,2025,2026-01-11 17:00:00+00:00,NS,Not Started,536,Sevilla,538,Celta Vigo,,,,soccer_spain_la_liga,sevilla,celta vigo
+1391003,140,La Liga,2025,2026-01-11 17:00:00+00:00,NS,Not Started,539,Levante,540,Espanyol,,,,soccer_spain_la_liga,levante,espanyol
+1391001,140,La Liga,2025,2026-01-11 17:00:00+00:00,NS,Not Started,546,Getafe,548,Real Sociedad,,,,soccer_spain_la_liga,getafe,real sociedad
+1391002,140,La Liga,2025,2026-01-11 17:00:00+00:00,NS,Not Started,547,Girona,727,Osasuna,,,,soccer_spain_la_liga,girona,osasuna
+1391005,140,La Liga,2025,2026-01-11 17:00:00+00:00,NS,Not Started,718,Oviedo,543,Real Betis,,,,soccer_spain_la_liga,oviedo,real betis
+1391004,140,La Liga,2025,2026-01-11 17:00:00+00:00,NS,Not Started,728,Rayo Vallecano,798,Mallorca,,,,soccer_spain_la_liga,rayo vallecano,mallorca
+1391009,140,La Liga,2025,2026-01-18 17:00:00+00:00,NS,Not Started,530,Atletico Madrid,542,Alaves,,,,soccer_spain_la_liga,atletico madrid,alaves
+1391011,140,La Liga,2025,2026-01-18 17:00:00+00:00,NS,Not Started,538,Celta Vigo,728,Rayo Vallecano,,,,soccer_spain_la_liga,celta vigo,rayo vallecano
+1391013,140,La Liga,2025,2026-01-18 17:00:00+00:00,NS,Not Started,540,Espanyol,547,Girona,,,,soccer_spain_la_liga,espanyol,girona
+1391017,140,La Liga,2025,2026-01-18 17:00:00+00:00,NS,Not Started,541,Real Madrid,539,Levante,,,,soccer_spain_la_liga,real madrid,levante
+1391010,140,La Liga,2025,2026-01-18 17:00:00+00:00,NS,Not Started,543,Real Betis,533,Villarreal,,,,soccer_spain_la_liga,real betis,villarreal
+1391014,140,La Liga,2025,2026-01-18 17:00:00+00:00,NS,Not Started,546,Getafe,532,Valencia,,,,soccer_spain_la_liga,getafe,valencia
+1391018,140,La Liga,2025,2026-01-18 17:00:00+00:00,NS,Not Started,548,Real Sociedad,529,Barcelona,,,,soccer_spain_la_liga,real sociedad,barcelona
+1391016,140,La Liga,2025,2026-01-18 17:00:00+00:00,NS,Not Started,727,Osasuna,718,Oviedo,,,,soccer_spain_la_liga,osasuna,oviedo
+1391012,140,La Liga,2025,2026-01-18 17:00:00+00:00,NS,Not Started,797,Elche,536,Sevilla,,,,soccer_spain_la_liga,elche,sevilla
+1391015,140,La Liga,2025,2026-01-18 17:00:00+00:00,NS,Not Started,798,Mallorca,531,Athletic Club,,,,soccer_spain_la_liga,mallorca,athletic
+1391021,140,La Liga,2025,2026-01-25 17:00:00+00:00,NS,Not Started,529,Barcelona,718,Oviedo,,,,soccer_spain_la_liga,barcelona,oviedo
+1391020,140,La Liga,2025,2026-01-25 17:00:00+00:00,NS,Not Started,530,Atletico Madrid,798,Mallorca,,,,soccer_spain_la_liga,atletico madrid,mallorca
+1391027,140,La Liga,2025,2026-01-25 17:00:00+00:00,NS,Not Started,532,Valencia,540,Espanyol,,,,soccer_spain_la_liga,valencia,espanyol
+1391028,140,La Liga,2025,2026-01-25 17:00:00+00:00,NS,Not Started,533,Villarreal,541,Real Madrid,,,,soccer_spain_la_liga,villarreal,real madrid
+1391026,140,La Liga,2025,2026-01-25 17:00:00+00:00,NS,Not Started,536,Sevilla,531,Athletic Club,,,,soccer_spain_la_liga,sevilla,athletic
+1391023,140,La Liga,2025,2026-01-25 17:00:00+00:00,NS,Not Started,539,Levante,797,Elche,,,,soccer_spain_la_liga,levante,elche
+1391019,140,La Liga,2025,2026-01-25 17:00:00+00:00,NS,Not Started,542,Alaves,543,Real Betis,,,,soccer_spain_la_liga,alaves,real betis
+1391022,140,La Liga,2025,2026-01-25 17:00:00+00:00,NS,Not Started,547,Girona,546,Getafe,,,,soccer_spain_la_liga,girona,getafe
+1391025,140,La Liga,2025,2026-01-25 17:00:00+00:00,NS,Not Started,548,Real Sociedad,538,Celta Vigo,,,,soccer_spain_la_liga,real sociedad,celta vigo
+1391024,140,La Liga,2025,2026-01-25 17:00:00+00:00,NS,Not Started,728,Rayo Vallecano,727,Osasuna,,,,soccer_spain_la_liga,rayo vallecano,osasuna
+1391029,140,La Liga,2025,2026-02-01 17:00:00+00:00,NS,Not Started,531,Athletic Club,548,Real Sociedad,,,,soccer_spain_la_liga,athletic,real sociedad
+1391034,140,La Liga,2025,2026-02-01 17:00:00+00:00,NS,Not Started,539,Levante,530,Atletico Madrid,,,,soccer_spain_la_liga,levante,atletico madrid
+1391032,140,La Liga,2025,2026-02-01 17:00:00+00:00,NS,Not Started,540,Espanyol,542,Alaves,,,,soccer_spain_la_liga,espanyol,alaves
+1391037,140,La Liga,2025,2026-02-01 17:00:00+00:00,NS,Not Started,541,Real Madrid,728,Rayo Vallecano,,,,soccer_spain_la_liga,real madrid,rayo vallecano
+1391030,140,La Liga,2025,2026-02-01 17:00:00+00:00,NS,Not Started,543,Real Betis,532,Valencia,,,,soccer_spain_la_liga,real betis,valencia
+1391033,140,La Liga,2025,2026-02-01 17:00:00+00:00,NS,Not Started,546,Getafe,538,Celta Vigo,,,,soccer_spain_la_liga,getafe,celta vigo
+1391038,140,La Liga,2025,2026-02-01 17:00:00+00:00,NS,Not Started,718,Oviedo,547,Girona,,,,soccer_spain_la_liga,oviedo,girona
+1391036,140,La Liga,2025,2026-02-01 17:00:00+00:00,NS,Not Started,727,Osasuna,533,Villarreal,,,,soccer_spain_la_liga,osasuna,villarreal
+1391031,140,La Liga,2025,2026-02-01 17:00:00+00:00,NS,Not Started,797,Elche,529,Barcelona,,,,soccer_spain_la_liga,elche,barcelona
+1391035,140,La Liga,2025,2026-02-01 17:00:00+00:00,NS,Not Started,798,Mallorca,536,Sevilla,,,,soccer_spain_la_liga,mallorca,sevilla
+1391042,140,La Liga,2025,2026-02-08 17:00:00+00:00,NS,Not Started,529,Barcelona,798,Mallorca,,,,soccer_spain_la_liga,barcelona,mallorca
+1391041,140,La Liga,2025,2026-02-08 17:00:00+00:00,NS,Not Started,530,Atletico Madrid,543,Real Betis,,,,soccer_spain_la_liga,atletico madrid,real betis
+1391040,140,La Liga,2025,2026-02-08 17:00:00+00:00,NS,Not Started,531,Athletic Club,539,Levante,,,,soccer_spain_la_liga,athletic,levante
+1391047,140,La Liga,2025,2026-02-08 17:00:00+00:00,NS,Not Started,532,Valencia,541,Real Madrid,,,,soccer_spain_la_liga,valencia,real madrid
+1391048,140,La Liga,2025,2026-02-08 17:00:00+00:00,NS,Not Started,533,Villarreal,540,Espanyol,,,,soccer_spain_la_liga,villarreal,espanyol
+1391046,140,La Liga,2025,2026-02-08 17:00:00+00:00,NS,Not Started,536,Sevilla,547,Girona,,,,soccer_spain_la_liga,sevilla,girona
+1391043,140,La Liga,2025,2026-02-08 17:00:00+00:00,NS,Not Started,538,Celta Vigo,727,Osasuna,,,,soccer_spain_la_liga,celta vigo,osasuna
+1391039,140,La Liga,2025,2026-02-08 17:00:00+00:00,NS,Not Started,542,Alaves,546,Getafe,,,,soccer_spain_la_liga,alaves,getafe
+1391045,140,La Liga,2025,2026-02-08 17:00:00+00:00,NS,Not Started,548,Real Sociedad,797,Elche,,,,soccer_spain_la_liga,real sociedad,elche
+1391044,140,La Liga,2025,2026-02-08 17:00:00+00:00,NS,Not Started,728,Rayo Vallecano,718,Oviedo,,,,soccer_spain_la_liga,rayo vallecano,oviedo
+1391058,140,La Liga,2025,2026-02-15 17:00:00+00:00,NS,Not Started,536,Sevilla,542,Alaves,,,,soccer_spain_la_liga,sevilla,alaves
+1391053,140,La Liga,2025,2026-02-15 17:00:00+00:00,NS,Not Started,539,Levante,532,Valencia,,,,soccer_spain_la_liga,levante,valencia
+1391050,140,La Liga,2025,2026-02-15 17:00:00+00:00,NS,Not Started,540,Espanyol,538,Celta Vigo,,,,soccer_spain_la_liga,espanyol,celta vigo
+1391056,140,La Liga,2025,2026-02-15 17:00:00+00:00,NS,Not Started,541,Real Madrid,548,Real Sociedad,,,,soccer_spain_la_liga,real madrid,real sociedad
+1391051,140,La Liga,2025,2026-02-15 17:00:00+00:00,NS,Not Started,546,Getafe,533,Villarreal,,,,soccer_spain_la_liga,getafe,villarreal
+1391052,140,La Liga,2025,2026-02-15 17:00:00+00:00,NS,Not Started,547,Girona,529,Barcelona,,,,soccer_spain_la_liga,girona,barcelona
+1391057,140,La Liga,2025,2026-02-15 17:00:00+00:00,NS,Not Started,718,Oviedo,531,Athletic Club,,,,soccer_spain_la_liga,oviedo,athletic
+1391055,140,La Liga,2025,2026-02-15 17:00:00+00:00,NS,Not Started,728,Rayo Vallecano,530,Atletico Madrid,,,,soccer_spain_la_liga,rayo vallecano,atletico madrid
+1391049,140,La Liga,2025,2026-02-15 17:00:00+00:00,NS,Not Started,797,Elche,727,Osasuna,,,,soccer_spain_la_liga,elche,osasuna
+1391054,140,La Liga,2025,2026-02-15 17:00:00+00:00,NS,Not Started,798,Mallorca,543,Real Betis,,,,soccer_spain_la_liga,mallorca,real betis
+1391062,140,La Liga,2025,2026-02-22 17:00:00+00:00,NS,Not Started,529,Barcelona,539,Levante,,,,soccer_spain_la_liga,barcelona,levante
+1391061,140,La Liga,2025,2026-02-22 17:00:00+00:00,NS,Not Started,530,Atletico Madrid,540,Espanyol,,,,soccer_spain_la_liga,atletico madrid,espanyol
+1391060,140,La Liga,2025,2026-02-22 17:00:00+00:00,NS,Not Started,531,Athletic Club,797,Elche,,,,soccer_spain_la_liga,athletic,elche
+1391068,140,La Liga,2025,2026-02-22 17:00:00+00:00,NS,Not Started,533,Villarreal,532,Valencia,,,,soccer_spain_la_liga,villarreal,valencia
+1391064,140,La Liga,2025,2026-02-22 17:00:00+00:00,NS,Not Started,538,Celta Vigo,798,Mallorca,,,,soccer_spain_la_liga,celta vigo,mallorca
+1391059,140,La Liga,2025,2026-02-22 17:00:00+00:00,NS,Not Started,542,Alaves,547,Girona,,,,soccer_spain_la_liga,alaves,girona
+1391063,140,La Liga,2025,2026-02-22 17:00:00+00:00,NS,Not Started,543,Real Betis,728,Rayo Vallecano,,,,soccer_spain_la_liga,real betis,rayo vallecano
+1391065,140,La Liga,2025,2026-02-22 17:00:00+00:00,NS,Not Started,546,Getafe,536,Sevilla,,,,soccer_spain_la_liga,getafe,sevilla
+1391067,140,La Liga,2025,2026-02-22 17:00:00+00:00,NS,Not Started,548,Real Sociedad,718,Oviedo,,,,soccer_spain_la_liga,real sociedad,oviedo
+1391066,140,La Liga,2025,2026-02-22 17:00:00+00:00,NS,Not Started,727,Osasuna,541,Real Madrid,,,,soccer_spain_la_liga,osasuna,real madrid
+1391069,140,La Liga,2025,2026-03-01 17:00:00+00:00,NS,Not Started,529,Barcelona,533,Villarreal,,,,soccer_spain_la_liga,barcelona,villarreal
+1391078,140,La Liga,2025,2026-03-01 17:00:00+00:00,NS,Not Started,532,Valencia,727,Osasuna,,,,soccer_spain_la_liga,valencia,osasuna
+1391073,140,La Liga,2025,2026-03-01 17:00:00+00:00,NS,Not Started,539,Levante,542,Alaves,,,,soccer_spain_la_liga,levante,alaves
+1391076,140,La Liga,2025,2026-03-01 17:00:00+00:00,NS,Not Started,541,Real Madrid,546,Getafe,,,,soccer_spain_la_liga,real madrid,getafe
+1391070,140,La Liga,2025,2026-03-01 17:00:00+00:00,NS,Not Started,543,Real Betis,536,Sevilla,,,,soccer_spain_la_liga,real betis,sevilla
+1391072,140,La Liga,2025,2026-03-01 17:00:00+00:00,NS,Not Started,547,Girona,538,Celta Vigo,,,,soccer_spain_la_liga,girona,celta vigo
+1391077,140,La Liga,2025,2026-03-01 17:00:00+00:00,NS,Not Started,718,Oviedo,530,Atletico Madrid,,,,soccer_spain_la_liga,oviedo,atletico madrid
+1391075,140,La Liga,2025,2026-03-01 17:00:00+00:00,NS,Not Started,728,Rayo Vallecano,531,Athletic Club,,,,soccer_spain_la_liga,rayo vallecano,athletic
+1391071,140,La Liga,2025,2026-03-01 17:00:00+00:00,NS,Not Started,797,Elche,540,Espanyol,,,,soccer_spain_la_liga,elche,espanyol
+1391074,140,La Liga,2025,2026-03-01 17:00:00+00:00,NS,Not Started,798,Mallorca,548,Real Sociedad,,,,soccer_spain_la_liga,mallorca,real sociedad
+1391080,140,La Liga,2025,2026-03-08 17:00:00+00:00,NS,Not Started,530,Atletico Madrid,548,Real Sociedad,,,,soccer_spain_la_liga,atletico madrid,real sociedad
+1391079,140,La Liga,2025,2026-03-08 17:00:00+00:00,NS,Not Started,531,Athletic Club,529,Barcelona,,,,soccer_spain_la_liga,athletic,barcelona
+1391087,140,La Liga,2025,2026-03-08 17:00:00+00:00,NS,Not Started,532,Valencia,542,Alaves,,,,soccer_spain_la_liga,valencia,alaves
+1391088,140,La Liga,2025,2026-03-08 17:00:00+00:00,NS,Not Started,533,Villarreal,797,Elche,,,,soccer_spain_la_liga,villarreal,elche
+1391086,140,La Liga,2025,2026-03-08 17:00:00+00:00,NS,Not Started,536,Sevilla,728,Rayo Vallecano,,,,soccer_spain_la_liga,sevilla,rayo vallecano
+1391081,140,La Liga,2025,2026-03-08 17:00:00+00:00,NS,Not Started,538,Celta Vigo,541,Real Madrid,,,,soccer_spain_la_liga,celta vigo,real madrid
+1391084,140,La Liga,2025,2026-03-08 17:00:00+00:00,NS,Not Started,539,Levante,547,Girona,,,,soccer_spain_la_liga,levante,girona
+1391082,140,La Liga,2025,2026-03-08 17:00:00+00:00,NS,Not Started,540,Espanyol,718,Oviedo,,,,soccer_spain_la_liga,espanyol,oviedo
+1391083,140,La Liga,2025,2026-03-08 17:00:00+00:00,NS,Not Started,546,Getafe,543,Real Betis,,,,soccer_spain_la_liga,getafe,real betis
+1391085,140,La Liga,2025,2026-03-08 17:00:00+00:00,NS,Not Started,727,Osasuna,798,Mallorca,,,,soccer_spain_la_liga,osasuna,mallorca
+1391091,140,La Liga,2025,2026-03-15 17:00:00+00:00,NS,Not Started,529,Barcelona,536,Sevilla,,,,soccer_spain_la_liga,barcelona,sevilla
+1391090,140,La Liga,2025,2026-03-15 17:00:00+00:00,NS,Not Started,530,Atletico Madrid,546,Getafe,,,,soccer_spain_la_liga,atletico madrid,getafe
+1391096,140,La Liga,2025,2026-03-15 17:00:00+00:00,NS,Not Started,541,Real Madrid,797,Elche,,,,soccer_spain_la_liga,real madrid,elche
+1391089,140,La Liga,2025,2026-03-15 17:00:00+00:00,NS,Not Started,542,Alaves,533,Villarreal,,,,soccer_spain_la_liga,alaves,villarreal
+1391092,140,La Liga,2025,2026-03-15 17:00:00+00:00,NS,Not Started,543,Real Betis,538,Celta Vigo,,,,soccer_spain_la_liga,real betis,celta vigo
+1391093,140,La Liga,2025,2026-03-15 17:00:00+00:00,NS,Not Started,547,Girona,531,Athletic Club,,,,soccer_spain_la_liga,girona,athletic
+1391097,140,La Liga,2025,2026-03-15 17:00:00+00:00,NS,Not Started,548,Real Sociedad,727,Osasuna,,,,soccer_spain_la_liga,real sociedad,osasuna
+1391098,140,La Liga,2025,2026-03-15 17:00:00+00:00,NS,Not Started,718,Oviedo,532,Valencia,,,,soccer_spain_la_liga,oviedo,valencia
+1391095,140,La Liga,2025,2026-03-15 17:00:00+00:00,NS,Not Started,728,Rayo Vallecano,539,Levante,,,,soccer_spain_la_liga,rayo vallecano,levante
+1391094,140,La Liga,2025,2026-03-15 17:00:00+00:00,NS,Not Started,798,Mallorca,540,Espanyol,,,,soccer_spain_la_liga,mallorca,espanyol
+1391100,140,La Liga,2025,2026-03-22 17:00:00+00:00,NS,Not Started,529,Barcelona,728,Rayo Vallecano,,,,soccer_spain_la_liga,barcelona,rayo vallecano
+1391099,140,La Liga,2025,2026-03-22 17:00:00+00:00,NS,Not Started,531,Athletic Club,543,Real Betis,,,,soccer_spain_la_liga,athletic,real betis
+1391108,140,La Liga,2025,2026-03-22 17:00:00+00:00,NS,Not Started,533,Villarreal,548,Real Sociedad,,,,soccer_spain_la_liga,villarreal,real sociedad
+1391107,140,La Liga,2025,2026-03-22 17:00:00+00:00,NS,Not Started,536,Sevilla,532,Valencia,,,,soccer_spain_la_liga,sevilla,valencia
+1391101,140,La Liga,2025,2026-03-22 17:00:00+00:00,NS,Not Started,538,Celta Vigo,542,Alaves,,,,soccer_spain_la_liga,celta vigo,alaves
+1391104,140,La Liga,2025,2026-03-22 17:00:00+00:00,NS,Not Started,539,Levante,718,Oviedo,,,,soccer_spain_la_liga,levante,oviedo
+1391103,140,La Liga,2025,2026-03-22 17:00:00+00:00,NS,Not Started,540,Espanyol,546,Getafe,,,,soccer_spain_la_liga,espanyol,getafe
+1391106,140,La Liga,2025,2026-03-22 17:00:00+00:00,NS,Not Started,541,Real Madrid,530,Atletico Madrid,,,,soccer_spain_la_liga,real madrid,atletico madrid
+1391105,140,La Liga,2025,2026-03-22 17:00:00+00:00,NS,Not Started,727,Osasuna,547,Girona,,,,soccer_spain_la_liga,osasuna,girona
+1391102,140,La Liga,2025,2026-03-22 17:00:00+00:00,NS,Not Started,797,Elche,798,Mallorca,,,,soccer_spain_la_liga,elche,mallorca
+1391110,140,La Liga,2025,2026-04-05 16:00:00+00:00,NS,Not Started,530,Atletico Madrid,529,Barcelona,,,,soccer_spain_la_liga,atletico madrid,barcelona
+1391118,140,La Liga,2025,2026-04-05 16:00:00+00:00,NS,Not Started,532,Valencia,538,Celta Vigo,,,,soccer_spain_la_liga,valencia,celta vigo
+1391109,140,La Liga,2025,2026-04-05 16:00:00+00:00,NS,Not Started,542,Alaves,727,Osasuna,,,,soccer_spain_la_liga,alaves,osasuna
+1391111,140,La Liga,2025,2026-04-05 16:00:00+00:00,NS,Not Started,543,Real Betis,540,Espanyol,,,,soccer_spain_la_liga,real betis,espanyol
+1391112,140,La Liga,2025,2026-04-05 16:00:00+00:00,NS,Not Started,546,Getafe,531,Athletic Club,,,,soccer_spain_la_liga,getafe,athletic
+1391113,140,La Liga,2025,2026-04-05 16:00:00+00:00,NS,Not Started,547,Girona,533,Villarreal,,,,soccer_spain_la_liga,girona,villarreal
+1391116,140,La Liga,2025,2026-04-05 16:00:00+00:00,NS,Not Started,548,Real Sociedad,539,Levante,,,,soccer_spain_la_liga,real sociedad,levante
+1391117,140,La Liga,2025,2026-04-05 16:00:00+00:00,NS,Not Started,718,Oviedo,536,Sevilla,,,,soccer_spain_la_liga,oviedo,sevilla
+1391115,140,La Liga,2025,2026-04-05 16:00:00+00:00,NS,Not Started,728,Rayo Vallecano,797,Elche,,,,soccer_spain_la_liga,rayo vallecano,elche
+1391114,140,La Liga,2025,2026-04-05 16:00:00+00:00,NS,Not Started,798,Mallorca,541,Real Madrid,,,,soccer_spain_la_liga,mallorca,real madrid
+1391120,140,La Liga,2025,2026-04-12 16:00:00+00:00,NS,Not Started,529,Barcelona,540,Espanyol,,,,soccer_spain_la_liga,barcelona,espanyol
+1391119,140,La Liga,2025,2026-04-12 16:00:00+00:00,NS,Not Started,531,Athletic Club,533,Villarreal,,,,soccer_spain_la_liga,athletic,villarreal
+1391128,140,La Liga,2025,2026-04-12 16:00:00+00:00,NS,Not Started,536,Sevilla,530,Atletico Madrid,,,,soccer_spain_la_liga,sevilla,atletico madrid
+1391121,140,La Liga,2025,2026-04-12 16:00:00+00:00,NS,Not Started,538,Celta Vigo,718,Oviedo,,,,soccer_spain_la_liga,celta vigo,oviedo
+1391123,140,La Liga,2025,2026-04-12 16:00:00+00:00,NS,Not Started,539,Levante,546,Getafe,,,,soccer_spain_la_liga,levante,getafe
+1391126,140,La Liga,2025,2026-04-12 16:00:00+00:00,NS,Not Started,541,Real Madrid,547,Girona,,,,soccer_spain_la_liga,real madrid,girona
+1391127,140,La Liga,2025,2026-04-12 16:00:00+00:00,NS,Not Started,548,Real Sociedad,542,Alaves,,,,soccer_spain_la_liga,real sociedad,alaves
+1391125,140,La Liga,2025,2026-04-12 16:00:00+00:00,NS,Not Started,727,Osasuna,543,Real Betis,,,,soccer_spain_la_liga,osasuna,real betis
+1391122,140,La Liga,2025,2026-04-12 16:00:00+00:00,NS,Not Started,797,Elche,532,Valencia,,,,soccer_spain_la_liga,elche,valencia
+1391124,140,La Liga,2025,2026-04-12 16:00:00+00:00,NS,Not Started,798,Mallorca,728,Rayo Vallecano,,,,soccer_spain_la_liga,mallorca,rayo vallecano
+1391130,140,La Liga,2025,2026-04-19 16:00:00+00:00,NS,Not Started,530,Atletico Madrid,531,Athletic Club,,,,soccer_spain_la_liga,atletico madrid,athletic
+1391137,140,La Liga,2025,2026-04-19 16:00:00+00:00,NS,Not Started,532,Valencia,547,Girona,,,,soccer_spain_la_liga,valencia,girona
+1391138,140,La Liga,2025,2026-04-19 16:00:00+00:00,NS,Not Started,533,Villarreal,538,Celta Vigo,,,,soccer_spain_la_liga,villarreal,celta vigo
+1391132,140,La Liga,2025,2026-04-19 16:00:00+00:00,NS,Not Started,540,Espanyol,539,Levante,,,,soccer_spain_la_liga,espanyol,levante
+1391129,140,La Liga,2025,2026-04-19 16:00:00+00:00,NS,Not Started,542,Alaves,798,Mallorca,,,,soccer_spain_la_liga,alaves,mallorca
+1391131,140,La Liga,2025,2026-04-19 16:00:00+00:00,NS,Not Started,543,Real Betis,541,Real Madrid,,,,soccer_spain_la_liga,real betis,real madrid
+1391133,140,La Liga,2025,2026-04-19 16:00:00+00:00,NS,Not Started,546,Getafe,529,Barcelona,,,,soccer_spain_la_liga,getafe,barcelona
+1391136,140,La Liga,2025,2026-04-19 16:00:00+00:00,NS,Not Started,718,Oviedo,797,Elche,,,,soccer_spain_la_liga,oviedo,elche
+1391134,140,La Liga,2025,2026-04-19 16:00:00+00:00,NS,Not Started,727,Osasuna,536,Sevilla,,,,soccer_spain_la_liga,osasuna,sevilla
+1391135,140,La Liga,2025,2026-04-19 16:00:00+00:00,NS,Not Started,728,Rayo Vallecano,548,Real Sociedad,,,,soccer_spain_la_liga,rayo vallecano,real sociedad
+1391140,140,La Liga,2025,2026-04-22 16:00:00+00:00,NS,Not Started,529,Barcelona,538,Celta Vigo,,,,soccer_spain_la_liga,barcelona,celta vigo
+1391139,140,La Liga,2025,2026-04-22 16:00:00+00:00,NS,Not Started,531,Athletic Club,727,Osasuna,,,,soccer_spain_la_liga,athletic,osasuna
+1391143,140,La Liga,2025,2026-04-22 16:00:00+00:00,NS,Not Started,539,Levante,536,Sevilla,,,,soccer_spain_la_liga,levante,sevilla
+1391146,140,La Liga,2025,2026-04-22 16:00:00+00:00,NS,Not Started,541,Real Madrid,542,Alaves,,,,soccer_spain_la_liga,real madrid,alaves
+1391142,140,La Liga,2025,2026-04-22 16:00:00+00:00,NS,Not Started,547,Girona,543,Real Betis,,,,soccer_spain_la_liga,girona,real betis
+1391147,140,La Liga,2025,2026-04-22 16:00:00+00:00,NS,Not Started,548,Real Sociedad,546,Getafe,,,,soccer_spain_la_liga,real sociedad,getafe
+1391148,140,La Liga,2025,2026-04-22 16:00:00+00:00,NS,Not Started,718,Oviedo,533,Villarreal,,,,soccer_spain_la_liga,oviedo,villarreal
+1391145,140,La Liga,2025,2026-04-22 16:00:00+00:00,NS,Not Started,728,Rayo Vallecano,540,Espanyol,,,,soccer_spain_la_liga,rayo vallecano,espanyol
+1391141,140,La Liga,2025,2026-04-22 16:00:00+00:00,NS,Not Started,797,Elche,530,Atletico Madrid,,,,soccer_spain_la_liga,elche,atletico madrid
+1391144,140,La Liga,2025,2026-04-22 16:00:00+00:00,NS,Not Started,798,Mallorca,532,Valencia,,,,soccer_spain_la_liga,mallorca,valencia
+1391157,140,La Liga,2025,2026-05-03 16:00:00+00:00,NS,Not Started,532,Valencia,530,Atletico Madrid,,,,soccer_spain_la_liga,valencia,atletico madrid
+1391158,140,La Liga,2025,2026-05-03 16:00:00+00:00,NS,Not Started,533,Villarreal,539,Levante,,,,soccer_spain_la_liga,villarreal,levante
+1391156,140,La Liga,2025,2026-05-03 16:00:00+00:00,NS,Not Started,536,Sevilla,548,Real Sociedad,,,,soccer_spain_la_liga,sevilla,real sociedad
+1391151,140,La Liga,2025,2026-05-03 16:00:00+00:00,NS,Not Started,538,Celta Vigo,797,Elche,,,,soccer_spain_la_liga,celta vigo,elche
+1391152,140,La Liga,2025,2026-05-03 16:00:00+00:00,NS,Not Started,540,Espanyol,541,Real Madrid,,,,soccer_spain_la_liga,espanyol,real madrid
+1391149,140,La Liga,2025,2026-05-03 16:00:00+00:00,NS,Not Started,542,Alaves,531,Athletic Club,,,,soccer_spain_la_liga,alaves,athletic
+1391150,140,La Liga,2025,2026-05-03 16:00:00+00:00,NS,Not Started,543,Real Betis,718,Oviedo,,,,soccer_spain_la_liga,real betis,oviedo
+1391153,140,La Liga,2025,2026-05-03 16:00:00+00:00,NS,Not Started,546,Getafe,728,Rayo Vallecano,,,,soccer_spain_la_liga,getafe,rayo vallecano
+1391154,140,La Liga,2025,2026-05-03 16:00:00+00:00,NS,Not Started,547,Girona,798,Mallorca,,,,soccer_spain_la_liga,girona,mallorca
+1391155,140,La Liga,2025,2026-05-03 16:00:00+00:00,NS,Not Started,727,Osasuna,529,Barcelona,,,,soccer_spain_la_liga,osasuna,barcelona
+1391161,140,La Liga,2025,2026-05-10 16:00:00+00:00,NS,Not Started,529,Barcelona,541,Real Madrid,,,,soccer_spain_la_liga,barcelona,real madrid
+1391160,140,La Liga,2025,2026-05-10 16:00:00+00:00,NS,Not Started,530,Atletico Madrid,538,Celta Vigo,,,,soccer_spain_la_liga,atletico madrid,celta vigo
+1391159,140,La Liga,2025,2026-05-10 16:00:00+00:00,NS,Not Started,531,Athletic Club,532,Valencia,,,,soccer_spain_la_liga,athletic,valencia
+1391168,140,La Liga,2025,2026-05-10 16:00:00+00:00,NS,Not Started,536,Sevilla,540,Espanyol,,,,soccer_spain_la_liga,sevilla,espanyol
+1391163,140,La Liga,2025,2026-05-10 16:00:00+00:00,NS,Not Started,539,Levante,727,Osasuna,,,,soccer_spain_la_liga,levante,osasuna
+1391166,140,La Liga,2025,2026-05-10 16:00:00+00:00,NS,Not Started,548,Real Sociedad,543,Real Betis,,,,soccer_spain_la_liga,real sociedad,real betis
+1391167,140,La Liga,2025,2026-05-10 16:00:00+00:00,NS,Not Started,718,Oviedo,546,Getafe,,,,soccer_spain_la_liga,oviedo,getafe
+1391165,140,La Liga,2025,2026-05-10 16:00:00+00:00,NS,Not Started,728,Rayo Vallecano,547,Girona,,,,soccer_spain_la_liga,rayo vallecano,girona
+1391162,140,La Liga,2025,2026-05-10 16:00:00+00:00,NS,Not Started,797,Elche,542,Alaves,,,,soccer_spain_la_liga,elche,alaves
+1391164,140,La Liga,2025,2026-05-10 16:00:00+00:00,NS,Not Started,798,Mallorca,533,Villarreal,,,,soccer_spain_la_liga,mallorca,villarreal
+1391177,140,La Liga,2025,2026-05-13 16:00:00+00:00,NS,Not Started,532,Valencia,728,Rayo Vallecano,,,,soccer_spain_la_liga,valencia,rayo vallecano
+1391178,140,La Liga,2025,2026-05-13 16:00:00+00:00,NS,Not Started,533,Villarreal,536,Sevilla,,,,soccer_spain_la_liga,villarreal,sevilla
+1391171,140,La Liga,2025,2026-05-13 16:00:00+00:00,NS,Not Started,538,Celta Vigo,539,Levante,,,,soccer_spain_la_liga,celta vigo,levante
+1391172,140,La Liga,2025,2026-05-13 16:00:00+00:00,NS,Not Started,540,Espanyol,531,Athletic Club,,,,soccer_spain_la_liga,espanyol,athletic
+1391176,140,La Liga,2025,2026-05-13 16:00:00+00:00,NS,Not Started,541,Real Madrid,718,Oviedo,,,,soccer_spain_la_liga,real madrid,oviedo
+1391169,140,La Liga,2025,2026-05-13 16:00:00+00:00,NS,Not Started,542,Alaves,529,Barcelona,,,,soccer_spain_la_liga,alaves,barcelona
+1391170,140,La Liga,2025,2026-05-13 16:00:00+00:00,NS,Not Started,543,Real Betis,797,Elche,,,,soccer_spain_la_liga,real betis,elche
+1391173,140,La Liga,2025,2026-05-13 16:00:00+00:00,NS,Not Started,546,Getafe,798,Mallorca,,,,soccer_spain_la_liga,getafe,mallorca
+1391174,140,La Liga,2025,2026-05-13 16:00:00+00:00,NS,Not Started,547,Girona,548,Real Sociedad,,,,soccer_spain_la_liga,girona,real sociedad
+1391175,140,La Liga,2025,2026-05-13 16:00:00+00:00,NS,Not Started,727,Osasuna,530,Atletico Madrid,,,,soccer_spain_la_liga,osasuna,atletico madrid
+1391181,140,La Liga,2025,2026-05-17 16:00:00+00:00,NS,Not Started,529,Barcelona,543,Real Betis,,,,soccer_spain_la_liga,barcelona,real betis
+1391180,140,La Liga,2025,2026-05-17 16:00:00+00:00,NS,Not Started,530,Atletico Madrid,547,Girona,,,,soccer_spain_la_liga,atletico madrid,girona
+1391179,140,La Liga,2025,2026-05-17 16:00:00+00:00,NS,Not Started,531,Athletic Club,538,Celta Vigo,,,,soccer_spain_la_liga,athletic,celta vigo
+1391188,140,La Liga,2025,2026-05-17 16:00:00+00:00,NS,Not Started,536,Sevilla,541,Real Madrid,,,,soccer_spain_la_liga,sevilla,real madrid
+1391183,140,La Liga,2025,2026-05-17 16:00:00+00:00,NS,Not Started,539,Levante,798,Mallorca,,,,soccer_spain_la_liga,levante,mallorca
+1391186,140,La Liga,2025,2026-05-17 16:00:00+00:00,NS,Not Started,548,Real Sociedad,532,Valencia,,,,soccer_spain_la_liga,real sociedad,valencia
+1391187,140,La Liga,2025,2026-05-17 16:00:00+00:00,NS,Not Started,718,Oviedo,542,Alaves,,,,soccer_spain_la_liga,oviedo,alaves
+1391184,140,La Liga,2025,2026-05-17 16:00:00+00:00,NS,Not Started,727,Osasuna,540,Espanyol,,,,soccer_spain_la_liga,osasuna,espanyol
+1391185,140,La Liga,2025,2026-05-17 16:00:00+00:00,NS,Not Started,728,Rayo Vallecano,533,Villarreal,,,,soccer_spain_la_liga,rayo vallecano,villarreal
+1391182,140,La Liga,2025,2026-05-17 16:00:00+00:00,NS,Not Started,797,Elche,546,Getafe,,,,soccer_spain_la_liga,elche,getafe
+1391197,140,La Liga,2025,2026-05-24 16:00:00+00:00,NS,Not Started,532,Valencia,529,Barcelona,,,,soccer_spain_la_liga,valencia,barcelona
+1391198,140,La Liga,2025,2026-05-24 16:00:00+00:00,NS,Not Started,533,Villarreal,530,Atletico Madrid,,,,soccer_spain_la_liga,villarreal,atletico madrid
+1391191,140,La Liga,2025,2026-05-24 16:00:00+00:00,NS,Not Started,538,Celta Vigo,536,Sevilla,,,,soccer_spain_la_liga,celta vigo,sevilla
+1391192,140,La Liga,2025,2026-05-24 16:00:00+00:00,NS,Not Started,540,Espanyol,548,Real Sociedad,,,,soccer_spain_la_liga,espanyol,real sociedad
+1391196,140,La Liga,2025,2026-05-24 16:00:00+00:00,NS,Not Started,541,Real Madrid,531,Athletic Club,,,,soccer_spain_la_liga,real madrid,athletic
+1391189,140,La Liga,2025,2026-05-24 16:00:00+00:00,NS,Not Started,542,Alaves,728,Rayo Vallecano,,,,soccer_spain_la_liga,alaves,rayo vallecano
+1391190,140,La Liga,2025,2026-05-24 16:00:00+00:00,NS,Not Started,543,Real Betis,539,Levante,,,,soccer_spain_la_liga,real betis,levante
+1391193,140,La Liga,2025,2026-05-24 16:00:00+00:00,NS,Not Started,546,Getafe,727,Osasuna,,,,soccer_spain_la_liga,getafe,osasuna
+1391194,140,La Liga,2025,2026-05-24 16:00:00+00:00,NS,Not Started,547,Girona,797,Elche,,,,soccer_spain_la_liga,girona,elche
+1391195,140,La Liga,2025,2026-05-24 16:00:00+00:00,NS,Not Started,798,Mallorca,718,Oviedo,,,,soccer_spain_la_liga,mallorca,oviedo

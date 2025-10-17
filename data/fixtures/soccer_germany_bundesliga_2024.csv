@@ -1,0 +1,309 @@
+sport_key,league_name,season,fixture_id,date,home,away,home_id,away_id,status,goals_home,goals_away,result
+soccer_germany_bundesliga,Bundesliga,2024,1223975,2024-08-23 18:30:00+00:00,Borussia Mönchengladbach,Bayer Leverkusen,163,168,FT,2,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1223979,2024-08-24 13:30:00+00:00,SC Freiburg,VfB Stuttgart,160,172,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1223982,2024-08-24 13:30:00+00:00,FSV Mainz 05,Union Berlin,164,182,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1223978,2024-08-24 13:30:00+00:00,1899 Hoffenheim,Holstein Kiel,167,191,FT,3,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1223980,2024-08-24 13:30:00+00:00,FC Augsburg,Werder Bremen,170,162,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1223976,2024-08-24 13:30:00+00:00,RB Leipzig,VfL Bochum,173,176,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1223977,2024-08-24 16:30:00+00:00,Borussia Dortmund,Eintracht Frankfurt,165,169,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1223981,2024-08-25 13:30:00+00:00,VfL Wolfsburg,Bayern München,161,157,FT,2,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1223983,2024-08-25 15:30:00+00:00,FC St. Pauli,1. FC Heidenheim,186,180,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1223990,2024-08-30 18:30:00+00:00,Union Berlin,FC St. Pauli,182,186,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1223989,2024-08-31 13:30:00+00:00,Werder Bremen,Borussia Dortmund,162,165,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1223987,2024-08-31 13:30:00+00:00,Eintracht Frankfurt,1899 Hoffenheim,169,167,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1223985,2024-08-31 13:30:00+00:00,VfB Stuttgart,FSV Mainz 05,172,164,FT,3,3,D
+soccer_germany_bundesliga,Bundesliga,2024,1223991,2024-08-31 13:30:00+00:00,VfL Bochum,Borussia Mönchengladbach,176,163,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1223992,2024-08-31 13:30:00+00:00,Holstein Kiel,VfL Wolfsburg,191,161,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1223984,2024-08-31 16:30:00+00:00,Bayer Leverkusen,RB Leipzig,168,173,FT,2,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1223988,2024-09-01 13:30:00+00:00,1. FC Heidenheim,FC Augsburg,180,170,FT,4,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1223986,2024-09-01 15:30:00+00:00,Bayern München,SC Freiburg,157,160,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1223994,2024-09-13 18:30:00+00:00,Borussia Dortmund,1. FC Heidenheim,165,180,FT,4,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1223996,2024-09-14 13:30:00+00:00,SC Freiburg,VfL Bochum,160,176,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1223998,2024-09-14 13:30:00+00:00,VfL Wolfsburg,Eintracht Frankfurt,161,169,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224000,2024-09-14 13:30:00+00:00,Borussia Mönchengladbach,VfB Stuttgart,163,172,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1223995,2024-09-14 13:30:00+00:00,1899 Hoffenheim,Bayer Leverkusen,167,168,FT,1,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1223993,2024-09-14 13:30:00+00:00,RB Leipzig,Union Berlin,173,182,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224001,2024-09-14 16:30:00+00:00,Holstein Kiel,Bayern München,191,157,FT,1,6,A
+soccer_germany_bundesliga,Bundesliga,2024,1223997,2024-09-15 13:30:00+00:00,FC Augsburg,FC St. Pauli,170,186,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1223999,2024-09-15 15:30:00+00:00,FSV Mainz 05,Werder Bremen,164,162,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224007,2024-09-20 18:30:00+00:00,FC Augsburg,FSV Mainz 05,170,164,FT,2,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224006,2024-09-21 13:30:00+00:00,Werder Bremen,Bayern München,162,157,FT,0,5,A
+soccer_germany_bundesliga,Bundesliga,2024,1224009,2024-09-21 13:30:00+00:00,VfL Bochum,Holstein Kiel,176,191,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224005,2024-09-21 13:30:00+00:00,1. FC Heidenheim,SC Freiburg,180,160,FT,0,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224008,2024-09-21 13:30:00+00:00,Union Berlin,1899 Hoffenheim,182,167,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224004,2024-09-21 16:30:00+00:00,Eintracht Frankfurt,Borussia Mönchengladbach,169,163,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224002,2024-09-22 13:30:00+00:00,Bayer Leverkusen,VfL Wolfsburg,168,161,FT,4,3,H
+soccer_germany_bundesliga,Bundesliga,2024,1224003,2024-09-22 15:30:00+00:00,VfB Stuttgart,Borussia Dortmund,172,165,FT,5,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224010,2024-09-22 17:30:00+00:00,FC St. Pauli,RB Leipzig,186,173,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224013,2024-09-27 18:30:00+00:00,Borussia Dortmund,VfL Bochum,165,176,FT,4,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224015,2024-09-28 13:30:00+00:00,SC Freiburg,FC St. Pauli,160,186,FT,0,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224016,2024-09-28 13:30:00+00:00,VfL Wolfsburg,VfB Stuttgart,161,172,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224018,2024-09-28 13:30:00+00:00,Borussia Mönchengladbach,Union Berlin,163,182,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224017,2024-09-28 13:30:00+00:00,FSV Mainz 05,1. FC Heidenheim,164,180,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224012,2024-09-28 13:30:00+00:00,RB Leipzig,FC Augsburg,173,170,FT,4,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224011,2024-09-28 16:30:00+00:00,Bayern München,Bayer Leverkusen,157,168,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224019,2024-09-29 13:30:00+00:00,Holstein Kiel,Eintracht Frankfurt,191,169,FT,2,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224014,2024-09-29 15:30:00+00:00,1899 Hoffenheim,Werder Bremen,167,162,FT,3,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224025,2024-10-04 18:30:00+00:00,FC Augsburg,Borussia Mönchengladbach,170,163,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224024,2024-10-05 13:30:00+00:00,Werder Bremen,SC Freiburg,162,160,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224020,2024-10-05 13:30:00+00:00,Bayer Leverkusen,Holstein Kiel,168,191,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224027,2024-10-05 13:30:00+00:00,VfL Bochum,VfL Wolfsburg,176,161,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224026,2024-10-05 13:30:00+00:00,Union Berlin,Borussia Dortmund,182,165,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224028,2024-10-05 16:30:00+00:00,FC St. Pauli,FSV Mainz 05,186,164,FT,0,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224023,2024-10-06 13:30:00+00:00,1. FC Heidenheim,RB Leipzig,180,173,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224022,2024-10-06 15:30:00+00:00,Eintracht Frankfurt,Bayern München,169,157,FT,3,3,D
+soccer_germany_bundesliga,Bundesliga,2024,1224021,2024-10-06 17:30:00+00:00,VfB Stuttgart,1899 Hoffenheim,172,167,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224031,2024-10-18 18:30:00+00:00,Borussia Dortmund,FC St. Pauli,165,186,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224033,2024-10-19 13:30:00+00:00,SC Freiburg,FC Augsburg,160,170,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224036,2024-10-19 13:30:00+00:00,Borussia Mönchengladbach,1. FC Heidenheim,163,180,FT,3,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224035,2024-10-19 13:30:00+00:00,FSV Mainz 05,RB Leipzig,164,173,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224032,2024-10-19 13:30:00+00:00,1899 Hoffenheim,VfL Bochum,167,176,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224029,2024-10-19 13:30:00+00:00,Bayer Leverkusen,Eintracht Frankfurt,168,169,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224030,2024-10-19 16:30:00+00:00,Bayern München,VfB Stuttgart,157,172,FT,4,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224037,2024-10-20 13:30:00+00:00,Holstein Kiel,Union Berlin,191,182,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224034,2024-10-20 15:30:00+00:00,VfL Wolfsburg,Werder Bremen,161,162,FT,2,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224043,2024-10-25 18:30:00+00:00,FSV Mainz 05,Borussia Mönchengladbach,164,163,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224042,2024-10-26 13:30:00+00:00,FC Augsburg,Borussia Dortmund,170,165,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224038,2024-10-26 13:30:00+00:00,VfB Stuttgart,Holstein Kiel,172,191,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224039,2024-10-26 13:30:00+00:00,RB Leipzig,SC Freiburg,173,160,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224046,2024-10-26 13:30:00+00:00,FC St. Pauli,VfL Wolfsburg,186,161,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224041,2024-10-26 16:30:00+00:00,Werder Bremen,Bayer Leverkusen,162,168,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224045,2024-10-27 14:30:00+00:00,VfL Bochum,Bayern München,176,157,FT,0,5,A
+soccer_germany_bundesliga,Bundesliga,2024,1224044,2024-10-27 16:30:00+00:00,Union Berlin,Eintracht Frankfurt,182,169,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224040,2024-10-27 18:30:00+00:00,1. FC Heidenheim,1899 Hoffenheim,180,167,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224047,2024-11-01 19:30:00+00:00,Bayer Leverkusen,VfB Stuttgart,168,172,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224048,2024-11-02 14:30:00+00:00,Bayern München,Union Berlin,157,182,FT,3,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224053,2024-11-02 14:30:00+00:00,VfL Wolfsburg,FC Augsburg,161,170,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224051,2024-11-02 14:30:00+00:00,1899 Hoffenheim,FC St. Pauli,167,186,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224050,2024-11-02 14:30:00+00:00,Eintracht Frankfurt,VfL Bochum,169,176,FT,7,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224055,2024-11-02 14:30:00+00:00,Holstein Kiel,1. FC Heidenheim,191,180,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224049,2024-11-02 17:30:00+00:00,Borussia Dortmund,RB Leipzig,165,173,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224052,2024-11-03 14:30:00+00:00,SC Freiburg,FSV Mainz 05,160,164,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224054,2024-11-03 16:30:00+00:00,Borussia Mönchengladbach,Werder Bremen,163,162,FT,4,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224062,2024-11-08 19:30:00+00:00,Union Berlin,SC Freiburg,182,160,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224059,2024-11-09 14:30:00+00:00,Werder Bremen,Holstein Kiel,162,191,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224061,2024-11-09 14:30:00+00:00,FSV Mainz 05,Borussia Dortmund,164,165,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224063,2024-11-09 14:30:00+00:00,VfL Bochum,Bayer Leverkusen,176,168,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224064,2024-11-09 14:30:00+00:00,FC St. Pauli,Bayern München,186,157,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224057,2024-11-09 17:30:00+00:00,RB Leipzig,Borussia Mönchengladbach,173,163,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224060,2024-11-10 14:30:00+00:00,FC Augsburg,1899 Hoffenheim,170,167,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224056,2024-11-10 16:30:00+00:00,VfB Stuttgart,Eintracht Frankfurt,172,169,FT,2,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224058,2024-11-10 18:30:00+00:00,1. FC Heidenheim,VfL Wolfsburg,180,161,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224067,2024-11-22 19:30:00+00:00,Bayern München,FC Augsburg,157,170,FT,3,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224071,2024-11-23 14:30:00+00:00,VfL Wolfsburg,Union Berlin,161,182,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224068,2024-11-23 14:30:00+00:00,Borussia Dortmund,SC Freiburg,165,160,FT,4,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224070,2024-11-23 14:30:00+00:00,1899 Hoffenheim,RB Leipzig,167,173,FT,4,3,H
+soccer_germany_bundesliga,Bundesliga,2024,1224065,2024-11-23 14:30:00+00:00,Bayer Leverkusen,1. FC Heidenheim,168,180,FT,5,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224066,2024-11-23 14:30:00+00:00,VfB Stuttgart,VfL Bochum,172,176,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224069,2024-11-23 17:30:00+00:00,Eintracht Frankfurt,Werder Bremen,169,162,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224073,2024-11-24 14:30:00+00:00,Holstein Kiel,FSV Mainz 05,191,164,FT,0,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224072,2024-11-24 16:30:00+00:00,Borussia Mönchengladbach,FC St. Pauli,163,186,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224082,2024-11-29 19:30:00+00:00,FC St. Pauli,Holstein Kiel,186,191,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224078,2024-11-30 14:30:00+00:00,SC Freiburg,Borussia Mönchengladbach,160,163,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224077,2024-11-30 14:30:00+00:00,Werder Bremen,VfB Stuttgart,162,172,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224079,2024-11-30 14:30:00+00:00,FC Augsburg,VfL Bochum,170,176,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224074,2024-11-30 14:30:00+00:00,RB Leipzig,VfL Wolfsburg,173,161,FT,1,5,A
+soccer_germany_bundesliga,Bundesliga,2024,1224081,2024-11-30 14:30:00+00:00,Union Berlin,Bayer Leverkusen,182,168,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224075,2024-11-30 17:30:00+00:00,Borussia Dortmund,Bayern München,165,157,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224080,2024-12-01 14:30:00+00:00,FSV Mainz 05,1899 Hoffenheim,164,167,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224076,2024-12-01 16:30:00+00:00,1. FC Heidenheim,Eintracht Frankfurt,180,169,FT,0,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224084,2024-12-06 19:30:00+00:00,VfB Stuttgart,Union Berlin,172,182,FT,3,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224085,2024-12-07 14:30:00+00:00,Bayern München,1. FC Heidenheim,157,180,FT,4,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224083,2024-12-07 14:30:00+00:00,Bayer Leverkusen,FC St. Pauli,168,186,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224086,2024-12-07 14:30:00+00:00,Eintracht Frankfurt,FC Augsburg,169,170,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224090,2024-12-07 14:30:00+00:00,VfL Bochum,Werder Bremen,176,162,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224091,2024-12-07 14:30:00+00:00,Holstein Kiel,RB Leipzig,191,173,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224089,2024-12-07 17:30:00+00:00,Borussia Mönchengladbach,Borussia Dortmund,163,165,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224088,2024-12-08 14:30:00+00:00,VfL Wolfsburg,FSV Mainz 05,161,164,FT,4,3,H
+soccer_germany_bundesliga,Bundesliga,2024,1224087,2024-12-08 16:30:00+00:00,1899 Hoffenheim,SC Freiburg,167,160,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224095,2024-12-13 19:30:00+00:00,SC Freiburg,VfL Wolfsburg,160,161,FT,3,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224098,2024-12-14 14:30:00+00:00,Borussia Mönchengladbach,Holstein Kiel,163,191,FT,4,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224097,2024-12-14 14:30:00+00:00,FSV Mainz 05,Bayern München,164,157,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224096,2024-12-14 14:30:00+00:00,FC Augsburg,Bayer Leverkusen,170,168,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224099,2024-12-14 14:30:00+00:00,Union Berlin,VfL Bochum,182,176,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224100,2024-12-14 17:30:00+00:00,FC St. Pauli,Werder Bremen,186,162,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224094,2024-12-15 14:30:00+00:00,1. FC Heidenheim,VfB Stuttgart,180,172,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224093,2024-12-15 16:30:00+00:00,Borussia Dortmund,1899 Hoffenheim,165,167,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224092,2024-12-15 18:30:00+00:00,RB Leipzig,Eintracht Frankfurt,173,169,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224103,2024-12-20 19:30:00+00:00,Bayern München,RB Leipzig,157,173,FT,5,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224106,2024-12-21 14:30:00+00:00,Werder Bremen,Union Berlin,162,182,FT,4,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224105,2024-12-21 14:30:00+00:00,1899 Hoffenheim,Borussia Mönchengladbach,167,163,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224104,2024-12-21 14:30:00+00:00,Eintracht Frankfurt,FSV Mainz 05,169,164,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224102,2024-12-21 14:30:00+00:00,VfB Stuttgart,FC St. Pauli,172,186,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224109,2024-12-21 14:30:00+00:00,Holstein Kiel,FC Augsburg,191,170,FT,5,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224101,2024-12-21 17:30:00+00:00,Bayer Leverkusen,SC Freiburg,168,160,FT,5,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224108,2024-12-22 14:30:00+00:00,VfL Bochum,1. FC Heidenheim,176,180,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224107,2024-12-22 16:30:00+00:00,VfL Wolfsburg,Borussia Dortmund,161,165,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224111,2025-01-10 19:45:00+00:00,Borussia Dortmund,Bayer Leverkusen,165,168,FT,2,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224114,2025-01-11 14:30:00+00:00,SC Freiburg,Holstein Kiel,160,191,FT,3,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224116,2025-01-11 14:30:00+00:00,FSV Mainz 05,VfL Bochum,164,176,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224112,2025-01-11 14:30:00+00:00,1899 Hoffenheim,VfL Wolfsburg,167,161,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224113,2025-01-11 14:30:00+00:00,1. FC Heidenheim,Union Berlin,180,182,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224118,2025-01-11 14:30:00+00:00,FC St. Pauli,Eintracht Frankfurt,186,169,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224117,2025-01-11 17:30:00+00:00,Borussia Mönchengladbach,Bayern München,163,157,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224110,2025-01-12 14:30:00+00:00,RB Leipzig,Werder Bremen,173,162,FT,4,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224115,2025-01-12 16:30:00+00:00,FC Augsburg,VfB Stuttgart,170,172,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224127,2025-01-14 17:30:00+00:00,Holstein Kiel,Borussia Dortmund,191,165,FT,4,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224124,2025-01-14 19:30:00+00:00,VfL Wolfsburg,Borussia Mönchengladbach,161,163,FT,5,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224119,2025-01-14 19:30:00+00:00,Bayer Leverkusen,FSV Mainz 05,168,164,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224122,2025-01-14 19:30:00+00:00,Eintracht Frankfurt,SC Freiburg,169,160,FT,4,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224126,2025-01-15 17:30:00+00:00,VfL Bochum,FC St. Pauli,176,186,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224121,2025-01-15 19:30:00+00:00,Bayern München,1899 Hoffenheim,157,167,FT,5,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224123,2025-01-15 19:30:00+00:00,Werder Bremen,1. FC Heidenheim,162,180,FT,3,3,D
+soccer_germany_bundesliga,Bundesliga,2024,1224120,2025-01-15 19:30:00+00:00,VfB Stuttgart,RB Leipzig,172,173,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224125,2025-01-15 19:30:00+00:00,Union Berlin,FC Augsburg,182,170,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224131,2025-01-17 19:30:00+00:00,Eintracht Frankfurt,Borussia Dortmund,169,165,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224130,2025-01-18 14:30:00+00:00,Bayern München,VfL Wolfsburg,157,161,FT,3,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224129,2025-01-18 14:30:00+00:00,VfB Stuttgart,SC Freiburg,172,160,FT,4,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224135,2025-01-18 14:30:00+00:00,VfL Bochum,RB Leipzig,176,173,FT,3,3,D
+soccer_germany_bundesliga,Bundesliga,2024,1224132,2025-01-18 14:30:00+00:00,1. FC Heidenheim,FC St. Pauli,180,186,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224136,2025-01-18 14:30:00+00:00,Holstein Kiel,1899 Hoffenheim,191,167,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224128,2025-01-18 17:30:00+00:00,Bayer Leverkusen,Borussia Mönchengladbach,168,163,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224134,2025-01-19 14:30:00+00:00,Union Berlin,FSV Mainz 05,182,164,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224133,2025-01-19 16:30:00+00:00,Werder Bremen,FC Augsburg,162,170,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224142,2025-01-24 19:30:00+00:00,VfL Wolfsburg,Holstein Kiel,161,191,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224140,2025-01-25 14:30:00+00:00,SC Freiburg,Bayern München,160,157,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224143,2025-01-25 14:30:00+00:00,FSV Mainz 05,VfB Stuttgart,164,172,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224138,2025-01-25 14:30:00+00:00,Borussia Dortmund,Werder Bremen,165,162,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224141,2025-01-25 14:30:00+00:00,FC Augsburg,1. FC Heidenheim,170,180,FT,2,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224137,2025-01-25 14:30:00+00:00,RB Leipzig,Bayer Leverkusen,173,168,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224144,2025-01-25 17:30:00+00:00,Borussia Mönchengladbach,VfL Bochum,163,176,FT,3,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224139,2025-01-26 14:30:00+00:00,1899 Hoffenheim,Eintracht Frankfurt,167,169,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224145,2025-01-26 16:30:00+00:00,FC St. Pauli,Union Berlin,186,182,FT,3,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224151,2025-01-31 19:30:00+00:00,Werder Bremen,FSV Mainz 05,162,164,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224148,2025-02-01 14:30:00+00:00,Bayern München,Holstein Kiel,157,191,FT,4,3,H
+soccer_germany_bundesliga,Bundesliga,2024,1224147,2025-02-01 14:30:00+00:00,VfB Stuttgart,Borussia Mönchengladbach,172,163,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224153,2025-02-01 14:30:00+00:00,VfL Bochum,SC Freiburg,176,160,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224150,2025-02-01 14:30:00+00:00,1. FC Heidenheim,Borussia Dortmund,180,165,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224154,2025-02-01 14:30:00+00:00,FC St. Pauli,FC Augsburg,186,170,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224152,2025-02-01 17:30:00+00:00,Union Berlin,RB Leipzig,182,173,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224149,2025-02-02 14:30:00+00:00,Eintracht Frankfurt,VfL Wolfsburg,169,161,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224146,2025-02-02 16:30:00+00:00,Bayer Leverkusen,1899 Hoffenheim,168,167,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224155,2025-02-07 19:30:00+00:00,Bayern München,Werder Bremen,157,162,FT,3,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224159,2025-02-08 14:30:00+00:00,SC Freiburg,1. FC Heidenheim,160,180,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224160,2025-02-08 14:30:00+00:00,VfL Wolfsburg,Bayer Leverkusen,161,168,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224161,2025-02-08 14:30:00+00:00,FSV Mainz 05,FC Augsburg,164,170,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224157,2025-02-08 14:30:00+00:00,Borussia Dortmund,VfB Stuttgart,165,172,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224158,2025-02-08 14:30:00+00:00,1899 Hoffenheim,Union Berlin,167,182,FT,0,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224162,2025-02-08 17:30:00+00:00,Borussia Mönchengladbach,Eintracht Frankfurt,163,169,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224163,2025-02-09 14:30:00+00:00,Holstein Kiel,VfL Bochum,191,176,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224156,2025-02-09 16:30:00+00:00,RB Leipzig,FC St. Pauli,173,186,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224169,2025-02-14 19:30:00+00:00,FC Augsburg,RB Leipzig,170,173,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224165,2025-02-15 14:30:00+00:00,VfB Stuttgart,VfL Wolfsburg,172,161,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224171,2025-02-15 14:30:00+00:00,VfL Bochum,Borussia Dortmund,176,165,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224170,2025-02-15 14:30:00+00:00,Union Berlin,Borussia Mönchengladbach,182,163,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224172,2025-02-15 14:30:00+00:00,FC St. Pauli,SC Freiburg,186,160,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224164,2025-02-15 17:30:00+00:00,Bayer Leverkusen,Bayern München,168,157,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224168,2025-02-16 14:30:00+00:00,Werder Bremen,1899 Hoffenheim,162,167,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224166,2025-02-16 16:30:00+00:00,Eintracht Frankfurt,Holstein Kiel,169,191,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224167,2025-02-16 18:30:00+00:00,1. FC Heidenheim,FSV Mainz 05,180,164,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224177,2025-02-21 19:30:00+00:00,SC Freiburg,Werder Bremen,160,162,FT,5,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224178,2025-02-22 14:30:00+00:00,VfL Wolfsburg,VfL Bochum,161,176,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224180,2025-02-22 14:30:00+00:00,Borussia Mönchengladbach,FC Augsburg,163,170,FT,0,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224179,2025-02-22 14:30:00+00:00,FSV Mainz 05,FC St. Pauli,164,186,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224181,2025-02-22 14:30:00+00:00,Holstein Kiel,Bayer Leverkusen,191,168,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224175,2025-02-22 17:30:00+00:00,Borussia Dortmund,Union Berlin,165,182,FT,6,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224174,2025-02-23 14:30:00+00:00,RB Leipzig,1. FC Heidenheim,173,180,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224173,2025-02-23 16:30:00+00:00,Bayern München,Eintracht Frankfurt,157,169,FT,4,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224176,2025-02-23 18:30:00+00:00,1899 Hoffenheim,VfB Stuttgart,167,172,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224182,2025-02-28 19:30:00+00:00,VfB Stuttgart,Bayern München,172,157,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224186,2025-03-01 14:30:00+00:00,Werder Bremen,VfL Wolfsburg,162,161,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224183,2025-03-01 14:30:00+00:00,RB Leipzig,FSV Mainz 05,173,164,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224189,2025-03-01 14:30:00+00:00,VfL Bochum,1899 Hoffenheim,176,167,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224185,2025-03-01 14:30:00+00:00,1. FC Heidenheim,Borussia Mönchengladbach,180,163,FT,0,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224190,2025-03-01 14:30:00+00:00,FC St. Pauli,Borussia Dortmund,186,165,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224184,2025-03-01 17:30:00+00:00,Eintracht Frankfurt,Bayer Leverkusen,169,168,FT,1,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224188,2025-03-02 14:30:00+00:00,Union Berlin,Holstein Kiel,182,191,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224187,2025-03-02 16:30:00+00:00,FC Augsburg,SC Freiburg,170,160,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224198,2025-03-07 19:30:00+00:00,Borussia Mönchengladbach,FSV Mainz 05,163,164,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224192,2025-03-08 14:30:00+00:00,Bayern München,VfL Bochum,157,176,FT,2,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224197,2025-03-08 14:30:00+00:00,VfL Wolfsburg,FC St. Pauli,161,186,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224193,2025-03-08 14:30:00+00:00,Borussia Dortmund,FC Augsburg,165,170,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224191,2025-03-08 14:30:00+00:00,Bayer Leverkusen,Werder Bremen,168,162,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224199,2025-03-08 14:30:00+00:00,Holstein Kiel,VfB Stuttgart,191,172,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224196,2025-03-08 17:30:00+00:00,SC Freiburg,RB Leipzig,160,173,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224194,2025-03-09 14:30:00+00:00,Eintracht Frankfurt,Union Berlin,169,182,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224195,2025-03-09 16:30:00+00:00,1899 Hoffenheim,1. FC Heidenheim,167,180,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224208,2025-03-14 19:30:00+00:00,FC St. Pauli,1899 Hoffenheim,186,167,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224203,2025-03-15 14:30:00+00:00,Werder Bremen,Borussia Mönchengladbach,162,163,FT,2,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224205,2025-03-15 14:30:00+00:00,FSV Mainz 05,SC Freiburg,164,160,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224204,2025-03-15 14:30:00+00:00,FC Augsburg,VfL Wolfsburg,170,161,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224206,2025-03-15 14:30:00+00:00,Union Berlin,Bayern München,182,157,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224201,2025-03-15 17:30:00+00:00,RB Leipzig,Borussia Dortmund,173,165,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224207,2025-03-16 15:20:00+00:00,VfL Bochum,Eintracht Frankfurt,176,169,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224202,2025-03-16 16:30:00+00:00,1. FC Heidenheim,Holstein Kiel,180,191,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224200,2025-03-16 18:30:00+00:00,VfB Stuttgart,Bayer Leverkusen,172,168,FT,3,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224209,2025-03-28 19:30:00+00:00,Bayer Leverkusen,VfL Bochum,168,176,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224210,2025-03-29 14:30:00+00:00,Bayern München,FC St. Pauli,157,186,FT,3,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224215,2025-03-29 14:30:00+00:00,VfL Wolfsburg,1. FC Heidenheim,161,180,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224216,2025-03-29 14:30:00+00:00,Borussia Mönchengladbach,RB Leipzig,163,173,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224213,2025-03-29 14:30:00+00:00,1899 Hoffenheim,FC Augsburg,167,170,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224217,2025-03-29 14:30:00+00:00,Holstein Kiel,Werder Bremen,191,162,FT,0,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224212,2025-03-29 17:30:00+00:00,Eintracht Frankfurt,VfB Stuttgart,169,172,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224214,2025-03-30 13:30:00+00:00,SC Freiburg,Union Berlin,160,182,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224211,2025-03-30 15:30:00+00:00,Borussia Dortmund,FSV Mainz 05,165,164,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224222,2025-04-04 18:30:00+00:00,FC Augsburg,Bayern München,170,157,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224221,2025-04-05 13:30:00+00:00,SC Freiburg,Borussia Dortmund,160,165,FT,1,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224223,2025-04-05 13:30:00+00:00,FSV Mainz 05,Holstein Kiel,164,191,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224218,2025-04-05 13:30:00+00:00,RB Leipzig,1899 Hoffenheim,173,167,FT,3,1,H
+soccer_germany_bundesliga,Bundesliga,2024,1224225,2025-04-05 13:30:00+00:00,VfL Bochum,VfB Stuttgart,176,172,FT,0,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224219,2025-04-05 13:30:00+00:00,1. FC Heidenheim,Bayer Leverkusen,180,168,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224220,2025-04-05 16:30:00+00:00,Werder Bremen,Eintracht Frankfurt,162,169,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224226,2025-04-06 13:30:00+00:00,FC St. Pauli,Borussia Mönchengladbach,186,163,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224224,2025-04-06 15:30:00+00:00,Union Berlin,VfL Wolfsburg,182,161,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224232,2025-04-11 18:30:00+00:00,VfL Wolfsburg,RB Leipzig,161,173,FT,2,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224233,2025-04-12 13:30:00+00:00,Borussia Mönchengladbach,SC Freiburg,163,160,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224231,2025-04-12 13:30:00+00:00,1899 Hoffenheim,FSV Mainz 05,167,164,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224227,2025-04-12 13:30:00+00:00,Bayer Leverkusen,Union Berlin,168,182,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224234,2025-04-12 13:30:00+00:00,VfL Bochum,FC Augsburg,176,170,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224235,2025-04-12 13:30:00+00:00,Holstein Kiel,FC St. Pauli,191,186,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224229,2025-04-12 16:30:00+00:00,Bayern München,Borussia Dortmund,157,165,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224228,2025-04-13 13:30:00+00:00,VfB Stuttgart,Werder Bremen,172,162,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224230,2025-04-13 15:30:00+00:00,Eintracht Frankfurt,1. FC Heidenheim,169,180,FT,3,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224240,2025-04-19 13:30:00+00:00,SC Freiburg,1899 Hoffenheim,160,167,FT,3,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224239,2025-04-19 13:30:00+00:00,Werder Bremen,VfL Bochum,162,176,FT,1,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224242,2025-04-19 13:30:00+00:00,FSV Mainz 05,VfL Wolfsburg,164,161,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224236,2025-04-19 13:30:00+00:00,RB Leipzig,Holstein Kiel,173,191,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224238,2025-04-19 13:30:00+00:00,1. FC Heidenheim,Bayern München,180,157,FT,0,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224243,2025-04-19 16:30:00+00:00,Union Berlin,VfB Stuttgart,182,172,FT,4,4,D
+soccer_germany_bundesliga,Bundesliga,2024,1224241,2025-04-20 13:30:00+00:00,FC Augsburg,Eintracht Frankfurt,170,169,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224237,2025-04-20 15:30:00+00:00,Borussia Dortmund,Borussia Mönchengladbach,165,163,FT,3,2,H
+soccer_germany_bundesliga,Bundesliga,2024,1224244,2025-04-20 17:30:00+00:00,FC St. Pauli,Bayer Leverkusen,186,168,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224246,2025-04-25 18:30:00+00:00,VfB Stuttgart,1. FC Heidenheim,172,180,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224247,2025-04-26 13:30:00+00:00,Bayern München,FSV Mainz 05,157,164,FT,3,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224251,2025-04-26 13:30:00+00:00,VfL Wolfsburg,SC Freiburg,161,160,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224249,2025-04-26 13:30:00+00:00,1899 Hoffenheim,Borussia Dortmund,167,165,FT,2,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224245,2025-04-26 13:30:00+00:00,Bayer Leverkusen,FC Augsburg,168,170,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224253,2025-04-26 13:30:00+00:00,Holstein Kiel,Borussia Mönchengladbach,191,163,FT,4,3,H
+soccer_germany_bundesliga,Bundesliga,2024,1224248,2025-04-26 16:30:00+00:00,Eintracht Frankfurt,RB Leipzig,169,173,FT,4,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224252,2025-04-27 13:30:00+00:00,VfL Bochum,Union Berlin,176,182,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224250,2025-04-27 15:30:00+00:00,Werder Bremen,FC St. Pauli,162,186,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224256,2025-05-02 18:30:00+00:00,1. FC Heidenheim,VfL Bochum,180,176,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224260,2025-05-03 13:30:00+00:00,Borussia Mönchengladbach,1899 Hoffenheim,163,167,FT,4,4,D
+soccer_germany_bundesliga,Bundesliga,2024,1224254,2025-05-03 13:30:00+00:00,RB Leipzig,Bayern München,173,157,FT,3,3,D
+soccer_germany_bundesliga,Bundesliga,2024,1224261,2025-05-03 13:30:00+00:00,Union Berlin,Werder Bremen,182,162,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224262,2025-05-03 13:30:00+00:00,FC St. Pauli,VfB Stuttgart,186,172,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224255,2025-05-03 16:30:00+00:00,Borussia Dortmund,VfL Wolfsburg,165,161,FT,4,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224258,2025-05-04 13:30:00+00:00,FC Augsburg,Holstein Kiel,170,191,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224257,2025-05-04 15:30:00+00:00,SC Freiburg,Bayer Leverkusen,160,168,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224259,2025-05-04 17:30:00+00:00,FSV Mainz 05,Eintracht Frankfurt,164,169,FT,1,1,D
+soccer_germany_bundesliga,Bundesliga,2024,1224268,2025-05-09 18:30:00+00:00,VfL Wolfsburg,1899 Hoffenheim,161,167,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224267,2025-05-10 13:30:00+00:00,Werder Bremen,RB Leipzig,162,173,FT,0,0,D
+soccer_germany_bundesliga,Bundesliga,2024,1224270,2025-05-10 13:30:00+00:00,VfL Bochum,FSV Mainz 05,176,164,FT,1,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224269,2025-05-10 13:30:00+00:00,Union Berlin,1. FC Heidenheim,182,180,FT,0,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224271,2025-05-10 13:30:00+00:00,Holstein Kiel,SC Freiburg,191,160,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224265,2025-05-10 16:30:00+00:00,Bayern München,Borussia Mönchengladbach,157,163,FT,2,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224263,2025-05-11 13:30:00+00:00,Bayer Leverkusen,Borussia Dortmund,168,165,FT,2,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224266,2025-05-11 15:30:00+00:00,Eintracht Frankfurt,FC St. Pauli,169,186,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224264,2025-05-11 17:30:00+00:00,VfB Stuttgart,FC Augsburg,172,170,FT,4,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224276,2025-05-17 13:30:00+00:00,SC Freiburg,Eintracht Frankfurt,160,169,FT,1,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224279,2025-05-17 13:30:00+00:00,Borussia Mönchengladbach,VfL Wolfsburg,163,161,FT,0,1,A
+soccer_germany_bundesliga,Bundesliga,2024,1224278,2025-05-17 13:30:00+00:00,FSV Mainz 05,Bayer Leverkusen,164,168,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1224273,2025-05-17 13:30:00+00:00,Borussia Dortmund,Holstein Kiel,165,191,FT,3,0,H
+soccer_germany_bundesliga,Bundesliga,2024,1224274,2025-05-17 13:30:00+00:00,1899 Hoffenheim,Bayern München,167,157,FT,0,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224277,2025-05-17 13:30:00+00:00,FC Augsburg,Union Berlin,170,182,FT,1,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1224272,2025-05-17 13:30:00+00:00,RB Leipzig,VfB Stuttgart,173,172,FT,2,3,A
+soccer_germany_bundesliga,Bundesliga,2024,1224275,2025-05-17 13:30:00+00:00,1. FC Heidenheim,Werder Bremen,180,162,FT,1,4,A
+soccer_germany_bundesliga,Bundesliga,2024,1224280,2025-05-17 13:30:00+00:00,FC St. Pauli,VfL Bochum,186,176,FT,0,2,A
+soccer_germany_bundesliga,Bundesliga,2024,1375862,2025-05-22 18:30:00+00:00,1. FC Heidenheim,SV Elversberg,180,1660,FT,2,2,D
+soccer_germany_bundesliga,Bundesliga,2024,1375863,2025-05-26 18:30:00+00:00,SV Elversberg,1. FC Heidenheim,1660,180,FT,1,2,A

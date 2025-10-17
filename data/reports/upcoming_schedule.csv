@@ -1,0 +1,243 @@
+date,league_name,home,away
+2025-10-17 20:30:00+02:00,Bundesliga,Union Berlin,Borussia Mönchengladbach
+2025-10-17 21:00:00+02:00,La Liga,Oviedo,Espanyol
+2025-10-18 13:30:00+02:00,Premier League,Nottingham Forest,Chelsea
+2025-10-18 14:00:00+02:00,La Liga,Sevilla,Mallorca
+2025-10-18 15:30:00+02:00,Bundesliga,1.FC Köln,FC Augsburg
+2025-10-18 15:30:00+02:00,Bundesliga,1. FC Heidenheim,Werder Bremen
+2025-10-18 15:30:00+02:00,Bundesliga,FSV Mainz 05,Bayer Leverkusen
+2025-10-18 15:30:00+02:00,Bundesliga,RB Leipzig,Hamburger SV
+2025-10-18 15:30:00+02:00,Bundesliga,VfL Wolfsburg,VfB Stuttgart
+2025-10-18 16:00:00+02:00,Premier League,Brighton,Newcastle
+2025-10-18 16:00:00+02:00,Premier League,Burnley,Leeds
+2025-10-18 16:00:00+02:00,Premier League,Crystal Palace,Bournemouth
+2025-10-18 16:00:00+02:00,Premier League,Manchester City,Everton
+2025-10-18 16:00:00+02:00,Premier League,Sunderland,Wolves
+2025-10-18 16:15:00+02:00,La Liga,Barcelona,Girona
+2025-10-18 18:30:00+02:00,Premier League,Fulham,Arsenal
+2025-10-18 18:30:00+02:00,Bundesliga,Bayern München,Borussia Dortmund
+2025-10-18 18:30:00+02:00,La Liga,Villarreal,Real Betis
+2025-10-18 21:00:00+02:00,La Liga,Atletico Madrid,Osasuna
+2025-10-19 14:00:00+02:00,La Liga,Elche,Athletic Club
+2025-10-19 15:00:00+02:00,Premier League,Tottenham,Aston Villa
+2025-10-19 15:30:00+02:00,Bundesliga,SC Freiburg,Eintracht Frankfurt
+2025-10-19 16:15:00+02:00,La Liga,Celta Vigo,Real Sociedad
+2025-10-19 17:30:00+02:00,Premier League,Liverpool,Manchester United
+2025-10-19 17:30:00+02:00,Bundesliga,FC St. Pauli,1899 Hoffenheim
+2025-10-19 18:30:00+02:00,La Liga,Levante,Rayo Vallecano
+2025-10-19 21:00:00+02:00,La Liga,Getafe,Real Madrid
+2025-10-20 21:00:00+02:00,Premier League,West Ham,Brentford
+2025-10-20 21:00:00+02:00,La Liga,Alaves,Valencia
+2025-10-24 20:30:00+02:00,Bundesliga,Werder Bremen,Union Berlin
+2025-10-24 21:00:00+02:00,Premier League,Leeds,West Ham
+2025-10-24 21:00:00+02:00,La Liga,Real Sociedad,Sevilla
+2025-10-25 14:00:00+02:00,La Liga,Girona,Oviedo
+2025-10-25 15:30:00+02:00,Bundesliga,FC Augsburg,RB Leipzig
+2025-10-25 15:30:00+02:00,Bundesliga,Borussia Mönchengladbach,Bayern München
+2025-10-25 15:30:00+02:00,Bundesliga,Eintracht Frankfurt,FC St. Pauli
+2025-10-25 15:30:00+02:00,Bundesliga,Hamburger SV,VfL Wolfsburg
+2025-10-25 15:30:00+02:00,Bundesliga,1899 Hoffenheim,1. FC Heidenheim
+2025-10-25 16:00:00+02:00,Premier League,Chelsea,Sunderland
+2025-10-25 16:00:00+02:00,Premier League,Newcastle,Fulham
+2025-10-25 16:15:00+02:00,La Liga,Espanyol,Elche
+2025-10-25 18:30:00+02:00,Premier League,Manchester United,Brighton
+2025-10-25 18:30:00+02:00,Bundesliga,Borussia Dortmund,1.FC Köln
+2025-10-25 18:30:00+02:00,La Liga,Athletic Club,Getafe
+2025-10-25 21:00:00+02:00,La Liga,Valencia,Villarreal
+2025-10-25 21:00:00+02:00,Premier League,Brentford,Liverpool
+2025-10-26 14:00:00+01:00,La Liga,Mallorca,Levante
+2025-10-26 15:00:00+01:00,Premier League,Arsenal,Crystal Palace
+2025-10-26 15:00:00+01:00,Premier League,Aston Villa,Manchester City
+2025-10-26 15:00:00+01:00,Premier League,Bournemouth,Nottingham Forest
+2025-10-26 15:00:00+01:00,Premier League,Wolves,Burnley
+2025-10-26 15:30:00+01:00,Bundesliga,Bayer Leverkusen,SC Freiburg
+2025-10-26 16:15:00+01:00,La Liga,Real Madrid,Barcelona
+2025-10-26 17:30:00+01:00,Premier League,Everton,Tottenham
+2025-10-26 17:30:00+01:00,Bundesliga,VfB Stuttgart,FSV Mainz 05
+2025-10-26 18:30:00+01:00,La Liga,Osasuna,Celta Vigo
+2025-10-26 21:00:00+01:00,La Liga,Rayo Vallecano,Alaves
+2025-10-27 21:00:00+01:00,La Liga,Real Betis,Atletico Madrid
+2025-10-31 20:30:00+01:00,Bundesliga,FC Augsburg,Borussia Dortmund
+2025-10-31 21:00:00+01:00,La Liga,Getafe,Girona
+2025-11-01 14:00:00+01:00,La Liga,Villarreal,Rayo Vallecano
+2025-11-01 15:30:00+01:00,Bundesliga,1. FC Heidenheim,Eintracht Frankfurt
+2025-11-01 15:30:00+01:00,Bundesliga,FSV Mainz 05,Werder Bremen
+2025-11-01 15:30:00+01:00,Bundesliga,RB Leipzig,VfB Stuttgart
+2025-11-01 15:30:00+01:00,Bundesliga,FC St. Pauli,Borussia Mönchengladbach
+2025-11-01 15:30:00+01:00,Bundesliga,Union Berlin,SC Freiburg
+2025-11-01 16:00:00+01:00,Premier League,Brighton,Leeds
+2025-11-01 16:00:00+01:00,Premier League,Burnley,Arsenal
+2025-11-01 16:00:00+01:00,Premier League,Crystal Palace,Brentford
+2025-11-01 16:00:00+01:00,Premier League,Fulham,Wolves
+2025-11-01 16:00:00+01:00,Premier League,Nottingham Forest,Manchester United
+2025-11-01 16:15:00+01:00,La Liga,Atletico Madrid,Sevilla
+2025-11-01 18:30:00+01:00,Bundesliga,Bayern München,Bayer Leverkusen
+2025-11-01 18:30:00+01:00,La Liga,Real Sociedad,Athletic Club
+2025-11-01 18:30:00+01:00,Premier League,Tottenham,Chelsea
+2025-11-01 21:00:00+01:00,Premier League,Liverpool,Aston Villa
+2025-11-01 21:00:00+01:00,La Liga,Real Madrid,Valencia
+2025-11-02 14:00:00+01:00,La Liga,Levante,Celta Vigo
+2025-11-02 15:00:00+01:00,Premier League,West Ham,Newcastle
+2025-11-02 15:30:00+01:00,Bundesliga,1.FC Köln,Hamburger SV
+2025-11-02 16:15:00+01:00,La Liga,Alaves,Espanyol
+2025-11-02 17:30:00+01:00,Premier League,Manchester City,Bournemouth
+2025-11-02 17:30:00+01:00,Bundesliga,VfL Wolfsburg,1899 Hoffenheim
+2025-11-02 18:30:00+01:00,La Liga,Barcelona,Elche
+2025-11-02 21:00:00+01:00,La Liga,Real Betis,Mallorca
+2025-11-03 21:00:00+01:00,Premier League,Sunderland,Everton
+2025-11-03 21:00:00+01:00,La Liga,Oviedo,Osasuna
+2025-11-07 20:30:00+01:00,Bundesliga,Werder Bremen,VfL Wolfsburg
+2025-11-07 21:00:00+01:00,La Liga,Elche,Real Sociedad
+2025-11-08 13:30:00+01:00,Premier League,Tottenham,Manchester United
+2025-11-08 14:00:00+01:00,La Liga,Girona,Alaves
+2025-11-08 15:30:00+01:00,Bundesliga,Bayer Leverkusen,1. FC Heidenheim
+2025-11-08 15:30:00+01:00,Bundesliga,Hamburger SV,Borussia Dortmund
+2025-11-08 15:30:00+01:00,Bundesliga,1899 Hoffenheim,RB Leipzig
+2025-11-08 15:30:00+01:00,Bundesliga,Union Berlin,Bayern München
+2025-11-08 16:00:00+01:00,Premier League,Everton,Fulham
+2025-11-08 16:00:00+01:00,Premier League,West Ham,Burnley
+2025-11-08 16:15:00+01:00,La Liga,Sevilla,Osasuna
+2025-11-08 18:30:00+01:00,Premier League,Sunderland,Arsenal
+2025-11-08 18:30:00+01:00,Bundesliga,Borussia Mönchengladbach,1.FC Köln
+2025-11-08 18:30:00+01:00,La Liga,Atletico Madrid,Levante
+2025-11-08 21:00:00+01:00,Premier League,Chelsea,Wolves
+2025-11-08 21:00:00+01:00,La Liga,Espanyol,Villarreal
+2025-11-09 14:00:00+01:00,La Liga,Athletic Club,Oviedo
+2025-11-09 15:00:00+01:00,Premier League,Nottingham Forest,Leeds
+2025-11-09 15:00:00+01:00,Premier League,Crystal Palace,Brighton
+2025-11-09 15:00:00+01:00,Premier League,Aston Villa,Bournemouth
+2025-11-09 15:00:00+01:00,Premier League,Brentford,Newcastle
+2025-11-09 15:30:00+01:00,Bundesliga,SC Freiburg,FC St. Pauli
+2025-11-09 16:15:00+01:00,La Liga,Rayo Vallecano,Real Madrid
+2025-11-09 17:30:00+01:00,Premier League,Manchester City,Liverpool
+2025-11-09 17:30:00+01:00,Bundesliga,VfB Stuttgart,FC Augsburg
+2025-11-09 18:30:00+01:00,La Liga,Mallorca,Getafe
+2025-11-09 18:30:00+01:00,La Liga,Valencia,Real Betis
+2025-11-09 19:30:00+01:00,Bundesliga,Eintracht Frankfurt,FSV Mainz 05
+2025-11-09 21:00:00+01:00,La Liga,Celta Vigo,Barcelona
+2025-11-21 20:30:00+01:00,Bundesliga,FSV Mainz 05,1899 Hoffenheim
+2025-11-22 13:30:00+01:00,Premier League,Burnley,Chelsea
+2025-11-22 15:30:00+01:00,Bundesliga,VfL Wolfsburg,Bayer Leverkusen
+2025-11-22 15:30:00+01:00,Bundesliga,1. FC Heidenheim,Borussia Mönchengladbach
+2025-11-22 15:30:00+01:00,Bundesliga,Borussia Dortmund,VfB Stuttgart
+2025-11-22 15:30:00+01:00,Bundesliga,Bayern München,SC Freiburg
+2025-11-22 15:30:00+01:00,Bundesliga,FC Augsburg,Hamburger SV
+2025-11-22 16:00:00+01:00,Premier League,Bournemouth,West Ham
+2025-11-22 16:00:00+01:00,Premier League,Brighton,Brentford
+2025-11-22 16:00:00+01:00,Premier League,Fulham,Sunderland
+2025-11-22 16:00:00+01:00,Premier League,Liverpool,Nottingham Forest
+2025-11-22 16:00:00+01:00,Premier League,Wolves,Crystal Palace
+2025-11-22 18:30:00+01:00,Premier League,Newcastle,Manchester City
+2025-11-22 18:30:00+01:00,Bundesliga,1.FC Köln,Eintracht Frankfurt
+2025-11-23 15:00:00+01:00,Premier League,Leeds,Aston Villa
+2025-11-23 15:30:00+01:00,Bundesliga,RB Leipzig,Werder Bremen
+2025-11-23 17:30:00+01:00,Bundesliga,FC St. Pauli,Union Berlin
+2025-11-23 17:30:00+01:00,Premier League,Arsenal,Tottenham
+2025-11-23 18:00:00+01:00,La Liga,Alaves,Celta Vigo
+2025-11-23 18:00:00+01:00,La Liga,Barcelona,Athletic Club
+2025-11-23 18:00:00+01:00,La Liga,Real Betis,Girona
+2025-11-23 18:00:00+01:00,La Liga,Elche,Real Madrid
+2025-11-23 18:00:00+01:00,La Liga,Espanyol,Sevilla
+2025-11-23 18:00:00+01:00,La Liga,Getafe,Atletico Madrid
+2025-11-23 18:00:00+01:00,La Liga,Osasuna,Real Sociedad
+2025-11-23 18:00:00+01:00,La Liga,Oviedo,Rayo Vallecano
+2025-11-23 18:00:00+01:00,La Liga,Valencia,Levante
+2025-11-23 18:00:00+01:00,La Liga,Villarreal,Mallorca
+2025-11-24 21:00:00+01:00,Premier League,Manchester United,Everton
+2025-11-28 20:30:00+01:00,Bundesliga,Borussia Mönchengladbach,RB Leipzig
+2025-11-29 15:30:00+01:00,Bundesliga,Union Berlin,1. FC Heidenheim
+2025-11-29 15:30:00+01:00,Bundesliga,Werder Bremen,1.FC Köln
+2025-11-29 15:30:00+01:00,Bundesliga,Bayern München,FC St. Pauli
+2025-11-29 15:30:00+01:00,Bundesliga,1899 Hoffenheim,FC Augsburg
+2025-11-29 16:00:00+01:00,Premier League,Brentford,Burnley
+2025-11-29 16:00:00+01:00,Premier League,Manchester City,Leeds
+2025-11-29 16:00:00+01:00,Premier League,Sunderland,Bournemouth
+2025-11-29 18:30:00+01:00,Premier League,Everton,Newcastle
+2025-11-29 18:30:00+01:00,Bundesliga,Bayer Leverkusen,Borussia Dortmund
+2025-11-29 21:00:00+01:00,Premier League,Tottenham,Fulham
+2025-11-30 13:00:00+01:00,Premier League,Crystal Palace,Manchester United
+2025-11-30 15:05:00+01:00,Premier League,Aston Villa,Wolves
+2025-11-30 15:05:00+01:00,Premier League,Nottingham Forest,Brighton
+2025-11-30 15:05:00+01:00,Premier League,West Ham,Liverpool
+2025-11-30 15:30:00+01:00,Bundesliga,Hamburger SV,VfB Stuttgart
+2025-11-30 17:30:00+01:00,Bundesliga,Eintracht Frankfurt,VfL Wolfsburg
+2025-11-30 17:30:00+01:00,Premier League,Chelsea,Arsenal
+2025-11-30 18:00:00+01:00,La Liga,Atletico Madrid,Oviedo
+2025-11-30 18:00:00+01:00,La Liga,Barcelona,Alaves
+2025-11-30 18:00:00+01:00,La Liga,Celta Vigo,Espanyol
+2025-11-30 18:00:00+01:00,La Liga,Getafe,Elche
+2025-11-30 18:00:00+01:00,La Liga,Girona,Real Madrid
+2025-11-30 18:00:00+01:00,La Liga,Levante,Athletic Club
+2025-11-30 18:00:00+01:00,La Liga,Mallorca,Osasuna
+2025-11-30 18:00:00+01:00,La Liga,Rayo Vallecano,Valencia
+2025-11-30 18:00:00+01:00,La Liga,Real Sociedad,Villarreal
+2025-11-30 18:00:00+01:00,La Liga,Sevilla,Real Betis
+2025-11-30 19:30:00+01:00,Bundesliga,SC Freiburg,FSV Mainz 05
+2025-12-03 21:00:00+01:00,Premier League,Liverpool,Sunderland
+2025-12-03 21:00:00+01:00,Premier League,Wolves,Nottingham Forest
+2025-12-03 21:00:00+01:00,Premier League,Newcastle,Tottenham
+2025-12-03 21:00:00+01:00,Premier League,Leeds,Chelsea
+2025-12-03 21:00:00+01:00,Premier League,Manchester United,West Ham
+2025-12-03 21:00:00+01:00,Premier League,Burnley,Crystal Palace
+2025-12-03 21:00:00+01:00,Premier League,Brighton,Aston Villa
+2025-12-03 21:00:00+01:00,Premier League,Fulham,Manchester City
+2025-12-03 21:00:00+01:00,Premier League,Bournemouth,Everton
+2025-12-03 21:00:00+01:00,Premier League,Arsenal,Brentford
+2025-12-06 15:30:00+01:00,Bundesliga,VfB Stuttgart,Bayern München
+2025-12-06 15:30:00+01:00,Bundesliga,RB Leipzig,Eintracht Frankfurt
+2025-12-06 15:30:00+01:00,Bundesliga,FSV Mainz 05,Borussia Mönchengladbach
+2025-12-06 15:30:00+01:00,Bundesliga,1. FC Heidenheim,SC Freiburg
+2025-12-06 15:30:00+01:00,Bundesliga,VfL Wolfsburg,Union Berlin
+2025-12-06 15:30:00+01:00,Bundesliga,1.FC Köln,FC St. Pauli
+2025-12-06 15:30:00+01:00,Bundesliga,Borussia Dortmund,1899 Hoffenheim
+2025-12-06 15:30:00+01:00,Bundesliga,FC Augsburg,Bayer Leverkusen
+2025-12-06 15:30:00+01:00,Bundesliga,Hamburger SV,Werder Bremen
+2025-12-06 16:00:00+01:00,Premier League,Wolves,Manchester United
+2025-12-06 16:00:00+01:00,Premier League,Tottenham,Brentford
+2025-12-06 16:00:00+01:00,Premier League,Newcastle,Burnley
+2025-12-06 16:00:00+01:00,Premier League,Manchester City,Sunderland
+2025-12-06 16:00:00+01:00,Premier League,Leeds,Liverpool
+2025-12-06 16:00:00+01:00,Premier League,Fulham,Crystal Palace
+2025-12-06 16:00:00+01:00,Premier League,Brighton,West Ham
+2025-12-06 16:00:00+01:00,Premier League,Bournemouth,Chelsea
+2025-12-06 16:00:00+01:00,Premier League,Aston Villa,Arsenal
+2025-12-06 16:00:00+01:00,Premier League,Everton,Nottingham Forest
+2025-12-07 18:00:00+01:00,La Liga,Real Madrid,Celta Vigo
+2025-12-07 18:00:00+01:00,La Liga,Valencia,Sevilla
+2025-12-07 18:00:00+01:00,La Liga,Villarreal,Getafe
+2025-12-07 18:00:00+01:00,La Liga,Osasuna,Levante
+2025-12-07 18:00:00+01:00,La Liga,Oviedo,Mallorca
+2025-12-07 18:00:00+01:00,La Liga,Elche,Girona
+2025-12-07 18:00:00+01:00,La Liga,Real Betis,Barcelona
+2025-12-07 18:00:00+01:00,La Liga,Athletic Club,Atletico Madrid
+2025-12-07 18:00:00+01:00,La Liga,Alaves,Real Sociedad
+2025-12-07 18:00:00+01:00,La Liga,Espanyol,Rayo Vallecano
+2025-12-13 15:30:00+01:00,Bundesliga,Werder Bremen,VfB Stuttgart
+2025-12-13 15:30:00+01:00,Bundesliga,Union Berlin,RB Leipzig
+2025-12-13 15:30:00+01:00,Bundesliga,FC St. Pauli,1. FC Heidenheim
+2025-12-13 15:30:00+01:00,Bundesliga,1899 Hoffenheim,Hamburger SV
+2025-12-13 15:30:00+01:00,Bundesliga,SC Freiburg,Borussia Dortmund
+2025-12-13 15:30:00+01:00,Bundesliga,Eintracht Frankfurt,FC Augsburg
+2025-12-13 15:30:00+01:00,Bundesliga,Borussia Mönchengladbach,VfL Wolfsburg
+2025-12-13 15:30:00+01:00,Bundesliga,Bayern München,FSV Mainz 05
+2025-12-13 15:30:00+01:00,Bundesliga,Bayer Leverkusen,1.FC Köln
+2025-12-13 16:00:00+01:00,Premier League,Sunderland,Newcastle
+2025-12-13 16:00:00+01:00,Premier League,Nottingham Forest,Tottenham
+2025-12-13 16:00:00+01:00,Premier League,West Ham,Aston Villa
+2025-12-13 16:00:00+01:00,Premier League,Manchester United,Bournemouth
+2025-12-13 16:00:00+01:00,Premier League,Liverpool,Brighton
+2025-12-13 16:00:00+01:00,Premier League,Burnley,Fulham
+2025-12-13 16:00:00+01:00,Premier League,Chelsea,Everton
+2025-12-13 16:00:00+01:00,Premier League,Brentford,Leeds
+2025-12-13 16:00:00+01:00,Premier League,Arsenal,Wolves
+2025-12-13 16:00:00+01:00,Premier League,Crystal Palace,Manchester City
+2025-12-14 18:00:00+01:00,La Liga,Real Sociedad,Girona
+2025-12-14 18:00:00+01:00,La Liga,Alaves,Real Madrid
+2025-12-14 18:00:00+01:00,La Liga,Atletico Madrid,Valencia
+2025-12-14 18:00:00+01:00,La Liga,Barcelona,Osasuna
+2025-12-14 18:00:00+01:00,La Liga,Celta Vigo,Athletic Club
+2025-12-14 18:00:00+01:00,La Liga,Getafe,Espanyol
+2025-12-14 18:00:00+01:00,La Liga,Levante,Villarreal
+2025-12-14 18:00:00+01:00,La Liga,Mallorca,Elche
+2025-12-14 18:00:00+01:00,La Liga,Rayo Vallecano,Real Betis
+2025-12-14 18:00:00+01:00,La Liga,Sevilla,Oviedo

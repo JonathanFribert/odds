@@ -1,0 +1,43 @@
+fixture_id,date,odds_source,fetched_at_utc,home,away,home_norm,away_norm,bookmaker_count,ou_line,ou_over,ou_under
+1388369,2025-10-17 18:30:00+0000,apifootball,2025-10-15 14:03:56,Union Berlin,Borussia Mönchengladbach,union berlin,borussia mönchengladbach,11,5.5,23.0,2.03
+1390906,2025-10-17 19:00:00+0000,apifootball,2025-10-15 14:03:56,Oviedo,Espanyol,oviedo,espanyol,11,6.5,41.0,1.83
+1379045,2025-10-18 11:30:00+0000,apifootball,2025-10-15 14:03:57,Nottingham Forest,Chelsea,nottingham forest,chelsea,11,5.5,21.0,1.98
+1390907,2025-10-18 12:00:00+0000,apifootball,2025-10-15 14:03:57,Sevilla,Mallorca,sevilla,mallorca,11,6.5,41.0,1.87
+1388363,2025-10-18 13:30:00+0000,apifootball,2025-10-15 14:03:58,1.FC Köln,FC Augsburg,1 köln,augsburg,11,6.5,19.0,2.04
+1388365,2025-10-18 13:30:00+0000,apifootball,2025-10-15 14:03:58,1. FC Heidenheim,Werder Bremen,1 heidenheim,werder bremen,11,5.5,19.0,2.02
+1388366,2025-10-18 13:30:00+0000,apifootball,2025-10-15 14:03:59,FSV Mainz 05,Bayer Leverkusen,fsv mainz 05,bayer leverkusen,11,5.5,21.0,1.88
+1388367,2025-10-18 13:30:00+0000,apifootball,2025-10-15 14:03:59,RB Leipzig,Hamburger SV,rb leipzig,hamburger sv,11,6.5,12.5,1.92
+1388370,2025-10-18 13:30:00+0000,apifootball,2025-10-15 14:04:00,VfL Wolfsburg,VfB Stuttgart,vfl wolfsburg,vfb stuttgart,11,6.5,17.0,1.88
+1379039,2025-10-18 14:00:00+0000,apifootball,2025-10-15 14:04:00,Brighton,Newcastle,brighton,newcastle,11,5.5,23.0,2.04
+1379040,2025-10-18 14:00:00+0000,apifootball,2025-10-15 14:04:01,Burnley,Leeds,burnley,leeds,11,6.5,41.0,1.91
+1379041,2025-10-18 14:00:00+0000,apifootball,2025-10-15 14:04:01,Crystal Palace,Bournemouth,crystal palace,bournemouth,11,5.5,26.0,1.92
+1379044,2025-10-18 14:00:00+0000,apifootball,2025-10-15 14:04:02,Manchester City,Everton,manchester city,everton,11,5.5,21.0,1.93
+1379046,2025-10-18 14:00:00+0000,apifootball,2025-10-15 14:04:02,Sunderland,Wolves,sunderland,wolves,11,6.5,51.0,1.79
+1390901,2025-10-18 14:15:00+0000,apifootball,2025-10-15 14:04:03,Barcelona,Girona,barcelona,girona,11,6.5,7.5,1.86
+1379042,2025-10-18 16:30:00+0000,apifootball,2025-10-15 14:04:03,Fulham,Arsenal,fulham,arsenal,11,5.5,26.0,1.93
+1388362,2025-10-18 16:30:00+0000,apifootball,2025-10-15 14:04:04,Bayern München,Borussia Dortmund,bayern münchen,borussia dortmund,11,6.5,9.0,1.84
+1390908,2025-10-18 16:30:00+0000,apifootball,2025-10-15 14:04:04,Villarreal,Real Betis,villarreal,real betis,11,5.5,21.0,1.93
+1390900,2025-10-18 19:00:00+0000,apifootball,2025-10-15 14:04:05,Atletico Madrid,Osasuna,atletico madrid,osasuna,11,5.5,26.0,1.95
+1390903,2025-10-19 12:00:00+0000,apifootball,2025-10-15 14:04:05,Elche,Athletic Club,elche,athletic,11,4.5,41.0,1.83
+1379047,2025-10-19 13:00:00+0000,apifootball,2025-10-15 14:04:06,Tottenham,Aston Villa,tottenham,aston villa,11,5.5,23.0,2.05
+1388364,2025-10-19 13:30:00+0000,apifootball,2025-10-15 14:04:07,SC Freiburg,Eintracht Frankfurt,freiburg,eintracht frankfurt,11,6.5,17.0,1.88
+1390902,2025-10-19 14:15:00+0000,apifootball,2025-10-15 14:04:07,Celta Vigo,Real Sociedad,celta vigo,real sociedad,11,5.5,26.0,1.86
+1379043,2025-10-19 15:30:00+0000,apifootball,2025-10-15 14:04:08,Liverpool,Manchester United,liverpool,manchester united,11,6.5,16.0,1.9
+1388368,2025-10-19 15:30:00+0000,apifootball,2025-10-15 14:04:08,FC St. Pauli,1899 Hoffenheim,st pauli,1899 hoffenheim,11,5.5,23.0,2.04
+1390905,2025-10-19 16:30:00+0000,apifootball,2025-10-15 14:04:09,Levante,Rayo Vallecano,levante,rayo vallecano,11,5.5,26.0,1.91
+1390904,2025-10-19 19:00:00+0000,apifootball,2025-10-15 14:04:09,Getafe,Real Madrid,getafe,real madrid,11,6.5,29.0,1.84
+1379048,2025-10-20 19:00:00+0000,apifootball,2025-10-15 14:04:10,West Ham,Brentford,west ham,brentford,11,5.5,23.0,1.87
+1390899,2025-10-20 19:00:00+0000,apifootball,2025-10-15 14:04:10,Alaves,Valencia,alaves,valencia,11,4.5,51.0,1.93
+1388379,2025-10-24 18:30:00+0000,apifootball,2025-10-15 14:04:11,Werder Bremen,Union Berlin,werder bremen,union berlin,4,6.5,13.0,1.12
+1379055,2025-10-24 19:00:00+0000,apifootball,2025-10-15 14:04:11,Leeds,West Ham,leeds,west ham,5,6.5,29.0,1.09
+1388371,2025-10-25 13:30:00+0000,apifootball,2025-10-15 14:04:13,FC Augsburg,RB Leipzig,augsburg,rb leipzig,4,5.5,17.0,1.09
+1388373,2025-10-25 13:30:00+0000,apifootball,2025-10-15 14:04:13,Borussia Mönchengladbach,Bayern München,borussia mönchengladbach,bayern münchen,3,5.5,7.0,1.23
+1388375,2025-10-25 13:30:00+0000,apifootball,2025-10-15 14:04:14,Eintracht Frankfurt,FC St. Pauli,eintracht frankfurt,st pauli,4,6.5,11.0,1.12
+1388376,2025-10-25 13:30:00+0000,apifootball,2025-10-15 14:04:14,Hamburger SV,VfL Wolfsburg,hamburger sv,vfl wolfsburg,4,5.5,21.0,1.17
+1388377,2025-10-25 13:30:00+0000,apifootball,2025-10-15 14:04:15,1899 Hoffenheim,1. FC Heidenheim,1899 hoffenheim,1 heidenheim,3,4.0,17.0,1.26
+1379053,2025-10-25 14:00:00+0000,apifootball,2025-10-15 14:04:15,Chelsea,Sunderland,chelsea,sunderland,4,6.5,19.0,1.2
+1379057,2025-10-25 14:00:00+0000,apifootball,2025-10-15 14:04:16,Newcastle,Fulham,newcastle,fulham,4,5.5,23.0,1.14
+1379056,2025-10-25 16:30:00+0000,apifootball,2025-10-15 14:04:17,Manchester United,Brighton,manchester united,brighton,4,5.5,19.0,1.18
+1388374,2025-10-25 16:30:00+0000,apifootball,2025-10-15 14:04:17,Borussia Dortmund,1.FC Köln,borussia dortmund,1 köln,4,5.5,15.0,1.08
+1379052,2025-10-25 19:00:00+0000,apifootball,2025-10-15 14:04:18,Brentford,Liverpool,brentford,liverpool,4,5.5,15.0,1.08
+1388372,2025-10-26 14:30:00+0000,apifootball,2025-10-15 14:04:21,Bayer Leverkusen,SC Freiburg,bayer leverkusen,freiburg,4,5.5,13.0,1.1

@@ -1,0 +1,381 @@
+fixture_id,league_id,league_name,season,date,status_short,status_long,home_id,home,away_id,away,goals_home,goals_away,result,sport_key,home_norm,away_norm
+1378969,39,Premier League,2025,2025-08-15 19:00:00+00:00,FT,Match Finished,40,Liverpool,35,Bournemouth,4.0,2.0,H,soccer_epl,liverpool,bournemouth
+1378970,39,Premier League,2025,2025-08-16 11:30:00+00:00,FT,Match Finished,66,Aston Villa,34,Newcastle,0.0,0.0,D,soccer_epl,aston villa,newcastle
+1378974,39,Premier League,2025,2025-08-16 14:00:00+00:00,FT,Match Finished,47,Tottenham,44,Burnley,3.0,0.0,H,soccer_epl,tottenham,burnley
+1378971,39,Premier League,2025,2025-08-16 14:00:00+00:00,FT,Match Finished,51,Brighton,36,Fulham,1.0,1.0,D,soccer_epl,brighton,fulham
+1378973,39,Premier League,2025,2025-08-16 14:00:00+00:00,FT,Match Finished,746,Sunderland,48,West Ham,3.0,0.0,H,soccer_epl,sunderland,west ham
+1378975,39,Premier League,2025,2025-08-16 16:30:00+00:00,FT,Match Finished,39,Wolves,50,Manchester City,0.0,4.0,A,soccer_epl,wolves,manchester city
+1378976,39,Premier League,2025,2025-08-17 13:00:00+00:00,FT,Match Finished,49,Chelsea,52,Crystal Palace,0.0,0.0,D,soccer_epl,chelsea,crystal palace
+1378972,39,Premier League,2025,2025-08-17 13:00:00+00:00,FT,Match Finished,65,Nottingham Forest,55,Brentford,3.0,1.0,H,soccer_epl,nottingham forest,brentford
+1378977,39,Premier League,2025,2025-08-17 15:30:00+00:00,FT,Match Finished,33,Manchester United,42,Arsenal,0.0,1.0,A,soccer_epl,manchester united,arsenal
+1378978,39,Premier League,2025,2025-08-18 19:00:00+00:00,FT,Match Finished,63,Leeds,45,Everton,1.0,0.0,H,soccer_epl,leeds,everton
+1378988,39,Premier League,2025,2025-08-22 19:00:00+00:00,FT,Match Finished,48,West Ham,49,Chelsea,1.0,5.0,A,soccer_epl,west ham,chelsea
+1378986,39,Premier League,2025,2025-08-23 11:30:00+00:00,FT,Match Finished,50,Manchester City,47,Tottenham,0.0,2.0,A,soccer_epl,manchester city,tottenham
+1378980,39,Premier League,2025,2025-08-23 14:00:00+00:00,FT,Match Finished,35,Bournemouth,39,Wolves,1.0,0.0,H,soccer_epl,bournemouth,wolves
+1378982,39,Premier League,2025,2025-08-23 14:00:00+00:00,FT,Match Finished,44,Burnley,746,Sunderland,2.0,0.0,H,soccer_epl,burnley,sunderland
+1378981,39,Premier League,2025,2025-08-23 14:00:00+00:00,FT,Match Finished,55,Brentford,66,Aston Villa,1.0,0.0,H,soccer_epl,brentford,aston villa
+1378979,39,Premier League,2025,2025-08-23 16:30:00+00:00,FT,Match Finished,42,Arsenal,63,Leeds,5.0,0.0,H,soccer_epl,arsenal,leeds
+1378984,39,Premier League,2025,2025-08-24 13:00:00+00:00,FT,Match Finished,45,Everton,51,Brighton,2.0,0.0,H,soccer_epl,everton,brighton
+1378983,39,Premier League,2025,2025-08-24 13:00:00+00:00,FT,Match Finished,52,Crystal Palace,65,Nottingham Forest,1.0,1.0,D,soccer_epl,crystal palace,nottingham forest
+1378985,39,Premier League,2025,2025-08-24 15:30:00+00:00,FT,Match Finished,36,Fulham,33,Manchester United,1.0,1.0,D,soccer_epl,fulham,manchester united
+1378987,39,Premier League,2025,2025-08-25 19:00:00+00:00,FT,Match Finished,34,Newcastle,40,Liverpool,2.0,3.0,A,soccer_epl,newcastle,liverpool
+1378991,39,Premier League,2025,2025-08-30 11:30:00+00:00,FT,Match Finished,49,Chelsea,36,Fulham,2.0,0.0,H,soccer_epl,chelsea,fulham
+1378994,39,Premier League,2025,2025-08-30 14:00:00+00:00,FT,Match Finished,33,Manchester United,44,Burnley,3.0,2.0,H,soccer_epl,manchester united,burnley
+1378998,39,Premier League,2025,2025-08-30 14:00:00+00:00,FT,Match Finished,39,Wolves,45,Everton,2.0,3.0,A,soccer_epl,wolves,everton
+1378997,39,Premier League,2025,2025-08-30 14:00:00+00:00,FT,Match Finished,47,Tottenham,35,Bournemouth,0.0,1.0,A,soccer_epl,tottenham,bournemouth
+1378996,39,Premier League,2025,2025-08-30 14:00:00+00:00,FT,Match Finished,746,Sunderland,55,Brentford,2.0,1.0,H,soccer_epl,sunderland,brentford
+1378992,39,Premier League,2025,2025-08-30 16:30:00+00:00,FT,Match Finished,63,Leeds,34,Newcastle,0.0,0.0,D,soccer_epl,leeds,newcastle
+1378990,39,Premier League,2025,2025-08-31 13:00:00+00:00,FT,Match Finished,51,Brighton,50,Manchester City,2.0,1.0,H,soccer_epl,brighton,manchester city
+1378995,39,Premier League,2025,2025-08-31 13:00:00+00:00,FT,Match Finished,65,Nottingham Forest,48,West Ham,0.0,3.0,A,soccer_epl,nottingham forest,west ham
+1378993,39,Premier League,2025,2025-08-31 15:30:00+00:00,FT,Match Finished,40,Liverpool,42,Arsenal,1.0,0.0,H,soccer_epl,liverpool,arsenal
+1378989,39,Premier League,2025,2025-08-31 18:00:00+00:00,FT,Match Finished,66,Aston Villa,52,Crystal Palace,0.0,3.0,A,soccer_epl,aston villa,crystal palace
+1378999,39,Premier League,2025,2025-09-13 11:30:00+00:00,FT,Match Finished,42,Arsenal,65,Nottingham Forest,3.0,0.0,H,soccer_epl,arsenal,nottingham forest
+1379007,39,Premier League,2025,2025-09-13 14:00:00+00:00,FT,Match Finished,34,Newcastle,39,Wolves,1.0,0.0,H,soccer_epl,newcastle,wolves
+1379000,39,Premier League,2025,2025-09-13 14:00:00+00:00,FT,Match Finished,35,Bournemouth,51,Brighton,2.0,1.0,H,soccer_epl,bournemouth,brighton
+1379005,39,Premier League,2025,2025-09-13 14:00:00+00:00,FT,Match Finished,36,Fulham,63,Leeds,1.0,0.0,H,soccer_epl,fulham,leeds
+1379004,39,Premier League,2025,2025-09-13 14:00:00+00:00,FT,Match Finished,45,Everton,66,Aston Villa,0.0,0.0,D,soccer_epl,everton,aston villa
+1379003,39,Premier League,2025,2025-09-13 14:00:00+00:00,FT,Match Finished,52,Crystal Palace,746,Sunderland,0.0,0.0,D,soccer_epl,crystal palace,sunderland
+1379008,39,Premier League,2025,2025-09-13 16:30:00+00:00,FT,Match Finished,48,West Ham,47,Tottenham,0.0,3.0,A,soccer_epl,west ham,tottenham
+1379001,39,Premier League,2025,2025-09-13 19:00:00+00:00,FT,Match Finished,55,Brentford,49,Chelsea,2.0,2.0,D,soccer_epl,brentford,chelsea
+1379002,39,Premier League,2025,2025-09-14 13:00:00+00:00,FT,Match Finished,44,Burnley,40,Liverpool,0.0,1.0,A,soccer_epl,burnley,liverpool
+1379006,39,Premier League,2025,2025-09-14 15:30:00+00:00,FT,Match Finished,50,Manchester City,33,Manchester United,3.0,0.0,H,soccer_epl,manchester city,manchester united
+1379014,39,Premier League,2025,2025-09-20 11:30:00+00:00,FT,Match Finished,40,Liverpool,45,Everton,2.0,1.0,H,soccer_epl,liverpool,everton
+1379018,39,Premier League,2025,2025-09-20 14:00:00+00:00,FT,Match Finished,39,Wolves,63,Leeds,1.0,3.0,A,soccer_epl,wolves,leeds
+1379012,39,Premier League,2025,2025-09-20 14:00:00+00:00,FT,Match Finished,44,Burnley,65,Nottingham Forest,1.0,1.0,D,soccer_epl,burnley,nottingham forest
+1379017,39,Premier League,2025,2025-09-20 14:00:00+00:00,FT,Match Finished,48,West Ham,52,Crystal Palace,1.0,2.0,A,soccer_epl,west ham,crystal palace
+1379011,39,Premier League,2025,2025-09-20 14:00:00+00:00,FT,Match Finished,51,Brighton,47,Tottenham,2.0,2.0,D,soccer_epl,brighton,tottenham
+1379015,39,Premier League,2025,2025-09-20 16:30:00+00:00,FT,Match Finished,33,Manchester United,49,Chelsea,2.0,1.0,H,soccer_epl,manchester united,chelsea
+1379013,39,Premier League,2025,2025-09-20 19:00:00+00:00,FT,Match Finished,36,Fulham,55,Brentford,3.0,1.0,H,soccer_epl,fulham,brentford
+1379010,39,Premier League,2025,2025-09-21 13:00:00+00:00,FT,Match Finished,35,Bournemouth,34,Newcastle,0.0,0.0,D,soccer_epl,bournemouth,newcastle
+1379016,39,Premier League,2025,2025-09-21 13:00:00+00:00,FT,Match Finished,746,Sunderland,66,Aston Villa,1.0,1.0,D,soccer_epl,sunderland,aston villa
+1379009,39,Premier League,2025,2025-09-21 15:30:00+00:00,FT,Match Finished,42,Arsenal,50,Manchester City,1.0,1.0,D,soccer_epl,arsenal,manchester city
+1379020,39,Premier League,2025,2025-09-27 11:30:00+00:00,FT,Match Finished,55,Brentford,33,Manchester United,3.0,1.0,H,soccer_epl,brentford,manchester united
+1379021,39,Premier League,2025,2025-09-27 14:00:00+00:00,FT,Match Finished,49,Chelsea,51,Brighton,1.0,3.0,A,soccer_epl,chelsea,brighton
+1379025,39,Premier League,2025,2025-09-27 14:00:00+00:00,FT,Match Finished,50,Manchester City,44,Burnley,5.0,1.0,H,soccer_epl,manchester city,burnley
+1379022,39,Premier League,2025,2025-09-27 14:00:00+00:00,FT,Match Finished,52,Crystal Palace,40,Liverpool,2.0,1.0,H,soccer_epl,crystal palace,liverpool
+1379024,39,Premier League,2025,2025-09-27 14:00:00+00:00,FT,Match Finished,63,Leeds,35,Bournemouth,2.0,2.0,D,soccer_epl,leeds,bournemouth
+1379027,39,Premier League,2025,2025-09-27 16:30:00+00:00,FT,Match Finished,65,Nottingham Forest,746,Sunderland,0.0,1.0,A,soccer_epl,nottingham forest,sunderland
+1379028,39,Premier League,2025,2025-09-27 19:00:00+00:00,FT,Match Finished,47,Tottenham,39,Wolves,1.0,1.0,D,soccer_epl,tottenham,wolves
+1379019,39,Premier League,2025,2025-09-28 13:00:00+00:00,FT,Match Finished,66,Aston Villa,36,Fulham,3.0,1.0,H,soccer_epl,aston villa,fulham
+1379026,39,Premier League,2025,2025-09-28 15:30:00+00:00,FT,Match Finished,34,Newcastle,42,Arsenal,1.0,2.0,A,soccer_epl,newcastle,arsenal
+1379023,39,Premier League,2025,2025-09-29 19:00:00+00:00,FT,Match Finished,45,Everton,48,West Ham,1.0,1.0,D,soccer_epl,everton,west ham
+1379031,39,Premier League,2025,2025-10-03 19:00:00+00:00,FT,Match Finished,35,Bournemouth,36,Fulham,3.0,1.0,H,soccer_epl,bournemouth,fulham
+1379035,39,Premier League,2025,2025-10-04 11:30:00+00:00,FT,Match Finished,63,Leeds,47,Tottenham,1.0,2.0,A,soccer_epl,leeds,tottenham
+1379036,39,Premier League,2025,2025-10-04 14:00:00+00:00,FT,Match Finished,33,Manchester United,746,Sunderland,2.0,0.0,H,soccer_epl,manchester united,sunderland
+1379029,39,Premier League,2025,2025-10-04 14:00:00+00:00,FT,Match Finished,42,Arsenal,48,West Ham,2.0,0.0,H,soccer_epl,arsenal,west ham
+1379033,39,Premier League,2025,2025-10-04 16:30:00+00:00,FT,Match Finished,49,Chelsea,40,Liverpool,2.0,1.0,H,soccer_epl,chelsea,liverpool
+1379037,39,Premier League,2025,2025-10-05 13:00:00+00:00,FT,Match Finished,34,Newcastle,65,Nottingham Forest,2.0,0.0,H,soccer_epl,newcastle,nottingham forest
+1379038,39,Premier League,2025,2025-10-05 13:00:00+00:00,FT,Match Finished,39,Wolves,51,Brighton,1.0,1.0,D,soccer_epl,wolves,brighton
+1379034,39,Premier League,2025,2025-10-05 13:00:00+00:00,FT,Match Finished,45,Everton,52,Crystal Palace,2.0,1.0,H,soccer_epl,everton,crystal palace
+1379030,39,Premier League,2025,2025-10-05 13:00:00+00:00,FT,Match Finished,66,Aston Villa,44,Burnley,2.0,1.0,H,soccer_epl,aston villa,burnley
+1379032,39,Premier League,2025,2025-10-05 15:30:00+00:00,FT,Match Finished,55,Brentford,50,Manchester City,0.0,1.0,A,soccer_epl,brentford,manchester city
+1379045,39,Premier League,2025,2025-10-18 11:30:00+00:00,NS,Not Started,65,Nottingham Forest,49,Chelsea,,,,soccer_epl,nottingham forest,chelsea
+1379040,39,Premier League,2025,2025-10-18 14:00:00+00:00,NS,Not Started,44,Burnley,63,Leeds,,,,soccer_epl,burnley,leeds
+1379044,39,Premier League,2025,2025-10-18 14:00:00+00:00,NS,Not Started,50,Manchester City,45,Everton,,,,soccer_epl,manchester city,everton
+1379039,39,Premier League,2025,2025-10-18 14:00:00+00:00,NS,Not Started,51,Brighton,34,Newcastle,,,,soccer_epl,brighton,newcastle
+1379041,39,Premier League,2025,2025-10-18 14:00:00+00:00,NS,Not Started,52,Crystal Palace,35,Bournemouth,,,,soccer_epl,crystal palace,bournemouth
+1379046,39,Premier League,2025,2025-10-18 14:00:00+00:00,NS,Not Started,746,Sunderland,39,Wolves,,,,soccer_epl,sunderland,wolves
+1379042,39,Premier League,2025,2025-10-18 16:30:00+00:00,NS,Not Started,36,Fulham,42,Arsenal,,,,soccer_epl,fulham,arsenal
+1379047,39,Premier League,2025,2025-10-19 13:00:00+00:00,NS,Not Started,47,Tottenham,66,Aston Villa,,,,soccer_epl,tottenham,aston villa
+1379043,39,Premier League,2025,2025-10-19 15:30:00+00:00,NS,Not Started,40,Liverpool,33,Manchester United,,,,soccer_epl,liverpool,manchester united
+1379048,39,Premier League,2025,2025-10-20 19:00:00+00:00,NS,Not Started,48,West Ham,55,Brentford,,,,soccer_epl,west ham,brentford
+1379055,39,Premier League,2025,2025-10-24 19:00:00+00:00,NS,Not Started,63,Leeds,48,West Ham,,,,soccer_epl,leeds,west ham
+1379057,39,Premier League,2025,2025-10-25 14:00:00+00:00,NS,Not Started,34,Newcastle,36,Fulham,,,,soccer_epl,newcastle,fulham
+1379053,39,Premier League,2025,2025-10-25 14:00:00+00:00,NS,Not Started,49,Chelsea,746,Sunderland,,,,soccer_epl,chelsea,sunderland
+1379056,39,Premier League,2025,2025-10-25 16:30:00+00:00,NS,Not Started,33,Manchester United,51,Brighton,,,,soccer_epl,manchester united,brighton
+1379052,39,Premier League,2025,2025-10-25 19:00:00+00:00,NS,Not Started,55,Brentford,40,Liverpool,,,,soccer_epl,brentford,liverpool
+1379051,39,Premier League,2025,2025-10-26 14:00:00+00:00,NS,Not Started,35,Bournemouth,65,Nottingham Forest,,,,soccer_epl,bournemouth,nottingham forest
+1379058,39,Premier League,2025,2025-10-26 14:00:00+00:00,NS,Not Started,39,Wolves,44,Burnley,,,,soccer_epl,wolves,burnley
+1379049,39,Premier League,2025,2025-10-26 14:00:00+00:00,NS,Not Started,42,Arsenal,52,Crystal Palace,,,,soccer_epl,arsenal,crystal palace
+1379050,39,Premier League,2025,2025-10-26 14:00:00+00:00,NS,Not Started,66,Aston Villa,50,Manchester City,,,,soccer_epl,aston villa,manchester city
+1379054,39,Premier League,2025,2025-10-26 16:30:00+00:00,NS,Not Started,45,Everton,47,Tottenham,,,,soccer_epl,everton,tottenham
+1379062,39,Premier League,2025,2025-11-01 15:00:00+00:00,NS,Not Started,36,Fulham,39,Wolves,,,,soccer_epl,fulham,wolves
+1379060,39,Premier League,2025,2025-11-01 15:00:00+00:00,NS,Not Started,44,Burnley,42,Arsenal,,,,soccer_epl,burnley,arsenal
+1379059,39,Premier League,2025,2025-11-01 15:00:00+00:00,NS,Not Started,51,Brighton,63,Leeds,,,,soccer_epl,brighton,leeds
+1379061,39,Premier League,2025,2025-11-01 15:00:00+00:00,NS,Not Started,52,Crystal Palace,55,Brentford,,,,soccer_epl,crystal palace,brentford
+1379065,39,Premier League,2025,2025-11-01 15:00:00+00:00,NS,Not Started,65,Nottingham Forest,33,Manchester United,,,,soccer_epl,nottingham forest,manchester united
+1379067,39,Premier League,2025,2025-11-01 17:30:00+00:00,NS,Not Started,47,Tottenham,49,Chelsea,,,,soccer_epl,tottenham,chelsea
+1379063,39,Premier League,2025,2025-11-01 20:00:00+00:00,NS,Not Started,40,Liverpool,66,Aston Villa,,,,soccer_epl,liverpool,aston villa
+1379068,39,Premier League,2025,2025-11-02 14:00:00+00:00,NS,Not Started,48,West Ham,34,Newcastle,,,,soccer_epl,west ham,newcastle
+1379064,39,Premier League,2025,2025-11-02 16:30:00+00:00,NS,Not Started,50,Manchester City,35,Bournemouth,,,,soccer_epl,manchester city,bournemouth
+1379066,39,Premier League,2025,2025-11-03 20:00:00+00:00,NS,Not Started,746,Sunderland,45,Everton,,,,soccer_epl,sunderland,everton
+1379077,39,Premier League,2025,2025-11-08 12:30:00+00:00,NS,Not Started,47,Tottenham,33,Manchester United,,,,soccer_epl,tottenham,manchester united
+1379073,39,Premier League,2025,2025-11-08 15:00:00+00:00,NS,Not Started,45,Everton,36,Fulham,,,,soccer_epl,everton,fulham
+1379078,39,Premier League,2025,2025-11-08 15:00:00+00:00,NS,Not Started,48,West Ham,44,Burnley,,,,soccer_epl,west ham,burnley
+1379076,39,Premier League,2025,2025-11-08 17:30:00+00:00,NS,Not Started,746,Sunderland,42,Arsenal,,,,soccer_epl,sunderland,arsenal
+1379071,39,Premier League,2025,2025-11-08 20:00:00+00:00,NS,Not Started,49,Chelsea,39,Wolves,,,,soccer_epl,chelsea,wolves
+1379072,39,Premier League,2025,2025-11-09 14:00:00+00:00,NS,Not Started,52,Crystal Palace,51,Brighton,,,,soccer_epl,crystal palace,brighton
+1379070,39,Premier League,2025,2025-11-09 14:00:00+00:00,NS,Not Started,55,Brentford,34,Newcastle,,,,soccer_epl,brentford,newcastle
+1379075,39,Premier League,2025,2025-11-09 14:00:00+00:00,NS,Not Started,65,Nottingham Forest,63,Leeds,,,,soccer_epl,nottingham forest,leeds
+1379069,39,Premier League,2025,2025-11-09 14:00:00+00:00,NS,Not Started,66,Aston Villa,35,Bournemouth,,,,soccer_epl,aston villa,bournemouth
+1379074,39,Premier League,2025,2025-11-09 16:30:00+00:00,NS,Not Started,50,Manchester City,40,Liverpool,,,,soccer_epl,manchester city,liverpool
+1379082,39,Premier League,2025,2025-11-22 12:30:00+00:00,NS,Not Started,44,Burnley,49,Chelsea,,,,soccer_epl,burnley,chelsea
+1379080,39,Premier League,2025,2025-11-22 15:00:00+00:00,NS,Not Started,35,Bournemouth,48,West Ham,,,,soccer_epl,bournemouth,west ham
+1379083,39,Premier League,2025,2025-11-22 15:00:00+00:00,NS,Not Started,36,Fulham,746,Sunderland,,,,soccer_epl,fulham,sunderland
+1379088,39,Premier League,2025,2025-11-22 15:00:00+00:00,NS,Not Started,39,Wolves,52,Crystal Palace,,,,soccer_epl,wolves,crystal palace
+1379085,39,Premier League,2025,2025-11-22 15:00:00+00:00,NS,Not Started,40,Liverpool,65,Nottingham Forest,,,,soccer_epl,liverpool,nottingham forest
+1379081,39,Premier League,2025,2025-11-22 15:00:00+00:00,NS,Not Started,51,Brighton,55,Brentford,,,,soccer_epl,brighton,brentford
+1379087,39,Premier League,2025,2025-11-22 17:30:00+00:00,NS,Not Started,34,Newcastle,50,Manchester City,,,,soccer_epl,newcastle,manchester city
+1379084,39,Premier League,2025,2025-11-23 14:00:00+00:00,NS,Not Started,63,Leeds,66,Aston Villa,,,,soccer_epl,leeds,aston villa
+1379079,39,Premier League,2025,2025-11-23 16:30:00+00:00,NS,Not Started,42,Arsenal,47,Tottenham,,,,soccer_epl,arsenal,tottenham
+1379086,39,Premier League,2025,2025-11-24 20:00:00+00:00,NS,Not Started,33,Manchester United,45,Everton,,,,soccer_epl,manchester united,everton
+1379094,39,Premier League,2025,2025-11-29 15:00:00+00:00,NS,Not Started,50,Manchester City,63,Leeds,,,,soccer_epl,manchester city,leeds
+1379090,39,Premier League,2025,2025-11-29 15:00:00+00:00,NS,Not Started,55,Brentford,44,Burnley,,,,soccer_epl,brentford,burnley
+1379096,39,Premier League,2025,2025-11-29 15:00:00+00:00,NS,Not Started,746,Sunderland,35,Bournemouth,,,,soccer_epl,sunderland,bournemouth
+1379093,39,Premier League,2025,2025-11-29 17:30:00+00:00,NS,Not Started,45,Everton,34,Newcastle,,,,soccer_epl,everton,newcastle
+1379097,39,Premier League,2025,2025-11-29 20:00:00+00:00,NS,Not Started,47,Tottenham,36,Fulham,,,,soccer_epl,tottenham,fulham
+1379092,39,Premier League,2025,2025-11-30 12:00:00+00:00,NS,Not Started,52,Crystal Palace,33,Manchester United,,,,soccer_epl,crystal palace,manchester united
+1379098,39,Premier League,2025,2025-11-30 14:05:00+00:00,NS,Not Started,48,West Ham,40,Liverpool,,,,soccer_epl,west ham,liverpool
+1379095,39,Premier League,2025,2025-11-30 14:05:00+00:00,NS,Not Started,65,Nottingham Forest,51,Brighton,,,,soccer_epl,nottingham forest,brighton
+1379089,39,Premier League,2025,2025-11-30 14:05:00+00:00,NS,Not Started,66,Aston Villa,39,Wolves,,,,soccer_epl,aston villa,wolves
+1379091,39,Premier League,2025,2025-11-30 16:30:00+00:00,NS,Not Started,49,Chelsea,42,Arsenal,,,,soccer_epl,chelsea,arsenal
+1379106,39,Premier League,2025,2025-12-03 20:00:00+00:00,NS,Not Started,33,Manchester United,48,West Ham,,,,soccer_epl,manchester united,west ham
+1379107,39,Premier League,2025,2025-12-03 20:00:00+00:00,NS,Not Started,34,Newcastle,47,Tottenham,,,,soccer_epl,newcastle,tottenham
+1379100,39,Premier League,2025,2025-12-03 20:00:00+00:00,NS,Not Started,35,Bournemouth,45,Everton,,,,soccer_epl,bournemouth,everton
+1379103,39,Premier League,2025,2025-12-03 20:00:00+00:00,NS,Not Started,36,Fulham,50,Manchester City,,,,soccer_epl,fulham,manchester city
+1379108,39,Premier League,2025,2025-12-03 20:00:00+00:00,NS,Not Started,39,Wolves,65,Nottingham Forest,,,,soccer_epl,wolves,nottingham forest
+1379105,39,Premier League,2025,2025-12-03 20:00:00+00:00,NS,Not Started,40,Liverpool,746,Sunderland,,,,soccer_epl,liverpool,sunderland
+1379099,39,Premier League,2025,2025-12-03 20:00:00+00:00,NS,Not Started,42,Arsenal,55,Brentford,,,,soccer_epl,arsenal,brentford
+1379102,39,Premier League,2025,2025-12-03 20:00:00+00:00,NS,Not Started,44,Burnley,52,Crystal Palace,,,,soccer_epl,burnley,crystal palace
+1379101,39,Premier League,2025,2025-12-03 20:00:00+00:00,NS,Not Started,51,Brighton,66,Aston Villa,,,,soccer_epl,brighton,aston villa
+1379104,39,Premier League,2025,2025-12-03 20:00:00+00:00,NS,Not Started,63,Leeds,49,Chelsea,,,,soccer_epl,leeds,chelsea
+1379116,39,Premier League,2025,2025-12-06 15:00:00+00:00,NS,Not Started,34,Newcastle,44,Burnley,,,,soccer_epl,newcastle,burnley
+1379110,39,Premier League,2025,2025-12-06 15:00:00+00:00,NS,Not Started,35,Bournemouth,49,Chelsea,,,,soccer_epl,bournemouth,chelsea
+1379113,39,Premier League,2025,2025-12-06 15:00:00+00:00,NS,Not Started,36,Fulham,52,Crystal Palace,,,,soccer_epl,fulham,crystal palace
+1379118,39,Premier League,2025,2025-12-06 15:00:00+00:00,NS,Not Started,39,Wolves,33,Manchester United,,,,soccer_epl,wolves,manchester united
+1379112,39,Premier League,2025,2025-12-06 15:00:00+00:00,NS,Not Started,45,Everton,65,Nottingham Forest,,,,soccer_epl,everton,nottingham forest
+1379117,39,Premier League,2025,2025-12-06 15:00:00+00:00,NS,Not Started,47,Tottenham,55,Brentford,,,,soccer_epl,tottenham,brentford
+1379115,39,Premier League,2025,2025-12-06 15:00:00+00:00,NS,Not Started,50,Manchester City,746,Sunderland,,,,soccer_epl,manchester city,sunderland
+1379111,39,Premier League,2025,2025-12-06 15:00:00+00:00,NS,Not Started,51,Brighton,48,West Ham,,,,soccer_epl,brighton,west ham
+1379114,39,Premier League,2025,2025-12-06 15:00:00+00:00,NS,Not Started,63,Leeds,40,Liverpool,,,,soccer_epl,leeds,liverpool
+1379109,39,Premier League,2025,2025-12-06 15:00:00+00:00,NS,Not Started,66,Aston Villa,42,Arsenal,,,,soccer_epl,aston villa,arsenal
+1379125,39,Premier League,2025,2025-12-13 15:00:00+00:00,NS,Not Started,33,Manchester United,35,Bournemouth,,,,soccer_epl,manchester united,bournemouth
+1379124,39,Premier League,2025,2025-12-13 15:00:00+00:00,NS,Not Started,40,Liverpool,51,Brighton,,,,soccer_epl,liverpool,brighton
+1379119,39,Premier League,2025,2025-12-13 15:00:00+00:00,NS,Not Started,42,Arsenal,39,Wolves,,,,soccer_epl,arsenal,wolves
+1379121,39,Premier League,2025,2025-12-13 15:00:00+00:00,NS,Not Started,44,Burnley,36,Fulham,,,,soccer_epl,burnley,fulham
+1379128,39,Premier League,2025,2025-12-13 15:00:00+00:00,NS,Not Started,48,West Ham,66,Aston Villa,,,,soccer_epl,west ham,aston villa
+1379122,39,Premier League,2025,2025-12-13 15:00:00+00:00,NS,Not Started,49,Chelsea,45,Everton,,,,soccer_epl,chelsea,everton
+1379123,39,Premier League,2025,2025-12-13 15:00:00+00:00,NS,Not Started,52,Crystal Palace,50,Manchester City,,,,soccer_epl,crystal palace,manchester city
+1379120,39,Premier League,2025,2025-12-13 15:00:00+00:00,NS,Not Started,55,Brentford,63,Leeds,,,,soccer_epl,brentford,leeds
+1379126,39,Premier League,2025,2025-12-13 15:00:00+00:00,NS,Not Started,65,Nottingham Forest,47,Tottenham,,,,soccer_epl,nottingham forest,tottenham
+1379127,39,Premier League,2025,2025-12-13 15:00:00+00:00,NS,Not Started,746,Sunderland,34,Newcastle,,,,soccer_epl,sunderland,newcastle
+1379136,39,Premier League,2025,2025-12-20 15:00:00+00:00,NS,Not Started,34,Newcastle,49,Chelsea,,,,soccer_epl,newcastle,chelsea
+1379130,39,Premier League,2025,2025-12-20 15:00:00+00:00,NS,Not Started,35,Bournemouth,44,Burnley,,,,soccer_epl,bournemouth,burnley
+1379133,39,Premier League,2025,2025-12-20 15:00:00+00:00,NS,Not Started,36,Fulham,65,Nottingham Forest,,,,soccer_epl,fulham,nottingham forest
+1379138,39,Premier League,2025,2025-12-20 15:00:00+00:00,NS,Not Started,39,Wolves,55,Brentford,,,,soccer_epl,wolves,brentford
+1379132,39,Premier League,2025,2025-12-20 15:00:00+00:00,NS,Not Started,45,Everton,42,Arsenal,,,,soccer_epl,everton,arsenal
+1379137,39,Premier League,2025,2025-12-20 15:00:00+00:00,NS,Not Started,47,Tottenham,40,Liverpool,,,,soccer_epl,tottenham,liverpool
+1379135,39,Premier League,2025,2025-12-20 15:00:00+00:00,NS,Not Started,50,Manchester City,48,West Ham,,,,soccer_epl,manchester city,west ham
+1379131,39,Premier League,2025,2025-12-20 15:00:00+00:00,NS,Not Started,51,Brighton,746,Sunderland,,,,soccer_epl,brighton,sunderland
+1379134,39,Premier League,2025,2025-12-20 15:00:00+00:00,NS,Not Started,63,Leeds,52,Crystal Palace,,,,soccer_epl,leeds,crystal palace
+1379129,39,Premier League,2025,2025-12-20 15:00:00+00:00,NS,Not Started,66,Aston Villa,33,Manchester United,,,,soccer_epl,aston villa,manchester united
+1379145,39,Premier League,2025,2025-12-27 15:00:00+00:00,NS,Not Started,33,Manchester United,34,Newcastle,,,,soccer_epl,manchester united,newcastle
+1379144,39,Premier League,2025,2025-12-27 15:00:00+00:00,NS,Not Started,40,Liverpool,39,Wolves,,,,soccer_epl,liverpool,wolves
+1379139,39,Premier League,2025,2025-12-27 15:00:00+00:00,NS,Not Started,42,Arsenal,51,Brighton,,,,soccer_epl,arsenal,brighton
+1379141,39,Premier League,2025,2025-12-27 15:00:00+00:00,NS,Not Started,44,Burnley,45,Everton,,,,soccer_epl,burnley,everton
+1379148,39,Premier League,2025,2025-12-27 15:00:00+00:00,NS,Not Started,48,West Ham,36,Fulham,,,,soccer_epl,west ham,fulham
+1379142,39,Premier League,2025,2025-12-27 15:00:00+00:00,NS,Not Started,49,Chelsea,66,Aston Villa,,,,soccer_epl,chelsea,aston villa
+1379143,39,Premier League,2025,2025-12-27 15:00:00+00:00,NS,Not Started,52,Crystal Palace,47,Tottenham,,,,soccer_epl,crystal palace,tottenham
+1379140,39,Premier League,2025,2025-12-27 15:00:00+00:00,NS,Not Started,55,Brentford,35,Bournemouth,,,,soccer_epl,brentford,bournemouth
+1379146,39,Premier League,2025,2025-12-27 15:00:00+00:00,NS,Not Started,65,Nottingham Forest,50,Manchester City,,,,soccer_epl,nottingham forest,manchester city
+1379147,39,Premier League,2025,2025-12-27 15:00:00+00:00,NS,Not Started,746,Sunderland,63,Leeds,,,,soccer_epl,sunderland,leeds
+1379155,39,Premier League,2025,2025-12-30 20:00:00+00:00,NS,Not Started,33,Manchester United,39,Wolves,,,,soccer_epl,manchester united,wolves
+1379154,39,Premier League,2025,2025-12-30 20:00:00+00:00,NS,Not Started,40,Liverpool,63,Leeds,,,,soccer_epl,liverpool,leeds
+1379149,39,Premier League,2025,2025-12-30 20:00:00+00:00,NS,Not Started,42,Arsenal,66,Aston Villa,,,,soccer_epl,arsenal,aston villa
+1379151,39,Premier League,2025,2025-12-30 20:00:00+00:00,NS,Not Started,44,Burnley,34,Newcastle,,,,soccer_epl,burnley,newcastle
+1379158,39,Premier League,2025,2025-12-30 20:00:00+00:00,NS,Not Started,48,West Ham,51,Brighton,,,,soccer_epl,west ham,brighton
+1379152,39,Premier League,2025,2025-12-30 20:00:00+00:00,NS,Not Started,49,Chelsea,35,Bournemouth,,,,soccer_epl,chelsea,bournemouth
+1379153,39,Premier League,2025,2025-12-30 20:00:00+00:00,NS,Not Started,52,Crystal Palace,36,Fulham,,,,soccer_epl,crystal palace,fulham
+1379150,39,Premier League,2025,2025-12-30 20:00:00+00:00,NS,Not Started,55,Brentford,47,Tottenham,,,,soccer_epl,brentford,tottenham
+1379156,39,Premier League,2025,2025-12-30 20:00:00+00:00,NS,Not Started,65,Nottingham Forest,45,Everton,,,,soccer_epl,nottingham forest,everton
+1379157,39,Premier League,2025,2025-12-30 20:00:00+00:00,NS,Not Started,746,Sunderland,50,Manchester City,,,,soccer_epl,sunderland,manchester city
+1379166,39,Premier League,2025,2026-01-03 15:00:00+00:00,NS,Not Started,34,Newcastle,52,Crystal Palace,,,,soccer_epl,newcastle,crystal palace
+1379160,39,Premier League,2025,2026-01-03 15:00:00+00:00,NS,Not Started,35,Bournemouth,42,Arsenal,,,,soccer_epl,bournemouth,arsenal
+1379163,39,Premier League,2025,2026-01-03 15:00:00+00:00,NS,Not Started,36,Fulham,40,Liverpool,,,,soccer_epl,fulham,liverpool
+1379168,39,Premier League,2025,2026-01-03 15:00:00+00:00,NS,Not Started,39,Wolves,48,West Ham,,,,soccer_epl,wolves,west ham
+1379162,39,Premier League,2025,2026-01-03 15:00:00+00:00,NS,Not Started,45,Everton,55,Brentford,,,,soccer_epl,everton,brentford
+1379167,39,Premier League,2025,2026-01-03 15:00:00+00:00,NS,Not Started,47,Tottenham,746,Sunderland,,,,soccer_epl,tottenham,sunderland
+1379165,39,Premier League,2025,2026-01-03 15:00:00+00:00,NS,Not Started,50,Manchester City,49,Chelsea,,,,soccer_epl,manchester city,chelsea
+1379161,39,Premier League,2025,2026-01-03 15:00:00+00:00,NS,Not Started,51,Brighton,44,Burnley,,,,soccer_epl,brighton,burnley
+1379164,39,Premier League,2025,2026-01-03 15:00:00+00:00,NS,Not Started,63,Leeds,33,Manchester United,,,,soccer_epl,leeds,manchester united
+1379159,39,Premier League,2025,2026-01-03 15:00:00+00:00,NS,Not Started,66,Aston Villa,65,Nottingham Forest,,,,soccer_epl,aston villa,nottingham forest
+1379177,39,Premier League,2025,2026-01-07 20:00:00+00:00,NS,Not Started,34,Newcastle,63,Leeds,,,,soccer_epl,newcastle,leeds
+1379170,39,Premier League,2025,2026-01-07 20:00:00+00:00,NS,Not Started,35,Bournemouth,47,Tottenham,,,,soccer_epl,bournemouth,tottenham
+1379175,39,Premier League,2025,2026-01-07 20:00:00+00:00,NS,Not Started,36,Fulham,49,Chelsea,,,,soccer_epl,fulham,chelsea
+1379169,39,Premier League,2025,2026-01-07 20:00:00+00:00,NS,Not Started,42,Arsenal,40,Liverpool,,,,soccer_epl,arsenal,liverpool
+1379172,39,Premier League,2025,2026-01-07 20:00:00+00:00,NS,Not Started,44,Burnley,33,Manchester United,,,,soccer_epl,burnley,manchester united
+1379174,39,Premier League,2025,2026-01-07 20:00:00+00:00,NS,Not Started,45,Everton,39,Wolves,,,,soccer_epl,everton,wolves
+1379178,39,Premier League,2025,2026-01-07 20:00:00+00:00,NS,Not Started,48,West Ham,65,Nottingham Forest,,,,soccer_epl,west ham,nottingham forest
+1379176,39,Premier League,2025,2026-01-07 20:00:00+00:00,NS,Not Started,50,Manchester City,51,Brighton,,,,soccer_epl,manchester city,brighton
+1379173,39,Premier League,2025,2026-01-07 20:00:00+00:00,NS,Not Started,52,Crystal Palace,66,Aston Villa,,,,soccer_epl,crystal palace,aston villa
+1379171,39,Premier League,2025,2026-01-07 20:00:00+00:00,NS,Not Started,55,Brentford,746,Sunderland,,,,soccer_epl,brentford,sunderland
+1379184,39,Premier League,2025,2026-01-17 15:00:00+00:00,NS,Not Started,33,Manchester United,50,Manchester City,,,,soccer_epl,manchester united,manchester city
+1379188,39,Premier League,2025,2026-01-17 15:00:00+00:00,NS,Not Started,39,Wolves,34,Newcastle,,,,soccer_epl,wolves,newcastle
+1379183,39,Premier League,2025,2026-01-17 15:00:00+00:00,NS,Not Started,40,Liverpool,44,Burnley,,,,soccer_epl,liverpool,burnley
+1379187,39,Premier League,2025,2026-01-17 15:00:00+00:00,NS,Not Started,47,Tottenham,48,West Ham,,,,soccer_epl,tottenham,west ham
+1379181,39,Premier League,2025,2026-01-17 15:00:00+00:00,NS,Not Started,49,Chelsea,55,Brentford,,,,soccer_epl,chelsea,brentford
+1379180,39,Premier League,2025,2026-01-17 15:00:00+00:00,NS,Not Started,51,Brighton,35,Bournemouth,,,,soccer_epl,brighton,bournemouth
+1379182,39,Premier League,2025,2026-01-17 15:00:00+00:00,NS,Not Started,63,Leeds,36,Fulham,,,,soccer_epl,leeds,fulham
+1379185,39,Premier League,2025,2026-01-17 15:00:00+00:00,NS,Not Started,65,Nottingham Forest,42,Arsenal,,,,soccer_epl,nottingham forest,arsenal
+1379179,39,Premier League,2025,2026-01-17 15:00:00+00:00,NS,Not Started,66,Aston Villa,45,Everton,,,,soccer_epl,aston villa,everton
+1379186,39,Premier League,2025,2026-01-17 15:00:00+00:00,NS,Not Started,746,Sunderland,52,Crystal Palace,,,,soccer_epl,sunderland,crystal palace
+1379197,39,Premier League,2025,2026-01-24 15:00:00+00:00,NS,Not Started,34,Newcastle,66,Aston Villa,,,,soccer_epl,newcastle,aston villa
+1379190,39,Premier League,2025,2026-01-24 15:00:00+00:00,NS,Not Started,35,Bournemouth,40,Liverpool,,,,soccer_epl,bournemouth,liverpool
+1379195,39,Premier League,2025,2026-01-24 15:00:00+00:00,NS,Not Started,36,Fulham,51,Brighton,,,,soccer_epl,fulham,brighton
+1379189,39,Premier League,2025,2026-01-24 15:00:00+00:00,NS,Not Started,42,Arsenal,33,Manchester United,,,,soccer_epl,arsenal,manchester united
+1379192,39,Premier League,2025,2026-01-24 15:00:00+00:00,NS,Not Started,44,Burnley,47,Tottenham,,,,soccer_epl,burnley,tottenham
+1379194,39,Premier League,2025,2026-01-24 15:00:00+00:00,NS,Not Started,45,Everton,63,Leeds,,,,soccer_epl,everton,leeds
+1379198,39,Premier League,2025,2026-01-24 15:00:00+00:00,NS,Not Started,48,West Ham,746,Sunderland,,,,soccer_epl,west ham,sunderland
+1379196,39,Premier League,2025,2026-01-24 15:00:00+00:00,NS,Not Started,50,Manchester City,39,Wolves,,,,soccer_epl,manchester city,wolves
+1379193,39,Premier League,2025,2026-01-24 15:00:00+00:00,NS,Not Started,52,Crystal Palace,49,Chelsea,,,,soccer_epl,crystal palace,chelsea
+1379191,39,Premier League,2025,2026-01-24 15:00:00+00:00,NS,Not Started,55,Brentford,65,Nottingham Forest,,,,soccer_epl,brentford,nottingham forest
+1379204,39,Premier League,2025,2026-01-31 15:00:00+00:00,NS,Not Started,33,Manchester United,36,Fulham,,,,soccer_epl,manchester united,fulham
+1379208,39,Premier League,2025,2026-01-31 15:00:00+00:00,NS,Not Started,39,Wolves,35,Bournemouth,,,,soccer_epl,wolves,bournemouth
+1379203,39,Premier League,2025,2026-01-31 15:00:00+00:00,NS,Not Started,40,Liverpool,34,Newcastle,,,,soccer_epl,liverpool,newcastle
+1379207,39,Premier League,2025,2026-01-31 15:00:00+00:00,NS,Not Started,47,Tottenham,50,Manchester City,,,,soccer_epl,tottenham,manchester city
+1379201,39,Premier League,2025,2026-01-31 15:00:00+00:00,NS,Not Started,49,Chelsea,48,West Ham,,,,soccer_epl,chelsea,west ham
+1379200,39,Premier League,2025,2026-01-31 15:00:00+00:00,NS,Not Started,51,Brighton,45,Everton,,,,soccer_epl,brighton,everton
+1379202,39,Premier League,2025,2026-01-31 15:00:00+00:00,NS,Not Started,63,Leeds,42,Arsenal,,,,soccer_epl,leeds,arsenal
+1379205,39,Premier League,2025,2026-01-31 15:00:00+00:00,NS,Not Started,65,Nottingham Forest,52,Crystal Palace,,,,soccer_epl,nottingham forest,crystal palace
+1379199,39,Premier League,2025,2026-01-31 15:00:00+00:00,NS,Not Started,66,Aston Villa,55,Brentford,,,,soccer_epl,aston villa,brentford
+1379206,39,Premier League,2025,2026-01-31 15:00:00+00:00,NS,Not Started,746,Sunderland,44,Burnley,,,,soccer_epl,sunderland,burnley
+1379216,39,Premier League,2025,2026-02-07 15:00:00+00:00,NS,Not Started,33,Manchester United,47,Tottenham,,,,soccer_epl,manchester united,tottenham
+1379217,39,Premier League,2025,2026-02-07 15:00:00+00:00,NS,Not Started,34,Newcastle,55,Brentford,,,,soccer_epl,newcastle,brentford
+1379210,39,Premier League,2025,2026-02-07 15:00:00+00:00,NS,Not Started,35,Bournemouth,66,Aston Villa,,,,soccer_epl,bournemouth,aston villa
+1379213,39,Premier League,2025,2026-02-07 15:00:00+00:00,NS,Not Started,36,Fulham,45,Everton,,,,soccer_epl,fulham,everton
+1379218,39,Premier League,2025,2026-02-07 15:00:00+00:00,NS,Not Started,39,Wolves,49,Chelsea,,,,soccer_epl,wolves,chelsea
+1379215,39,Premier League,2025,2026-02-07 15:00:00+00:00,NS,Not Started,40,Liverpool,50,Manchester City,,,,soccer_epl,liverpool,manchester city
+1379209,39,Premier League,2025,2026-02-07 15:00:00+00:00,NS,Not Started,42,Arsenal,746,Sunderland,,,,soccer_epl,arsenal,sunderland
+1379212,39,Premier League,2025,2026-02-07 15:00:00+00:00,NS,Not Started,44,Burnley,48,West Ham,,,,soccer_epl,burnley,west ham
+1379211,39,Premier League,2025,2026-02-07 15:00:00+00:00,NS,Not Started,51,Brighton,52,Crystal Palace,,,,soccer_epl,brighton,crystal palace
+1379214,39,Premier League,2025,2026-02-07 15:00:00+00:00,NS,Not Started,63,Leeds,65,Nottingham Forest,,,,soccer_epl,leeds,nottingham forest
+1379223,39,Premier League,2025,2026-02-11 20:00:00+00:00,NS,Not Started,45,Everton,35,Bournemouth,,,,soccer_epl,everton,bournemouth
+1379227,39,Premier League,2025,2026-02-11 20:00:00+00:00,NS,Not Started,47,Tottenham,34,Newcastle,,,,soccer_epl,tottenham,newcastle
+1379228,39,Premier League,2025,2026-02-11 20:00:00+00:00,NS,Not Started,48,West Ham,33,Manchester United,,,,soccer_epl,west ham,manchester united
+1379221,39,Premier League,2025,2026-02-11 20:00:00+00:00,NS,Not Started,49,Chelsea,63,Leeds,,,,soccer_epl,chelsea,leeds
+1379224,39,Premier League,2025,2026-02-11 20:00:00+00:00,NS,Not Started,50,Manchester City,36,Fulham,,,,soccer_epl,manchester city,fulham
+1379222,39,Premier League,2025,2026-02-11 20:00:00+00:00,NS,Not Started,52,Crystal Palace,44,Burnley,,,,soccer_epl,crystal palace,burnley
+1379220,39,Premier League,2025,2026-02-11 20:00:00+00:00,NS,Not Started,55,Brentford,42,Arsenal,,,,soccer_epl,brentford,arsenal
+1379225,39,Premier League,2025,2026-02-11 20:00:00+00:00,NS,Not Started,65,Nottingham Forest,39,Wolves,,,,soccer_epl,nottingham forest,wolves
+1379219,39,Premier League,2025,2026-02-11 20:00:00+00:00,NS,Not Started,66,Aston Villa,51,Brighton,,,,soccer_epl,aston villa,brighton
+1379226,39,Premier League,2025,2026-02-11 20:00:00+00:00,NS,Not Started,746,Sunderland,40,Liverpool,,,,soccer_epl,sunderland,liverpool
+1379233,39,Premier League,2025,2026-02-21 15:00:00+00:00,NS,Not Started,45,Everton,33,Manchester United,,,,soccer_epl,everton,manchester united
+1379237,39,Premier League,2025,2026-02-21 15:00:00+00:00,NS,Not Started,47,Tottenham,42,Arsenal,,,,soccer_epl,tottenham,arsenal
+1379238,39,Premier League,2025,2026-02-21 15:00:00+00:00,NS,Not Started,48,West Ham,35,Bournemouth,,,,soccer_epl,west ham,bournemouth
+1379231,39,Premier League,2025,2026-02-21 15:00:00+00:00,NS,Not Started,49,Chelsea,44,Burnley,,,,soccer_epl,chelsea,burnley
+1379234,39,Premier League,2025,2026-02-21 15:00:00+00:00,NS,Not Started,50,Manchester City,34,Newcastle,,,,soccer_epl,manchester city,newcastle
+1379232,39,Premier League,2025,2026-02-21 15:00:00+00:00,NS,Not Started,52,Crystal Palace,39,Wolves,,,,soccer_epl,crystal palace,wolves
+1379230,39,Premier League,2025,2026-02-21 15:00:00+00:00,NS,Not Started,55,Brentford,51,Brighton,,,,soccer_epl,brentford,brighton
+1379235,39,Premier League,2025,2026-02-21 15:00:00+00:00,NS,Not Started,65,Nottingham Forest,40,Liverpool,,,,soccer_epl,nottingham forest,liverpool
+1379229,39,Premier League,2025,2026-02-21 15:00:00+00:00,NS,Not Started,66,Aston Villa,63,Leeds,,,,soccer_epl,aston villa,leeds
+1379236,39,Premier League,2025,2026-02-21 15:00:00+00:00,NS,Not Started,746,Sunderland,36,Fulham,,,,soccer_epl,sunderland,fulham
+1379246,39,Premier League,2025,2026-02-28 15:00:00+00:00,NS,Not Started,33,Manchester United,52,Crystal Palace,,,,soccer_epl,manchester united,crystal palace
+1379247,39,Premier League,2025,2026-02-28 15:00:00+00:00,NS,Not Started,34,Newcastle,45,Everton,,,,soccer_epl,newcastle,everton
+1379240,39,Premier League,2025,2026-02-28 15:00:00+00:00,NS,Not Started,35,Bournemouth,746,Sunderland,,,,soccer_epl,bournemouth,sunderland
+1379243,39,Premier League,2025,2026-02-28 15:00:00+00:00,NS,Not Started,36,Fulham,47,Tottenham,,,,soccer_epl,fulham,tottenham
+1379248,39,Premier League,2025,2026-02-28 15:00:00+00:00,NS,Not Started,39,Wolves,66,Aston Villa,,,,soccer_epl,wolves,aston villa
+1379245,39,Premier League,2025,2026-02-28 15:00:00+00:00,NS,Not Started,40,Liverpool,48,West Ham,,,,soccer_epl,liverpool,west ham
+1379239,39,Premier League,2025,2026-02-28 15:00:00+00:00,NS,Not Started,42,Arsenal,49,Chelsea,,,,soccer_epl,arsenal,chelsea
+1379242,39,Premier League,2025,2026-02-28 15:00:00+00:00,NS,Not Started,44,Burnley,55,Brentford,,,,soccer_epl,burnley,brentford
+1379241,39,Premier League,2025,2026-02-28 15:00:00+00:00,NS,Not Started,51,Brighton,65,Nottingham Forest,,,,soccer_epl,brighton,nottingham forest
+1379244,39,Premier League,2025,2026-02-28 15:00:00+00:00,NS,Not Started,63,Leeds,50,Manchester City,,,,soccer_epl,leeds,manchester city
+1379256,39,Premier League,2025,2026-03-04 20:00:00+00:00,NS,Not Started,34,Newcastle,33,Manchester United,,,,soccer_epl,newcastle,manchester united
+1379250,39,Premier League,2025,2026-03-04 20:00:00+00:00,NS,Not Started,35,Bournemouth,55,Brentford,,,,soccer_epl,bournemouth,brentford
+1379253,39,Premier League,2025,2026-03-04 20:00:00+00:00,NS,Not Started,36,Fulham,48,West Ham,,,,soccer_epl,fulham,west ham
+1379258,39,Premier League,2025,2026-03-04 20:00:00+00:00,NS,Not Started,39,Wolves,40,Liverpool,,,,soccer_epl,wolves,liverpool
+1379252,39,Premier League,2025,2026-03-04 20:00:00+00:00,NS,Not Started,45,Everton,44,Burnley,,,,soccer_epl,everton,burnley
+1379257,39,Premier League,2025,2026-03-04 20:00:00+00:00,NS,Not Started,47,Tottenham,52,Crystal Palace,,,,soccer_epl,tottenham,crystal palace
+1379255,39,Premier League,2025,2026-03-04 20:00:00+00:00,NS,Not Started,50,Manchester City,65,Nottingham Forest,,,,soccer_epl,manchester city,nottingham forest
+1379251,39,Premier League,2025,2026-03-04 20:00:00+00:00,NS,Not Started,51,Brighton,42,Arsenal,,,,soccer_epl,brighton,arsenal
+1379254,39,Premier League,2025,2026-03-04 20:00:00+00:00,NS,Not Started,63,Leeds,746,Sunderland,,,,soccer_epl,leeds,sunderland
+1379249,39,Premier League,2025,2026-03-04 20:00:00+00:00,NS,Not Started,66,Aston Villa,49,Chelsea,,,,soccer_epl,aston villa,chelsea
+1379265,39,Premier League,2025,2026-03-14 15:00:00+00:00,NS,Not Started,33,Manchester United,66,Aston Villa,,,,soccer_epl,manchester united,aston villa
+1379264,39,Premier League,2025,2026-03-14 15:00:00+00:00,NS,Not Started,40,Liverpool,47,Tottenham,,,,soccer_epl,liverpool,tottenham
+1379259,39,Premier League,2025,2026-03-14 15:00:00+00:00,NS,Not Started,42,Arsenal,45,Everton,,,,soccer_epl,arsenal,everton
+1379261,39,Premier League,2025,2026-03-14 15:00:00+00:00,NS,Not Started,44,Burnley,35,Bournemouth,,,,soccer_epl,burnley,bournemouth
+1379268,39,Premier League,2025,2026-03-14 15:00:00+00:00,NS,Not Started,48,West Ham,50,Manchester City,,,,soccer_epl,west ham,manchester city
+1379262,39,Premier League,2025,2026-03-14 15:00:00+00:00,NS,Not Started,49,Chelsea,34,Newcastle,,,,soccer_epl,chelsea,newcastle
+1379263,39,Premier League,2025,2026-03-14 15:00:00+00:00,NS,Not Started,52,Crystal Palace,63,Leeds,,,,soccer_epl,crystal palace,leeds
+1379260,39,Premier League,2025,2026-03-14 15:00:00+00:00,NS,Not Started,55,Brentford,39,Wolves,,,,soccer_epl,brentford,wolves
+1379266,39,Premier League,2025,2026-03-14 15:00:00+00:00,NS,Not Started,65,Nottingham Forest,36,Fulham,,,,soccer_epl,nottingham forest,fulham
+1379267,39,Premier League,2025,2026-03-14 15:00:00+00:00,NS,Not Started,746,Sunderland,51,Brighton,,,,soccer_epl,sunderland,brighton
+1379276,39,Premier League,2025,2026-03-21 15:00:00+00:00,NS,Not Started,34,Newcastle,746,Sunderland,,,,soccer_epl,newcastle,sunderland
+1379270,39,Premier League,2025,2026-03-21 15:00:00+00:00,NS,Not Started,35,Bournemouth,33,Manchester United,,,,soccer_epl,bournemouth,manchester united
+1379273,39,Premier League,2025,2026-03-21 15:00:00+00:00,NS,Not Started,36,Fulham,44,Burnley,,,,soccer_epl,fulham,burnley
+1379278,39,Premier League,2025,2026-03-21 15:00:00+00:00,NS,Not Started,39,Wolves,42,Arsenal,,,,soccer_epl,wolves,arsenal
+1379272,39,Premier League,2025,2026-03-21 15:00:00+00:00,NS,Not Started,45,Everton,49,Chelsea,,,,soccer_epl,everton,chelsea
+1379277,39,Premier League,2025,2026-03-21 15:00:00+00:00,NS,Not Started,47,Tottenham,65,Nottingham Forest,,,,soccer_epl,tottenham,nottingham forest
+1379275,39,Premier League,2025,2026-03-21 15:00:00+00:00,NS,Not Started,50,Manchester City,52,Crystal Palace,,,,soccer_epl,manchester city,crystal palace
+1379271,39,Premier League,2025,2026-03-21 15:00:00+00:00,NS,Not Started,51,Brighton,40,Liverpool,,,,soccer_epl,brighton,liverpool
+1379274,39,Premier League,2025,2026-03-21 15:00:00+00:00,NS,Not Started,63,Leeds,55,Brentford,,,,soccer_epl,leeds,brentford
+1379269,39,Premier League,2025,2026-03-21 15:00:00+00:00,NS,Not Started,66,Aston Villa,48,West Ham,,,,soccer_epl,aston villa,west ham
+1379285,39,Premier League,2025,2026-04-11 14:00:00+00:00,NS,Not Started,33,Manchester United,63,Leeds,,,,soccer_epl,manchester united,leeds
+1379284,39,Premier League,2025,2026-04-11 14:00:00+00:00,NS,Not Started,40,Liverpool,36,Fulham,,,,soccer_epl,liverpool,fulham
+1379279,39,Premier League,2025,2026-04-11 14:00:00+00:00,NS,Not Started,42,Arsenal,35,Bournemouth,,,,soccer_epl,arsenal,bournemouth
+1379281,39,Premier League,2025,2026-04-11 14:00:00+00:00,NS,Not Started,44,Burnley,51,Brighton,,,,soccer_epl,burnley,brighton
+1379288,39,Premier League,2025,2026-04-11 14:00:00+00:00,NS,Not Started,48,West Ham,39,Wolves,,,,soccer_epl,west ham,wolves
+1379282,39,Premier League,2025,2026-04-11 14:00:00+00:00,NS,Not Started,49,Chelsea,50,Manchester City,,,,soccer_epl,chelsea,manchester city
+1379283,39,Premier League,2025,2026-04-11 14:00:00+00:00,NS,Not Started,52,Crystal Palace,34,Newcastle,,,,soccer_epl,crystal palace,newcastle
+1379280,39,Premier League,2025,2026-04-11 14:00:00+00:00,NS,Not Started,55,Brentford,45,Everton,,,,soccer_epl,brentford,everton
+1379286,39,Premier League,2025,2026-04-11 14:00:00+00:00,NS,Not Started,65,Nottingham Forest,66,Aston Villa,,,,soccer_epl,nottingham forest,aston villa
+1379287,39,Premier League,2025,2026-04-11 14:00:00+00:00,NS,Not Started,746,Sunderland,47,Tottenham,,,,soccer_epl,sunderland,tottenham
+1379296,39,Premier League,2025,2026-04-18 14:00:00+00:00,NS,Not Started,34,Newcastle,35,Bournemouth,,,,soccer_epl,newcastle,bournemouth
+1379293,39,Premier League,2025,2026-04-18 14:00:00+00:00,NS,Not Started,45,Everton,40,Liverpool,,,,soccer_epl,everton,liverpool
+1379298,39,Premier League,2025,2026-04-18 14:00:00+00:00,NS,Not Started,47,Tottenham,51,Brighton,,,,soccer_epl,tottenham,brighton
+1379291,39,Premier League,2025,2026-04-18 14:00:00+00:00,NS,Not Started,49,Chelsea,33,Manchester United,,,,soccer_epl,chelsea,manchester united
+1379295,39,Premier League,2025,2026-04-18 14:00:00+00:00,NS,Not Started,50,Manchester City,42,Arsenal,,,,soccer_epl,manchester city,arsenal
+1379292,39,Premier League,2025,2026-04-18 14:00:00+00:00,NS,Not Started,52,Crystal Palace,48,West Ham,,,,soccer_epl,crystal palace,west ham
+1379290,39,Premier League,2025,2026-04-18 14:00:00+00:00,NS,Not Started,55,Brentford,36,Fulham,,,,soccer_epl,brentford,fulham
+1379294,39,Premier League,2025,2026-04-18 14:00:00+00:00,NS,Not Started,63,Leeds,39,Wolves,,,,soccer_epl,leeds,wolves
+1379297,39,Premier League,2025,2026-04-18 14:00:00+00:00,NS,Not Started,65,Nottingham Forest,44,Burnley,,,,soccer_epl,nottingham forest,burnley
+1379289,39,Premier League,2025,2026-04-18 14:00:00+00:00,NS,Not Started,66,Aston Villa,746,Sunderland,,,,soccer_epl,aston villa,sunderland
+1379305,39,Premier League,2025,2026-04-25 14:00:00+00:00,NS,Not Started,33,Manchester United,55,Brentford,,,,soccer_epl,manchester united,brentford
+1379300,39,Premier League,2025,2026-04-25 14:00:00+00:00,NS,Not Started,35,Bournemouth,63,Leeds,,,,soccer_epl,bournemouth,leeds
+1379303,39,Premier League,2025,2026-04-25 14:00:00+00:00,NS,Not Started,36,Fulham,66,Aston Villa,,,,soccer_epl,fulham,aston villa
+1379308,39,Premier League,2025,2026-04-25 14:00:00+00:00,NS,Not Started,39,Wolves,47,Tottenham,,,,soccer_epl,wolves,tottenham
+1379304,39,Premier League,2025,2026-04-25 14:00:00+00:00,NS,Not Started,40,Liverpool,52,Crystal Palace,,,,soccer_epl,liverpool,crystal palace
+1379299,39,Premier League,2025,2026-04-25 14:00:00+00:00,NS,Not Started,42,Arsenal,34,Newcastle,,,,soccer_epl,arsenal,newcastle
+1379302,39,Premier League,2025,2026-04-25 14:00:00+00:00,NS,Not Started,44,Burnley,50,Manchester City,,,,soccer_epl,burnley,manchester city
+1379307,39,Premier League,2025,2026-04-25 14:00:00+00:00,NS,Not Started,48,West Ham,45,Everton,,,,soccer_epl,west ham,everton
+1379301,39,Premier League,2025,2026-04-25 14:00:00+00:00,NS,Not Started,51,Brighton,49,Chelsea,,,,soccer_epl,brighton,chelsea
+1379306,39,Premier League,2025,2026-04-25 14:00:00+00:00,NS,Not Started,746,Sunderland,65,Nottingham Forest,,,,soccer_epl,sunderland,nottingham forest
+1379316,39,Premier League,2025,2026-05-02 14:00:00+00:00,NS,Not Started,33,Manchester United,40,Liverpool,,,,soccer_epl,manchester united,liverpool
+1379317,39,Premier League,2025,2026-05-02 14:00:00+00:00,NS,Not Started,34,Newcastle,51,Brighton,,,,soccer_epl,newcastle,brighton
+1379311,39,Premier League,2025,2026-05-02 14:00:00+00:00,NS,Not Started,35,Bournemouth,52,Crystal Palace,,,,soccer_epl,bournemouth,crystal palace
+1379318,39,Premier League,2025,2026-05-02 14:00:00+00:00,NS,Not Started,39,Wolves,746,Sunderland,,,,soccer_epl,wolves,sunderland
+1379309,39,Premier League,2025,2026-05-02 14:00:00+00:00,NS,Not Started,42,Arsenal,36,Fulham,,,,soccer_epl,arsenal,fulham
+1379314,39,Premier League,2025,2026-05-02 14:00:00+00:00,NS,Not Started,45,Everton,50,Manchester City,,,,soccer_epl,everton,manchester city
+1379313,39,Premier League,2025,2026-05-02 14:00:00+00:00,NS,Not Started,49,Chelsea,65,Nottingham Forest,,,,soccer_epl,chelsea,nottingham forest
+1379312,39,Premier League,2025,2026-05-02 14:00:00+00:00,NS,Not Started,55,Brentford,48,West Ham,,,,soccer_epl,brentford,west ham
+1379315,39,Premier League,2025,2026-05-02 14:00:00+00:00,NS,Not Started,63,Leeds,44,Burnley,,,,soccer_epl,leeds,burnley
+1379310,39,Premier League,2025,2026-05-02 14:00:00+00:00,NS,Not Started,66,Aston Villa,47,Tottenham,,,,soccer_epl,aston villa,tottenham
+1379322,39,Premier League,2025,2026-05-09 14:00:00+00:00,NS,Not Started,36,Fulham,35,Bournemouth,,,,soccer_epl,fulham,bournemouth
+1379323,39,Premier League,2025,2026-05-09 14:00:00+00:00,NS,Not Started,40,Liverpool,49,Chelsea,,,,soccer_epl,liverpool,chelsea
+1379320,39,Premier League,2025,2026-05-09 14:00:00+00:00,NS,Not Started,44,Burnley,66,Aston Villa,,,,soccer_epl,burnley,aston villa
+1379327,39,Premier League,2025,2026-05-09 14:00:00+00:00,NS,Not Started,47,Tottenham,63,Leeds,,,,soccer_epl,tottenham,leeds
+1379328,39,Premier League,2025,2026-05-09 14:00:00+00:00,NS,Not Started,48,West Ham,42,Arsenal,,,,soccer_epl,west ham,arsenal
+1379324,39,Premier League,2025,2026-05-09 14:00:00+00:00,NS,Not Started,50,Manchester City,55,Brentford,,,,soccer_epl,manchester city,brentford
+1379319,39,Premier League,2025,2026-05-09 14:00:00+00:00,NS,Not Started,51,Brighton,39,Wolves,,,,soccer_epl,brighton,wolves
+1379321,39,Premier League,2025,2026-05-09 14:00:00+00:00,NS,Not Started,52,Crystal Palace,45,Everton,,,,soccer_epl,crystal palace,everton
+1379325,39,Premier League,2025,2026-05-09 14:00:00+00:00,NS,Not Started,65,Nottingham Forest,34,Newcastle,,,,soccer_epl,nottingham forest,newcastle
+1379326,39,Premier League,2025,2026-05-09 14:00:00+00:00,NS,Not Started,746,Sunderland,33,Manchester United,,,,soccer_epl,sunderland,manchester united
+1379336,39,Premier League,2025,2026-05-17 14:00:00+00:00,NS,Not Started,33,Manchester United,65,Nottingham Forest,,,,soccer_epl,manchester united,nottingham forest
+1379337,39,Premier League,2025,2026-05-17 14:00:00+00:00,NS,Not Started,34,Newcastle,48,West Ham,,,,soccer_epl,newcastle,west ham
+1379331,39,Premier League,2025,2026-05-17 14:00:00+00:00,NS,Not Started,35,Bournemouth,50,Manchester City,,,,soccer_epl,bournemouth,manchester city
+1379338,39,Premier League,2025,2026-05-17 14:00:00+00:00,NS,Not Started,39,Wolves,36,Fulham,,,,soccer_epl,wolves,fulham
+1379329,39,Premier League,2025,2026-05-17 14:00:00+00:00,NS,Not Started,42,Arsenal,44,Burnley,,,,soccer_epl,arsenal,burnley
+1379334,39,Premier League,2025,2026-05-17 14:00:00+00:00,NS,Not Started,45,Everton,746,Sunderland,,,,soccer_epl,everton,sunderland
+1379333,39,Premier League,2025,2026-05-17 14:00:00+00:00,NS,Not Started,49,Chelsea,47,Tottenham,,,,soccer_epl,chelsea,tottenham
+1379332,39,Premier League,2025,2026-05-17 14:00:00+00:00,NS,Not Started,55,Brentford,52,Crystal Palace,,,,soccer_epl,brentford,crystal palace
+1379335,39,Premier League,2025,2026-05-17 14:00:00+00:00,NS,Not Started,63,Leeds,51,Brighton,,,,soccer_epl,leeds,brighton
+1379330,39,Premier League,2025,2026-05-17 14:00:00+00:00,NS,Not Started,66,Aston Villa,40,Liverpool,,,,soccer_epl,aston villa,liverpool
+1379342,39,Premier League,2025,2026-05-24 15:00:00+00:00,NS,Not Started,36,Fulham,34,Newcastle,,,,soccer_epl,fulham,newcastle
+1379343,39,Premier League,2025,2026-05-24 15:00:00+00:00,NS,Not Started,40,Liverpool,55,Brentford,,,,soccer_epl,liverpool,brentford
+1379340,39,Premier League,2025,2026-05-24 15:00:00+00:00,NS,Not Started,44,Burnley,39,Wolves,,,,soccer_epl,burnley,wolves
+1379347,39,Premier League,2025,2026-05-24 15:00:00+00:00,NS,Not Started,47,Tottenham,45,Everton,,,,soccer_epl,tottenham,everton
+1379348,39,Premier League,2025,2026-05-24 15:00:00+00:00,NS,Not Started,48,West Ham,63,Leeds,,,,soccer_epl,west ham,leeds
+1379344,39,Premier League,2025,2026-05-24 15:00:00+00:00,NS,Not Started,50,Manchester City,66,Aston Villa,,,,soccer_epl,manchester city,aston villa
+1379339,39,Premier League,2025,2026-05-24 15:00:00+00:00,NS,Not Started,51,Brighton,33,Manchester United,,,,soccer_epl,brighton,manchester united
+1379341,39,Premier League,2025,2026-05-24 15:00:00+00:00,NS,Not Started,52,Crystal Palace,42,Arsenal,,,,soccer_epl,crystal palace,arsenal
+1379345,39,Premier League,2025,2026-05-24 15:00:00+00:00,NS,Not Started,65,Nottingham Forest,35,Bournemouth,,,,soccer_epl,nottingham forest,bournemouth
+1379346,39,Premier League,2025,2026-05-24 15:00:00+00:00,NS,Not Started,746,Sunderland,49,Chelsea,,,,soccer_epl,sunderland,chelsea

@@ -1,0 +1,19 @@
+team_id,team_name,rank,points,form,goalsDiff,played,wins,draws,losses
+157,Bayern München,1,82,WWDWW,67,34,25,7,2
+168,Bayer Leverkusen,2,69,DLDWD,29,34,19,12,3
+169,Eintracht Frankfurt,3,60,WDDWD,22,34,17,9,8
+165,Borussia Dortmund,4,57,WWWWW,20,34,17,6,11
+160,SC Freiburg,5,55,LWDWW,-4,34,16,7,11
+164,FSV Mainz 05,6,52,DWDLD,12,34,14,10,10
+173,RB Leipzig,7,51,LDDLD,5,34,13,12,9
+162,Werder Bremen,8,51,WDDDW,-3,34,14,9,11
+172,VfB Stuttgart,9,50,WWWLD,11,34,14,8,12
+163,Borussia Mönchengladbach,10,45,LLDLL,-2,34,13,6,15
+161,VfL Wolfsburg,11,43,WDLLD,2,34,11,10,13
+170,FC Augsburg,12,43,LLLLD,-16,34,11,10,13
+182,Union Berlin,13,40,WLDDD,-16,34,10,10,14
+186,FC St. Pauli,14,32,LDLDD,-13,34,8,8,18
+167,1899 Hoffenheim,15,32,LDDLL,-22,34,7,11,16
+180,1. FC Heidenheim,16,29,LWDWL,-27,34,8,5,21
+191,Holstein Kiel,17,25,LLWWD,-31,34,6,7,21
+176,VfL Bochum,18,25,WLDDL,-34,34,6,7,21
