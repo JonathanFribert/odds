@@ -1,0 +1,30 @@
+name: settle
+on:
+  schedule:
+    - cron: "50 21 * * *"  # 23:50 CPH = 21:50 UTC
+  workflow_dispatch: {}
+jobs:
+  settle:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Copenhagen
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      ODDSAPI_KEY: ${{ secrets.ODDSAPI_KEY }}
+      APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+    concurrency:
+      group: settle
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Install deps
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt
+          pip install "psycopg[binary]" "sqlalchemy>=2.0"
+      - name: Settle bets and write to Postgres
+        run: |
+          python scripts/predict_upcoming.py \
+            --settle --settle-lookback-days 90 \
+            --postgres-url "$POSTGRES_URL"

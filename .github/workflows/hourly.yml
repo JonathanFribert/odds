@@ -1,0 +1,32 @@
+name: hourly-picks
+on:
+  schedule:
+    - cron: "0 6-20 * * *"   # hver time 08–22 CPH ≈ 06–20 UTC
+  workflow_dispatch: {}
+jobs:
+  hourly:
+    runs-on: ubuntu-latest
+    env:
+      TZ: Europe/Copenhagen
+      ODDSAPI_KEY: ${{ secrets.ODDSAPI_KEY }}
+      APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+    concurrency:
+      group: hourly
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - name: Install deps
+        run: |
+          python -m pip install -U pip
+          pip install -r requirements.txt
+          pip install "psycopg[binary]" "sqlalchemy>=2.0"
+      - name: Picks only (save credits)
+        run: |
+          python scripts/predict_upcoming.py \
+            --days 14 --require-real-odds \
+            --min-ev 0.02 --min-kelly 0.01 --top-k 20 \
+            --export-md --log-bets \
+            --postgres-url "$POSTGRES_URL"
