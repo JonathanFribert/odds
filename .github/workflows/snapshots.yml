@@ -18,4 +18,36 @@ jobs:
           python -m pip install "sqlalchemy>=2" "psycopg[binary]" pandas numpy requests pyarrow
       - name: Fetch API-Football odds → Postgres snapshots
         run: |
-          python scripts/fetch_apifootball_odds.py --days 1 --include-ou25 --include-ah --write-parquet
+          python scripts/fetch_apifootball_odds.py \
+            --days 1 \
+            --imminent-mins 180 \
+            --include-ou25 --include-ah \
+            --all-books-snapshots \
+            --write-parquet
+
+      - name: Report pre-KO coverage (today)
+        run: |
+          python - <<'PY'
+          import os
+          from sqlalchemy import create_engine, text
+          e = create_engine(os.environ["POSTGRES_URL"], pool_pre_ping=True)
+          sql = """
+          WITH today_fx AS (
+            SELECT fixture_id, kick_off
+            FROM outcomes
+            WHERE kick_off::date = (now() AT TIME ZONE 'UTC')::date
+          ), last_preko AS (
+            SELECT s.fixture_id, MAX(s.fetched_at_utc) AS ts
+            FROM odds_snapshots s
+            JOIN today_fx o USING (fixture_id)
+            WHERE s.market='1X2' AND s.fetched_at_utc <= o.kick_off
+            GROUP BY s.fixture_id
+          )
+          SELECT (SELECT COUNT(*) FROM today_fx) AS fixtures_today,
+                 (SELECT COUNT(*) FROM last_preko) AS with_preko
+          """
+          with e.connect() as c:
+            total, covered = c.execute(text(sql)).fetchone()
+            pct = (covered/total*100.0) if total else 0.0
+            print(f"pre-KO coverage today: {covered}/{total} ({pct:.1f}%)")
+          PY
