@@ -82,42 +82,97 @@ jobs:
               WHERE o.fixture_id = p.fixture_id;
             """))
           PY
-      - name: Settle picks
+      - name: Harvest match statistics (last 3 days)
         run: |
           python - <<'PY'
-          from sqlalchemy import create_engine, text; import os
-          e=create_engine(os.environ["POSTGRES_URL"], pool_pre_ping=True)
-          with e.begin() as c:
-            c.execute(text("""
-              CREATE TABLE IF NOT EXISTS pick_performance (
-                pick_id uuid PRIMARY KEY REFERENCES picks(pick_id) ON DELETE CASCADE,
-                fixture_id bigint NOT NULL,
-                settled_at timestamptz NOT NULL DEFAULT now(),
-                won boolean,
-                pnl_units double precision,
-                closing_line double precision,
-                comment text
-              );
-            """))
-            rows=c.execute(text("""
-              WITH j AS (
-                SELECT p.pick_id, p.fixture_id, p.selection, p.stake_units, p.best_odds,
-                       o.result, o.closing_odds_h, o.closing_odds_d, o.closing_odds_a, o.updated_at
-                FROM picks p JOIN outcomes o USING(fixture_id)
+          import os, requests, datetime as dt
+          from datetime import datetime, timezone
+          from sqlalchemy import create_engine, text
+
+          e = create_engine(os.environ["POSTGRES_URL"], pool_pre_ping=True)
+          headers = {"x-apisports-key": os.environ["APIFOOTBALL_KEY"]}
+
+          with e.connect() as c:
+              fids = [r[0] for r in c.execute(text("""
+                SELECT o.fixture_id
+                FROM outcomes o
                 WHERE o.result IS NOT NULL
-                ORDER BY o.updated_at DESC
-                LIMIT 1000
-              )
-              INSERT INTO pick_performance (pick_id, fixture_id, won, pnl_units, closing_line, comment)
-              SELECT pick_id, fixture_id,
-                     (CASE WHEN result=selection THEN TRUE ELSE FALSE END),
-                     (CASE WHEN result=selection THEN (COALESCE(best_odds,0)-1.0)*COALESCE(stake_units,0)
-                           ELSE -COALESCE(stake_units,0) END),
-                     (CASE selection WHEN 'H' THEN closing_odds_h WHEN 'D' THEN closing_odds_d ELSE closing_odds_a END),
-                     'auto-settle'
-              FROM j
-              ON CONFLICT (pick_id) DO UPDATE
-                SET pnl_units=EXCLUDED.pnl_units, closing_line=EXCLUDED.closing_line, comment=EXCLUDED.comment;
-            """)).rowcount
-            print("settled rows:", rows)
+                  AND o.updated_at >= now() - interval '3 days'
+                  AND (o.home_shots_on_goal IS NULL OR o.away_shots_on_goal IS NULL
+                       OR o.home_ball_possession IS NULL OR o.away_ball_possession IS NULL
+                       OR o.home_expected_goals IS NULL OR o.away_expected_goals IS NULL)
+                LIMIT 500
+              """)).fetchall()]
+
+          UPS = text("""
+            UPDATE outcomes SET
+              home_shots_on_goal = COALESCE(:h_sog, home_shots_on_goal),
+              away_shots_on_goal = COALESCE(:a_sog, away_shots_on_goal),
+              home_ball_possession = COALESCE(:h_poss, home_ball_possession),
+              away_ball_possession = COALESCE(:a_poss, away_ball_possession),
+              home_expected_goals = COALESCE(:h_xg, home_expected_goals),
+              away_expected_goals = COALESCE(:a_xg, away_expected_goals),
+              updated_at = now()
+            WHERE fixture_id = :fid
+          """)
+
+          def to_num(x):
+              if x is None: return None
+              if isinstance(x,(int,float)): return float(x)
+              s=str(x).strip()
+              if s.endswith("%"):
+                  try: return float(s[:-1])
+                  except: return None
+              try: return float(s)
+              except: return None
+
+          updated = 0
+          for fid in fids:
+              try:
+                  r = requests.get("https://v3.football.api-sports.io/fixtures/statistics",
+                                   params={"fixture": int(fid)}, headers=headers, timeout=30)
+                  if r.status_code == 404:
+                      continue
+                  r.raise_for_status()
+                  resp = r.json().get("response", [])
+                  teams = {}
+                  for team_block in resp:
+                      tname = (team_block.get("team") or {}).get("name","")
+                      vals = {}
+                      for s in team_block.get("statistics") or []:
+                          typ = (s.get("type") or "").strip()
+                          vals[typ] = s.get("value")
+                      teams[tname] = vals
+
+                  # Map home/away via earliest pick row (fallback to first two names)
+                  with e.connect() as c2:
+                      row = c2.execute(text("SELECT home, away FROM picks WHERE fixture_id=:fid ORDER BY created_at ASC LIMIT 1"), {"fid": fid}).fetchone()
+                  hname, aname = (row[0], row[1]) if row else (None, None)
+                  H = teams.get(hname) or {}
+                  A = teams.get(aname) or {}
+                  if not H or not A:
+                      names = list(teams.keys())
+                      if len(names) >= 2:
+                          H = teams.get(names[0], {})
+                          A = teams.get(names[1], {})
+
+                  data = {
+                      "fid": fid,
+                      "h_sog": to_num(H.get("Shots on Goal")),
+                      "a_sog": to_num(A.get("Shots on Goal")),
+                      "h_poss": to_num(H.get("Ball Possession")),
+                      "a_poss": to_num(A.get("Ball Possession")),
+                      "h_xg": to_num(H.get("Expected Goals")),
+                      "a_xg": to_num(A.get("Expected Goals")),
+                  }
+                  with e.begin() as c3:
+                      c3.execute(UPS, data)
+                  updated += 1
+              except Exception as ex:
+                  print(f"[stats] fixture={fid}: {ex}")
+
+          print(f"✅ stats updated rows: {updated}")
           PY
+      - name: Settle picks
+        run: |
+          python scripts/settle_picks.py
