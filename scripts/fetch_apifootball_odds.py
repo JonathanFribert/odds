@@ -7,9 +7,87 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Iterable
 import re
+import hashlib
+import json
+# Optional: Postgres upsert for snapshots
+try:
+    from sqlalchemy import create_engine, text  # type: ignore
+except Exception:
+    create_engine = None  # type: ignore
+    text = None  # type: ignore
+
 from common import FEAT, ODIR, add_normalized_teams
 
 API_BASE = "https://v3.football.api-sports.io"
+
+# ---- simple on-disk cache for API-Football odds/bookmakers/mapping ----
+CACHE_DIR = Path("data/.cache/apifootball_odds")
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
+DEFAULT_CACHE_DIR = CACHE_DIR
+
+def _cache_path(endpoint: str, params: dict):
+    # stable key from endpoint + sorted params
+    key_src = endpoint + "?" + "&".join([f"{k}={params[k]}" for k in sorted(params.keys())])
+    h = hashlib.sha1(key_src.encode("utf-8")).hexdigest()
+    return CACHE_DIR / f"{endpoint.replace('/','_')}__{h}.json"
+
+def _now_ts():
+    return int(datetime.now(timezone.utc).timestamp())
+
+def _get_cached(endpoint: str, params: dict, ttl_seconds: int, retries=5, backoff=1.4, allow_stale=True):
+    """
+    Get JSON 'response' list with TTL caching.
+    If network fails and allow_stale=True, returns stale cache if present.
+    """
+    p = _cache_path(endpoint, params)
+    # try fresh cache
+    if p.exists():
+        try:
+            with p.open("r", encoding="utf-8") as f:
+                blob = json.load(f)
+            if isinstance(blob, dict) and "saved_at" in blob and "response" in blob:
+                age = _now_ts() - int(blob.get("saved_at", 0))
+                if age <= ttl_seconds:
+                    return blob.get("response", [])
+        except Exception:
+            pass
+
+    # fetch live
+    last_exc = None
+    for i in range(retries):
+        try:
+            r = requests.get(f"{API_BASE}/{endpoint}", headers=_headers(), params=params, timeout=30)
+            if r.status_code == 429:
+                time.sleep(backoff * (i + 1))
+                continue
+            if r.status_code in (401, 403):
+                print(f"⛔ {endpoint} auth error {r.status_code}: {r.text[:140]}")
+                break
+            r.raise_for_status()
+            js = r.json()
+            resp = js.get("response", [])
+            try:
+                with p.open("w", encoding="utf-8") as f:
+                    json.dump({"saved_at": _now_ts(), "response": resp}, f)
+            except Exception:
+                pass
+            return resp
+        except Exception as e:
+            last_exc = e
+            time.sleep(backoff * (i + 1))
+
+    # fall back to stale cache
+    if allow_stale and p.exists():
+        try:
+            with p.open("r", encoding="utf-8") as f:
+                blob = json.load(f)
+            print(f"ℹ️ using STALE cache for {endpoint} params={params}")
+            return blob.get("response", [])
+        except Exception:
+            pass
+    if last_exc:
+        print(f"⚠️ GET {endpoint} failed after {retries} retries: {last_exc}")
+    return []
 
 def _headers():
     k = os.getenv("APIFOOTBALL_KEY")
@@ -88,9 +166,9 @@ def load_upcoming_fixture_ids(days=14):
 
 # ------------------- Bookmakers -------------------
 
-def discover_bookmakers(targets: Optional[Iterable[str]] = None):
+def discover_bookmakers(targets: Optional[Iterable[str]] = None, ttl_seconds: int = 7*24*3600):
     """Return (all_map, wanted_map) where keys are lowercase names; values are (id, display)."""
-    resp = _get("odds/bookmakers", {})
+    resp = _get_cached("odds/bookmakers", {}, ttl_seconds=ttl_seconds)
     name_to_meta = {}
     for row in resp:
         nm = str(row.get("name", "")).strip()
@@ -119,7 +197,8 @@ def fetch_mapping_fixture_ids(days: int,
                               leagues: set[int] | None = None,
                               season: int | None = None,
                               timezone_str: str = DEFAULT_TZ,
-                              max_pages: int = 5):
+                              max_pages: int = 5,
+                              ttl_seconds: int = 6*3600):
     """Return a set of fixture_ids that API-Football reports as having odds within the next N days.
     Some accounts require league+season filters for mapping to return anything. We therefore iterate per-league, per-date.
     """
@@ -141,7 +220,7 @@ def fetch_mapping_fixture_ids(days: int,
                     params["league"] = int(lg)
                 if season is not None:
                     params["season"] = int(season)
-                resp = _get("odds/mapping", params)
+                resp = _get_cached("odds/mapping", params, ttl_seconds=ttl_seconds)
                 if not resp:
                     break
                 for item in resp:
@@ -329,9 +408,9 @@ def parse_ah_rows(resp_item):
 # ------------------- Fetchers -------------------
 # ------------------- Fetcher for Asian Handicap -------------------
 
-def fetch_fixture_ah(fid: int, sleep: float):
+def fetch_fixture_ah(fid: int, sleep: float, ttl_seconds: int):
     params = {"fixture": int(fid), "timezone": DEFAULT_TZ}
-    resp = _get("odds", params)
+    resp = _get_cached("odds", params, ttl_seconds=ttl_seconds)
     rows = []
     for it in resp:
         rows.extend(parse_ah_rows(it))
@@ -340,9 +419,9 @@ def fetch_fixture_ah(fid: int, sleep: float):
     time.sleep(sleep)
     return pd.DataFrame(columns=["fixture_id","bookmaker_id","bookmaker_name","ah_line","ah_home","ah_away"])
 
-def fetch_fixture_odds(fid: int, sleep: float):
+def fetch_fixture_odds(fid: int, sleep: float, ttl_seconds: int):
     params = {"fixture": int(fid), "bet": BET_ID_MATCH_WINNER, "timezone": DEFAULT_TZ}
-    resp = _get("odds", params)
+    resp = _get_cached("odds", params, ttl_seconds=ttl_seconds)
     rows = []
     for it in resp:
         rows.extend(parse_1x2_rows(it))
@@ -353,9 +432,9 @@ def fetch_fixture_odds(fid: int, sleep: float):
 
 
 # ------------------- Fetcher for OU 2.5 -------------------
-def fetch_fixture_ou25(fid: int, sleep: float):
+def fetch_fixture_ou25(fid: int, sleep: float, ttl_seconds: int):
     params = {"fixture": int(fid), "bet": BET_ID_OU_GOALS, "timezone": DEFAULT_TZ}
-    resp = _get("odds", params)
+    resp = _get_cached("odds", params, ttl_seconds=ttl_seconds)
     rows = []
     for it in resp:
         rows.extend(parse_ou25_rows(it))
@@ -365,7 +444,7 @@ def fetch_fixture_ou25(fid: int, sleep: float):
     return pd.DataFrame(columns=["fixture_id","bookmaker_id","bookmaker_name","ou_line","ou_over","ou_under"])
 
 
-def fetch_league_odds(league_id: int, season: int, sleep: float, bookmaker_id: int | None = None, max_pages: int = 20, days_ahead: int = 14):
+def fetch_league_odds(league_id: int, season: int, sleep: float, bookmaker_id: int | None = None, max_pages: int = 20, days_ahead: int = 14, ttl_seconds_date: int = 15*60):
     """Fetch pre-match 1x2 odds by iterating date windows (docs: pre-match odds exist 1–14 days before KO).
     We iterate each date from today to today+days_ahead and paginate up to max_pages per date.
     """
@@ -381,7 +460,7 @@ def fetch_league_odds(league_id: int, season: int, sleep: float, bookmaker_id: i
         params["page"] = 1
         while params["page"] <= max_pages:
             params["timezone"] = DEFAULT_TZ
-            resp = _get("odds", params)
+            resp = _get_cached("odds", params, ttl_seconds=ttl_seconds_date)
             if not resp:
                 break
             for it in resp:
@@ -414,9 +493,146 @@ def best_of(df_rows: pd.DataFrame, wanted_bids: set):
             row[f"src_book_{suf}"] = str(cand.loc[idx, "bookmaker_name"])[:64]
     return row
 
+
+# ------------------- Snapshot helpers (optional Postgres) -------------------
+def _pg():
+    """Return a SQLAlchemy engine if POSTGRES_URL is set and sqlalchemy is available; else None."""
+    url = os.environ.get("POSTGRES_URL")
+    if not url or create_engine is None:
+        return None
+    try:
+        return create_engine(url, pool_pre_ping=True)  # type: ignore
+    except Exception:
+        return None
+
+def _snap_rows_from_1x2_df(out_df: pd.DataFrame) -> list[dict]:
+    rows: list[dict] = []
+    if out_df is None or out_df.empty:
+        return rows
+    for _, r in out_df.iterrows():
+        for sel, col, src_b in (("H","odds_h","src_book_h"),
+                                ("D","odds_d","src_book_d"),
+                                ("A","odds_a","src_book_a")):
+            price = r.get(col)
+            if pd.notna(price):
+                rows.append({
+                    "fixture_id": int(r["fixture_id"]),
+                    "market": "1X2",
+                    "selection": sel,
+                    "line": None,
+                    "price": float(price),
+                    "bookmaker": (r.get(src_b) or None),
+                    "fetched_at_utc": pd.to_datetime(r.get("fetched_at_utc"), utc=True, errors="coerce"),
+                    "home": r.get("home"),
+                    "away": r.get("away"),
+                    "source": "apifootball",
+                })
+    return rows
+
+def _snap_rows_from_ou_df(ou_df: pd.DataFrame) -> list[dict]:
+    rows: list[dict] = []
+    if ou_df is None or ou_df.empty:
+        return rows
+    for _, r in ou_df.iterrows():
+        line = r.get("ou_line")
+        if pd.notna(line):
+            if pd.notna(r.get("ou_over")):
+                rows.append({
+                    "fixture_id": int(r["fixture_id"]),
+                    "market": "totals",
+                    "selection": "O",
+                    "line": float(line),
+                    "price": float(r["ou_over"]),
+                    "bookmaker": None,
+                    "fetched_at_utc": pd.to_datetime(r.get("fetched_at_utc"), utc=True, errors="coerce"),
+                    "home": r.get("home"), "away": r.get("away"),
+                    "source": "apifootball",
+                })
+            if pd.notna(r.get("ou_under")):
+                rows.append({
+                    "fixture_id": int(r["fixture_id"]),
+                    "market": "totals",
+                    "selection": "U",
+                    "line": float(line),
+                    "price": float(r["ou_under"]),
+                    "bookmaker": None,
+                    "fetched_at_utc": pd.to_datetime(r.get("fetched_at_utc"), utc=True, errors="coerce"),
+                    "home": r.get("home"), "away": r.get("away"),
+                    "source": "apifootball",
+                })
+    return rows
+
+def _snap_rows_from_ah_df(ah_df: pd.DataFrame) -> list[dict]:
+    rows: list[dict] = []
+    if ah_df is None or ah_df.empty:
+        return rows
+    for _, r in ah_df.iterrows():
+        line = r.get("ah_line")
+        if pd.notna(line):
+            if pd.notna(r.get("ah_home")):
+                rows.append({
+                    "fixture_id": int(r["fixture_id"]),
+                    "market": "ahc",
+                    "selection": "H",
+                    "line": float(line),
+                    "price": float(r["ah_home"]),
+                    "bookmaker": None,
+                    "fetched_at_utc": pd.to_datetime(r.get("fetched_at_utc"), utc=True, errors="coerce"),
+                    "home": r.get("home"), "away": r.get("away"),
+                    "source": "apifootball",
+                })
+            if pd.notna(r.get("ah_away")):
+                rows.append({
+                    "fixture_id": int(r["fixture_id"]),
+                    "market": "ahc",
+                    "selection": "A",
+                    "line": float(line),
+                    "price": float(r["ah_away"]),
+                    "bookmaker": None,
+                    "fetched_at_utc": pd.to_datetime(r.get("fetched_at_utc"), utc=True, errors="coerce"),
+                    "home": r.get("home"), "away": r.get("away"),
+                    "source": "apifootball",
+                })
+    return rows
+
+def _upsert_snapshots(rows: list[dict]):
+    eng = _pg()
+    if eng is None or not rows:
+        return
+    # Ensure table exists (idempotent)
+    with eng.begin() as c:
+        c.execute(text("""
+        CREATE TABLE IF NOT EXISTS odds_snapshots (
+          id BIGSERIAL PRIMARY KEY,
+          fixture_id BIGINT NOT NULL,
+          market TEXT NOT NULL,
+          selection TEXT,
+          line DOUBLE PRECISION,
+          price DOUBLE PRECISION,
+          bookmaker TEXT,
+          fetched_at_utc TIMESTAMPTZ NOT NULL,
+          home TEXT,
+          away TEXT,
+          source TEXT,
+          UNIQUE(fixture_id, market, selection, line, bookmaker, fetched_at_utc)
+        );
+        CREATE INDEX IF NOT EXISTS idx_snap_fx ON odds_snapshots(fixture_id);
+        CREATE INDEX IF NOT EXISTS idx_snap_time ON odds_snapshots(fetched_at_utc);
+        """))
+        stmt = text("""
+          INSERT INTO odds_snapshots
+            (fixture_id, market, selection, line, price, bookmaker, fetched_at_utc, home, away, source)
+          VALUES
+            (:fixture_id, :market, :selection, :line, :price, :bookmaker, :fetched_at_utc, :home, :away, :source)
+          ON CONFLICT (fixture_id, market, selection, line, bookmaker, fetched_at_utc) DO NOTHING
+        """)
+        for i in range(0, len(rows), 500):
+            c.execute(stmt, rows[i:i+500])
+
 # ------------------- Main -------------------
 
 def main():
+    global CACHE_DIR
     ap = ArgumentParser()
     ap.add_argument("--days", type=int, default=14)
     ap.add_argument("--sleep", type=float, default=0.35)
@@ -432,7 +648,16 @@ def main():
                     help="Preferred Over/Under goal line; closest line will be chosen when exact is unavailable.")
     ap.add_argument("--write-parquet", action="store_true", help="Also save output as Parquet alongside CSV")
     ap.add_argument("--force-all-books", action="store_true", help="Ignore shortlist and consider all bookmakers equally")
+    ap.add_argument("--cache-dir", type=str, default=str(DEFAULT_CACHE_DIR), help="Directory for API cache files")
+    ap.add_argument("--ttl-bookmakers", type=int, default=7*24*3600, help="TTL seconds for odds/bookmakers cache (default 7 days)")
+    ap.add_argument("--ttl-mapping", type=int, default=6*3600, help="TTL seconds for odds/mapping cache (default 6h)")
+    ap.add_argument("--ttl-odds-fixture", type=int, default=15*60, help="TTL seconds for odds?fixture= cache (default 15min)")
+    ap.add_argument("--ttl-odds-date", type=int, default=15*60, help="TTL seconds for odds by date cache (default 15min)")
     args = ap.parse_args()
+
+    global CACHE_DIR
+    CACHE_DIR = Path(args.cache_dir)
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
     try:
         _ = _headers()
@@ -449,7 +674,7 @@ def main():
                 season_infer = int(pd.to_numeric(base["season"], errors="coerce").dropna().mode().iloc[0])
             except Exception:
                 season_infer = None
-        map_ids = fetch_mapping_fixture_ids(args.days, leagues=leagues_in_base or None, season=season_infer, timezone_str=args.timezone)
+        map_ids = fetch_mapping_fixture_ids(args.days, leagues=leagues_in_base or None, season=season_infer, timezone_str=args.timezone, ttl_seconds=args.ttl_mapping)
         if map_ids:
             before = len(base)
             base = base[ base["fixture_id"].astype(int).isin(map_ids) ].copy()
@@ -464,7 +689,7 @@ def main():
     # Discover bookmakers
     try:
         targets = _parse_bookmaker_targets(args.bookmakers)
-        _, wanted = discover_bookmakers(targets)
+        _, wanted = discover_bookmakers(targets, ttl_seconds=args.ttl_bookmakers)
         wanted_bids = {meta[0] for meta in wanted.values()}
         print("ℹ️ targeting bookmakers:", sorted([v[1].lower() for v in wanted.values()]), "-> IDs", sorted(list(wanted_bids)))
         print(f"ℹ️ timezone: {args.timezone}")
@@ -484,7 +709,7 @@ def main():
     misses = 0
     for i, (fid, row) in enumerate(base.set_index("fixture_id").iterrows(), start=1):
         try:
-            df = fetch_fixture_odds(int(fid), args.sleep)
+            df = fetch_fixture_odds(int(fid), args.sleep, args.ttl_odds_fixture)
             if df.empty:
                 if args.no_fallback:
                     misses += 1
@@ -497,21 +722,25 @@ def main():
                     # (a) targeted books, per-date
                     if prefer_books and wanted_bids:
                         for bid in wanted_bids:
-                            df_lg = fetch_league_odds(int(lg), int(ssn), args.sleep, bookmaker_id=int(bid), max_pages=10, days_ahead=min(args.days,7))
+                            df_lg = fetch_league_odds(int(lg), int(ssn), args.sleep, bookmaker_id=int(bid), max_pages=10, days_ahead=min(args.days,7), ttl_seconds_date=args.ttl_odds_date)
                             if (not df_lg.empty) and ("fixture_id" in df_lg.columns):
                                 df = df_lg[df_lg["fixture_id"].astype("Int64") == int(fid)]
                                 if not df.empty:
                                     found = True
                                     break
+                        if df_lg.empty:
+                            print(f"… no odds for book={bid} league={lg} season={ssn} on date-sweep")
                     # (b) all books, per-date
                     if (not found):
-                        df_lg = fetch_league_odds(int(lg), int(ssn), args.sleep, bookmaker_id=None, max_pages=10, days_ahead=min(args.days,7))
+                        df_lg = fetch_league_odds(int(lg), int(ssn), args.sleep, bookmaker_id=None, max_pages=10, days_ahead=min(args.days,7), ttl_seconds_date=args.ttl_odds_date)
                         if (not df_lg.empty) and ("fixture_id" in df_lg.columns):
                             df = df_lg[df_lg["fixture_id"].astype("Int64") == int(fid)]
                             found = (not df.empty)
+                        if df_lg.empty:
+                            print(f"… no league/date odds for league={lg} season={ssn} date-sweep; will try broader sweep")
                     # (c) all books, season-wide (last resort)
                     if (not found):
-                        df_lg = fetch_league_odds(int(lg), int(ssn), args.sleep, bookmaker_id=None, max_pages=10, days_ahead=0)
+                        df_lg = fetch_league_odds(int(lg), int(ssn), args.sleep, bookmaker_id=None, max_pages=10, days_ahead=0, ttl_seconds_date=args.ttl_odds_date)
                         if (not df_lg.empty) and ("fixture_id" in df_lg.columns):
                             df = df_lg[df_lg["fixture_id"].astype("Int64") == int(fid)]
             if not df.empty:
@@ -536,7 +765,7 @@ def main():
             # ---- fetch OU(2.5) if enabled ----
             if args.include_ou25:
                 try:
-                    df_ou = fetch_fixture_ou25(int(fid), args.sleep)
+                    df_ou = fetch_fixture_ou25(int(fid), args.sleep, args.ttl_odds_fixture)
                     if not df_ou.empty:
                         df_ou["sport_key"] = row.get("sport_key")
                         df_ou["date"] = row.get("date")
@@ -580,7 +809,7 @@ def main():
             # ---- fetch AH if enabled ----
             if args.include_ah:
                 try:
-                    df_ah = fetch_fixture_ah(int(fid), args.sleep)
+                    df_ah = fetch_fixture_ah(int(fid), args.sleep, args.ttl_odds_fixture)
                     if not df_ah.empty:
                         df_ah["sport_key"] = row.get("sport_key")
                         df_ah["date"] = row.get("date")
@@ -657,6 +886,18 @@ def main():
         out.to_parquet(out_parq, index=False)
         print(f"📦 also saved Parquet → {out_parq}")
 
+    # Upsert 1X2 snapshots to Postgres (optional)
+    try:
+        _upsert_snapshots(_snap_rows_from_1x2_df(out))
+        print("🧾 upserted 1X2 snapshots → Postgres")
+    except Exception as e:
+        print(f"[snapshots-1x2] skip: {e}")
+
+    if args.include_ou25:
+        print(f"ℹ️ OU2.5 rows collected: {0 if not ou_rows else len(ou_rows)}")
+    if args.include_ah:
+        print(f"ℹ️ AH rows collected: {0 if not ah_rows else len(ah_rows)}")
+
     if args.include_ou25 and ou_rows:
         ou = pd.DataFrame(ou_rows)
         if "date" in ou.columns:
@@ -674,6 +915,11 @@ def main():
             ou_parq = ODIR / f"apifootball_ou25_{ts}.parquet"
             ou.to_parquet(ou_parq, index=False)
             print(f"📦 also saved Parquet → {ou_parq}")
+        try:
+            _upsert_snapshots(_snap_rows_from_ou_df(ou))
+            print("🧾 upserted OU snapshots → Postgres")
+        except Exception as e:
+            print(f"[snapshots-ou] skip: {e}")
 
     if args.include_ah and ah_rows:
         ah = pd.DataFrame(ah_rows)
@@ -692,6 +938,11 @@ def main():
             ah_parq = ODIR / f"apifootball_ah_{ts}.parquet"
             ah.to_parquet(ah_parq, index=False)
             print(f"📦 also saved Parquet → {ah_parq}")
+        try:
+            _upsert_snapshots(_snap_rows_from_ah_df(ah))
+            print("🧾 upserted AH snapshots → Postgres")
+        except Exception as e:
+            print(f"[snapshots-ah] skip: {e}")
 
 
 if __name__ == "__main__":
