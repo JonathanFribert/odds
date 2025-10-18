@@ -60,7 +60,24 @@ def upsert_outcomes(df, eng):
           home_shots_on_goal, away_shots_on_goal,
           home_ball_possession, away_ball_possession
         )
-        select * from _outcomes_tmp
+        select
+          fixture_id,
+          league_id,
+          season,
+          kick_off::timestamptz,
+          result,
+          goals_h,
+          goals_a,
+          closing_odds_h,
+          closing_odds_d,
+          closing_odds_a,
+          home_expected_goals,
+          away_expected_goals,
+          home_shots_on_goal,
+          away_shots_on_goal,
+          home_ball_possession,
+          away_ball_possession
+        from _outcomes_tmp
         on conflict (fixture_id) do update
         set league_id=excluded.league_id,
             season=excluded.season,
@@ -84,30 +101,51 @@ def upsert_outcomes(df, eng):
 
 def settle(eng):
     with eng.begin() as conn:
-        picks = pd.read_sql("""select p.*, o.result,
-          case p.selection
-            when 'H' then o.closing_odds_h
-            when 'D' then o.closing_odds_d
-            when 'A' then o.closing_odds_a
-          end as closing_line
-          from picks p
-          join outcomes o using (fixture_id)
-          where p.pick_id not in (select pick_id from pick_performance)
-            and o.result is not null
+        picks = pd.read_sql("""
+        SELECT
+          p.pick_id,
+          p.fixture_id,
+          p.selection AS pick_selection,
+          p.stake_units,
+          p.best_odds,
+          o.result  AS match_result,
+          CASE p.selection
+            WHEN 'H' THEN o.closing_odds_h
+            WHEN 'D' THEN o.closing_odds_d
+            WHEN 'A' THEN o.closing_odds_a
+          END AS closing_line
+        FROM picks p
+        JOIN outcomes o USING (fixture_id)
+        WHERE p.pick_id NOT IN (SELECT pick_id FROM pick_performance)
+          AND o.result IS NOT NULL
         """, conn)
         if picks.empty: return 0
         def pnl(row):
-            if row["result"] == row["selection"]:
-                return (row["closing_line"] - 1.0) * (row["stake_units"] or 1.0)
+            stake = row["stake_units"] if pd.notna(row["stake_units"]) else 1.0
+            price = row["closing_line"] if pd.notna(row["closing_line"]) else row["best_odds"]
+            if row["match_result"] == row["pick_selection"]:
+                return (float(price) - 1.0) * float(stake)
             else:
-                return -(row["stake_units"] or 1.0)
+                return -float(stake)
         perf = picks.assign(
-            won = picks["result"] == picks["selection"],
+            won = picks["match_result"] == picks["pick_selection"],
             pnl_units = picks.apply(pnl, axis=1),
             settled_at = datetime.now(timezone.utc)
         )[["pick_id","fixture_id","settled_at","won","pnl_units","closing_line"]]
-        perf.to_sql("pick_performance", conn, if_exists="append", index=False)
-        return len(perf)
+        # Write using explicit executemany to preserve UUID types (avoid pandas to_sql casting to VARCHAR)
+        rows = perf.to_dict(orient="records")
+        from sqlalchemy import text
+        stmt = text("""
+          INSERT INTO pick_performance (pick_id, fixture_id, settled_at, won, pnl_units, closing_line)
+          VALUES (:pick_id, :fixture_id, :settled_at, :won, :pnl_units, :closing_line)
+          ON CONFLICT (pick_id) DO UPDATE
+          SET settled_at = EXCLUDED.settled_at,
+              won        = EXCLUDED.won,
+              pnl_units  = EXCLUDED.pnl_units,
+              closing_line = EXCLUDED.closing_line
+        """)
+        conn.execute(stmt, rows)
+        return len(rows)
 
 if __name__ == "__main__":
     eng = _pg()
