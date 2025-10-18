@@ -1,0 +1,41 @@
+name: health
+on:
+  schedule: [{ cron: "10 6 * * *" }]   # 06:10 UTC ≈ 08:10 DK
+  workflow_dispatch:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      TZ: Europe/Copenhagen
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install "sqlalchemy>=2" "psycopg[binary]"
+      - name: DB health checks
+        run: |
+          python - <<'PY'
+          import os, sys
+          from sqlalchemy import create_engine, text
+          e = create_engine(os.environ["POSTGRES_URL"], pool_pre_ping=True)
+          bad = []
+          with e.connect() as c:
+            def q(sql):
+              return c.execute(text(sql)).scalar() or 0
+            picks_24h   = q("SELECT COUNT(*) FROM picks WHERE created_at >= now() - interval '24 hours'")
+            outcomes_48h= q("SELECT COUNT(*) FROM outcomes WHERE updated_at >= now() - interval '48 hours'")
+            settled_24h = q("SELECT COUNT(*) FROM pick_performance WHERE settled_at >= now() - interval '24 hours'")
+            trained_7d  = q("SELECT COUNT(*) FROM training_runs WHERE created_at >= now() - interval '7 days'")
+            print(f"picks_24h={picks_24h}, outcomes_48h={outcomes_48h}, settled_24h={settled_24h}, trained_7d={trained_7d}")
+            if picks_24h == 0:    bad.append("No picks in last 24h")
+            if outcomes_48h == 0: bad.append("No outcomes updated in last 48h")
+            if settled_24h == 0:  bad.append("No picks settled in last 24h")
+            if trained_7d == 0:   bad.append("No training runs in last 7d")
+          if bad:
+            print("HEALTH FAIL:", "; ".join(bad))
+            sys.exit(1)
+          print("HEALTH OK")
+          PY
