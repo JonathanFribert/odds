@@ -1,0 +1,22 @@
+name: snapshots
+on:
+  schedule:
+    - cron: "*/15 6-23 * * *"   # hver 15. min kl. 06–23 DK
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+      TZ: Europe/Copenhagen
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install "sqlalchemy>=2" "psycopg[binary]" pandas numpy requests pyarrow
+      - name: Fetch odds → snapshots (API-Football)
+        run: |
+          python scripts/fetch_apifootball_odds.py --days 3 --include-ou25 --include-ah --write-parquet
