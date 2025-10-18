@@ -2,8 +2,9 @@ name: snapshots
 
 on:
   schedule:
- - cron: "*/10 4-21 * * *"
-  workflow_dispatch: {}
+    # Hver 10. minut fra 06:00–23:00 DK (≈ 04–21 UTC afh. af DST)
+    - cron: "*/10 4-21 * * *"
+  workflow_dispatch:
 
 jobs:
   snapshots:
