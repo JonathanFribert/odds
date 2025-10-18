@@ -1,30 +1,123 @@
 name: settle
 on:
-  schedule:
-    - cron: "50 21 * * *"  # 23:50 CPH = 21:50 UTC
-  workflow_dispatch: {}
+  schedule: [{ cron: "50 4 * * *" }]   # 04:50 UTC ≈ 06:50 DK
+  workflow_dispatch:
 jobs:
-  settle:
+  run:
     runs-on: ubuntu-latest
     env:
-      TZ: Europe/Copenhagen
       POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
-      ODDSAPI_KEY: ${{ secrets.ODDSAPI_KEY }}
       APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
-    concurrency:
-      group: settle
-      cancel-in-progress: false
+      TZ: Europe/Copenhagen
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: { python-version: "3.11" }
-      - name: Install deps
+      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install "sqlalchemy>=2" "psycopg[binary]" pandas numpy pyarrow joblib requests
+      - name: Upsert outcomes (last 3 days)
         run: |
-          python -m pip install -U pip
-          pip install -r requirements.txt
-          pip install "psycopg[binary]" "sqlalchemy>=2.0"
-      - name: Settle bets and write to Postgres
+          python - <<'PY'
+          import os, requests, datetime as dt
+          from datetime import datetime, timezone
+          from sqlalchemy import create_engine, text
+          e=create_engine(os.environ["POSTGRES_URL"], pool_pre_ping=True)
+          headers={"x-apisports-key": os.environ["APIFOOTBALL_KEY"]}
+          UPS=text("""
+            INSERT INTO outcomes (fixture_id, league_id, season, kick_off, result, goals_h, goals_a, updated_at)
+            VALUES (:fixture_id,:league_id,:season,:kick_off,:result,:goals_h,:goals_a, now())
+            ON CONFLICT (fixture_id) DO UPDATE
+            SET result=EXCLUDED.result, goals_h=EXCLUDED.goals_h, goals_a=EXCLUDED.goals_a, updated_at=now();
+          """)
+          def res(h,a): return None if (h is None or a is None) else ("H" if h>a else ("A" if a>h else "D"))
+          def upsert(date):
+              r=requests.get("https://v3.football.api-sports.io/fixtures", params={"date":date,"timezone":"UTC"}, headers=headers, timeout=30)
+              r.raise_for_status()
+              resp=r.json().get("response",[])
+              with e.begin() as c:
+                  for it in resp:
+                      f,L,G=it["fixture"],it["league"],it.get("goals") or {}
+                      ts=f.get("timestamp")
+                      kick=datetime.fromtimestamp(ts, timezone.utc).isoformat().replace("+00:00","Z") if ts else None
+                      st=(f.get("status") or {}).get("short")
+                      if st in {"FT","AET","PEN"} and G.get("home") is not None:
+                          c.execute(UPS, {
+                              "fixture_id": f["id"], "league_id": L.get("id"), "season": L.get("season"),
+                              "kick_off": kick, "result": res(G["home"], G["away"]),
+                              "goals_h": G["home"], "goals_a": G["away"]
+                          })
+          today=dt.date.today()
+          for d in [today, today-dt.timedelta(days=1), today-dt.timedelta(days=2)]:
+              upsert(d.isoformat())
+          # Fill closing odds from snapshots
+          with e.begin() as c:
+            c.execute(text("""
+              WITH last_preko AS (
+                SELECT s.fixture_id, MAX(s.fetched_at_utc) AS ts
+                FROM odds_snapshots s
+                JOIN outcomes o ON o.fixture_id = s.fixture_id
+                WHERE s.market='1X2' AND o.kick_off IS NOT NULL AND s.fetched_at_utc <= o.kick_off
+                GROUP BY s.fixture_id
+              ),
+              sel AS (
+                SELECT s.fixture_id, s.selection, s.price
+                FROM odds_snapshots s JOIN last_preko lp
+                  ON lp.fixture_id=s.fixture_id AND lp.ts=s.fetched_at_utc
+                WHERE s.market='1X2'
+              ),
+              pivot AS (
+                SELECT fixture_id,
+                       MAX(CASE WHEN selection='H' THEN price END) AS cl_h,
+                       MAX(CASE WHEN selection='D' THEN price END) AS cl_d,
+                       MAX(CASE WHEN selection='A' THEN price END) AS cl_a
+                FROM sel GROUP BY fixture_id
+              )
+              UPDATE outcomes o
+              SET closing_odds_h = COALESCE(p.cl_h, o.closing_odds_h),
+                  closing_odds_d = COALESCE(p.cl_d, o.closing_odds_d),
+                  closing_odds_a = COALESCE(p.cl_a, o.closing_odds_a),
+                  updated_at = now()
+              FROM pivot p
+              WHERE o.fixture_id = p.fixture_id;
+            """))
+          PY
+      - name: Settle picks
         run: |
-          python scripts/predict_upcoming.py \
-            --settle --settle-lookback-days 90 \
-            --postgres-url "$POSTGRES_URL"
+          python - <<'PY'
+          from sqlalchemy import create_engine, text; import os
+          e=create_engine(os.environ["POSTGRES_URL"], pool_pre_ping=True)
+          with e.begin() as c:
+            c.execute(text("""
+              CREATE TABLE IF NOT EXISTS pick_performance (
+                pick_id uuid PRIMARY KEY REFERENCES picks(pick_id) ON DELETE CASCADE,
+                fixture_id bigint NOT NULL,
+                settled_at timestamptz NOT NULL DEFAULT now(),
+                won boolean,
+                pnl_units double precision,
+                closing_line double precision,
+                comment text
+              );
+            """))
+            rows=c.execute(text("""
+              WITH j AS (
+                SELECT p.pick_id, p.fixture_id, p.selection, p.stake_units, p.best_odds,
+                       o.result, o.closing_odds_h, o.closing_odds_d, o.closing_odds_a, o.updated_at
+                FROM picks p JOIN outcomes o USING(fixture_id)
+                WHERE o.result IS NOT NULL
+                ORDER BY o.updated_at DESC
+                LIMIT 1000
+              )
+              INSERT INTO pick_performance (pick_id, fixture_id, won, pnl_units, closing_line, comment)
+              SELECT pick_id, fixture_id,
+                     (CASE WHEN result=selection THEN TRUE ELSE FALSE END),
+                     (CASE WHEN result=selection THEN (COALESCE(best_odds,0)-1.0)*COALESCE(stake_units,0)
+                           ELSE -COALESCE(stake_units,0) END),
+                     (CASE selection WHEN 'H' THEN closing_odds_h WHEN 'D' THEN closing_odds_d ELSE closing_odds_a END),
+                     'auto-settle'
+              FROM j
+              ON CONFLICT (pick_id) DO UPDATE
+                SET pnl_units=EXCLUDED.pnl_units, closing_line=EXCLUDED.closing_line, comment=EXCLUDED.comment;
+            """)).rowcount
+            print("settled rows:", rows)
+          PY
