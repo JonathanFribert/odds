@@ -1,0 +1,58 @@
+name: morning-predict
+
+on:
+  schedule:
+    # 08:30 Europe/Copenhagen ≈ 06:30 UTC (DST)
+    - cron: "30 6 * * *"
+  workflow_dispatch: {}
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Env
+        run: |
+          echo "POSTGRES_URL=${{ secrets.POSTGRES_URL }}" >> $GITHUB_ENV
+          echo "APIFOOTBALL_KEY=${{ secrets.APIFOOTBALL_KEY }}" >> $GITHUB_ENV
+          echo "ODDSAPI_KEY=${{ secrets.ODDSAPI_KEY }}" >> $GITHUB_ENV
+
+      - name: Build latest snapshots (best-effort; non-blocking)
+        continue-on-error: true
+        run: |
+          # Hvis/naar du får et særskilt snapshot-script, så kald det her.
+          python scripts/fetch_apifootball_odds.py --imminent-mins 180 || true
+
+      - name: Predict upcoming (log to Postgres + ledger)
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: |
+          python scripts/predict_upcoming.py \
+            --days 2 \
+            --offline-only \
+            --no-oddsapi \
+            --markets 1x2,ou25,ahm05 \
+            --min-ev 0.00 \
+            --top-k 50 \
+            --log-bets \
+            --postgres-url "$POSTGRES_URL"
+
+      - name: Upload picks artifact
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: picks-morning
+          path: data/picks/*.csv
