@@ -25,6 +25,13 @@ from sklearn.metrics import log_loss, accuracy_score, brier_score_loss
 from sklearn.model_selection import train_test_split
 import joblib
 
+# Optional: Postgres logging (if POSTGRES_URL is set)
+try:
+    from sqlalchemy import create_engine, text  # type: ignore
+except Exception:  # pragma: no cover
+    create_engine = None  # type: ignore
+    text = None  # type: ignore
+
 ROOT = Path(__file__).resolve().parents[1]
 FEAT_DIR = ROOT / "data" / "features"
 MODEL_DIR = ROOT / "models"
@@ -143,6 +150,73 @@ def _ensure_db():
     con.close()
 
 
+# -------------------- Optional Postgres logging --------------------
+def _pg_engine():
+    """Return a SQLAlchemy engine if POSTGRES_URL is set and sqlalchemy is available; else None."""
+    url = os.environ.get("POSTGRES_URL")
+    if not url or create_engine is None:
+        return None
+    try:
+        eng = create_engine(url, pool_pre_ping=True)  # type: ignore
+        return eng
+    except Exception:
+        return None
+
+def _ensure_pg_tables():
+    eng = _pg_engine()
+    if eng is None:
+        return
+    with eng.begin() as c:
+        c.execute(text("""
+        CREATE TABLE IF NOT EXISTS training_runs (
+            id bigserial PRIMARY KEY,
+            created_at timestamptz NOT NULL,
+            model_tag text NOT NULL,
+            n_train int,
+            n_test int,
+            n_features int,
+            log_loss double precision,
+            accuracy double precision,
+            brier double precision,
+            artifact_path text
+        );
+        """))
+        c.execute(text("""
+        CREATE TABLE IF NOT EXISTS training_features (
+            run_id bigint REFERENCES training_runs(id) ON DELETE CASCADE,
+            feature text
+        );
+        """))
+
+def _log_training_pg(model_tag: str, metrics: dict, artifact_path: Path, features: list[str]):
+    """Mirror of _log_training but writes to Postgres if POSTGRES_URL is configured."""
+    eng = _pg_engine()
+    if eng is None:
+        return
+    _ensure_pg_tables()
+    with eng.begin() as c:
+        run = c.execute(text("""
+            INSERT INTO training_runs (created_at, model_tag, n_train, n_test, n_features, log_loss, accuracy, brier, artifact_path)
+            VALUES (:created_at, :model_tag, :n_train, :n_test, :n_features, :log_loss, :accuracy, :brier, :artifact_path)
+            RETURNING id
+        """), {
+            "created_at": metrics.get("created_at"),
+            "model_tag": model_tag,
+            "n_train": metrics.get("n_train"),
+            "n_test": metrics.get("n_test"),
+            "n_features": metrics.get("n_features"),
+            "log_loss": metrics.get("log_loss"),
+            "accuracy": metrics.get("accuracy"),
+            "brier": metrics.get("brier"),
+            "artifact_path": str(artifact_path),
+        }).scalar_one()
+        if features:
+            c.execute(text("""
+                INSERT INTO training_features (run_id, feature)
+                VALUES """ + ",".join(["(:rid, :f"+str(i)+")" for i in range(len(features))])
+            ), dict({"rid": run}, **{("f"+str(i)): f for i, f in enumerate(features)}))
+
+
 def _log_training(model_tag: str, metrics: dict, artifact_path: Path, features: list[str]):
     _ensure_db()
     con = sqlite3.connect(DB_PATH)
@@ -230,6 +304,7 @@ def _train_multiclass_1x2(df: pd.DataFrame, model_path: Path, metrics_path: Path
     feats_csv = model_path.with_suffix(".features.csv")
     pd.Series(X_cols, name="feature").to_csv(feats_csv, index=False)
     _log_training("1x2", metrics, model_path, X_cols)
+    _log_training_pg("1x2", metrics, model_path, X_cols)
     print(f"[1x2] ✅ saved model → {model_path}")
     print(f"[1x2] 📊 metrics → {metrics_path}")
     return True
@@ -300,6 +375,7 @@ def _train_binary(df: pd.DataFrame, label_col: str, tag: str, model_path: Path, 
     feats_csv = model_path.with_suffix(".features.csv")
     pd.Series(X_cols, name="feature").to_csv(feats_csv, index=False)
     _log_training(tag, metrics, model_path, X_cols)
+    _log_training_pg(tag, metrics, model_path, X_cols)
     print(f"[{tag}] ✅ saved model → {model_path}")
     print(f"[{tag}] 📊 metrics → {metrics_path}")
     return True
@@ -317,6 +393,14 @@ def main():
 
     df = pd.read_parquet(p)
     print(f"✅ train_set loaded: shape={df.shape}")
+
+    pm = pd.read_parquet("data/features/postmatch_flat.parquet") if os.path.exists("data/features/postmatch_flat.parquet") else None
+    if pm is not None and not pm.empty:
+        keep = ["fixture_id","home_expected_goals","away_expected_goals",
+                "home_shots_on_goal","away_shots_on_goal",
+                "home_ball_possession","away_ball_possession"]
+        pm = pm[keep].drop_duplicates("fixture_id")
+        df = df.merge(pm, on="fixture_id", how="left")
 
     # Ensure date is parsed (useful for future time-based splits)
     if "date" in df.columns:
