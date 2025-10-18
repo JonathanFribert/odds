@@ -1,0 +1,22 @@
+name: predict
+on:
+  schedule:
+    - cron: "*/30 8-23 * * *"  # hver 30. min 08–23 DK
+  workflow_dispatch:
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    env:
+      POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+      ODDSAPI_KEY: ${{ secrets.ODDSAPI_KEY }}
+      TZ: Europe/Copenhagen
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: |
+          python -m pip install --upgrade pip
+          python -m pip install "sqlalchemy>=2" "psycopg[binary]" pandas numpy pyarrow joblib scikit-learn requests
+      - name: Predict
+        run: python scripts/predict_upcoming.py --postgres-url "$POSTGRES_URL"
