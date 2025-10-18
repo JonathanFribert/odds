@@ -524,6 +524,81 @@ def _coalesce_variants(df: pd.DataFrame, bases: list[str]) -> pd.DataFrame:
                 df.drop(columns=[cn], inplace=True, errors="ignore")
     return df
 
+def _repair_train_set(train_path: Path):
+    """
+    Ensure train_set has a non-null 'result' label and no duplicate suffix columns.
+    - Backfills 'result' from Postgres outcomes for all fixture_ids in train_set.
+    - Falls back to reconstructing 'result' from goals_h/goals_a or goals_home/goals_away.
+    - Coalesces duplicate variants (_x/_y/_left/_right/_train/_db) and folds goalkeeper_saves -> saves.
+    """
+    try:
+        df = pd.read_parquet(train_path)
+    except Exception as e:
+        print(f"ℹ️ could not read {train_path}: {e}")
+        return
+
+    # Backfill labels from DB
+    eng = _pg_engine()
+    if eng is not None and "fixture_id" in df.columns and not df.empty:
+        fids = df["fixture_id"].dropna().astype("int64").unique().tolist()
+        if fids:
+            from sqlalchemy import text
+            with eng.connect() as c:
+                lab = pd.DataFrame(
+                    c.execute(text("SELECT fixture_id, result, goals_h, goals_a FROM outcomes WHERE fixture_id = ANY(:ids)"),
+                              {"ids": fids}).mappings().all()
+                )
+            if not lab.empty:
+                lab["fixture_id"] = pd.to_numeric(lab["fixture_id"], errors="coerce").astype("Int64")
+                df = df.merge(lab, on="fixture_id", how="left", suffixes=("", "_db"))
+
+    # Coalesce result from any variants into a single Series
+    def _ser(col):
+        return df[col] if (col in df.columns and not isinstance(df[col], pd.DataFrame)) else pd.Series(index=df.index, dtype="object")
+    res = _ser("result").copy() if "result" in df.columns else pd.Series(index=df.index, dtype="object")
+    for cand in ["result_db","result_x","result_y","result_left","result_right","result_train"]:
+        if cand in df.columns and not isinstance(df[cand], pd.DataFrame):
+            res = res.where(res.notna(), df[cand])
+    # Fallback from goals
+    gh = df.get("goals_h", df.get("goals_home", df.get("goals_h_db")))
+    ga = df.get("goals_a", df.get("goals_away", df.get("goals_a_db")))
+    if gh is not None and ga is not None and res.isna().any():
+        def _rf(h,a):
+            try:
+                h,a = int(h), int(a)
+            except Exception:
+                return np.nan
+            return "H" if h>a else ("A" if a>h else "D")
+        need = res.isna()
+        ghv = pd.to_numeric(gh, errors="coerce")
+        gav = pd.to_numeric(ga, errors="coerce")
+        res.loc[need] = [ _rf(h,a) for h,a in zip(ghv[need], gav[need]) ]
+    df["result"] = res
+
+    # Fold goalkeeper_saves -> saves
+    for side in ("home","away"):
+        gk = f"{side}_goalkeeper_saves"
+        sv = f"{side}_saves"
+        if gk in df.columns:
+            if sv in df.columns:
+                df[sv] = pd.to_numeric(df[sv], errors="coerce").combine_first(pd.to_numeric(df[gk], errors="coerce"))
+            else:
+                df.rename(columns={gk: sv}, inplace=True)
+
+    # Drop all suffix variants
+    suffixes = ("_x","_y","_left","_right","_train","_db")
+    dup_cols = [c for c in df.columns if c.endswith(suffixes)]
+    if dup_cols:
+        df.drop(columns=dup_cols, inplace=True, errors="ignore")
+
+    try:
+        df.to_parquet(train_path, index=False)
+    except Exception as e:
+        print(f"ℹ️ could not write repaired train_set: {e}")
+    else:
+        nn = int(df["result"].notna().sum()) if "result" in df.columns else 0
+        print(f"✅ repaired train_set: result non-null rows={nn}; cols={df.shape[1]}; rows={df.shape[0]}")
+
 def _merge_train_stats_from_db(train_path: Path, batch: int = 2000) -> int:
     """
     Load data/features/train_set.parquet, look up matching fixture_ids in outcomes (Postgres),
@@ -657,6 +732,8 @@ def _merge_train_stats_from_db(train_path: Path, batch: int = 2000) -> int:
     if enriched:
         merged.to_parquet(train_path, index=False)
         print(f"✅ train_set enriched with DB stats for {enriched} rows → {train_path}")
+        # Auto-repair labels and suffixes so training never skips due to missing 'result'
+        _repair_train_set(train_path)
     else:
         print("ℹ️ no matching outcomes rows merged into train_set.")
     return int(enriched)
