@@ -1,11 +1,274 @@
 #!/usr/bin/env python3
 import os, sys, time
+import json, requests
 import pandas as pd, numpy as np
-import requests
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone as _TZ
 from pathlib import Path
 from typing import List
+
 from common import ROOT, FIXDIR, FEAT, ODIR, map_league_id_to_sport_key, add_normalized_teams
+
+API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
+
+def _apif_headers():
+    k = os.getenv("APIFOOTBALL_KEY")
+    if not k:
+        raise RuntimeError("APIFOOTBALL_KEY not set")
+    return {"x-apisports-key": k}
+
+def _apif_get(endpoint: str, **params):
+    url = f"{API_FOOTBALL_BASE}/{endpoint.lstrip('/')}"
+    last = None
+    for i in range(5):
+        try:
+            r = requests.get(url, headers=_apif_headers(), params=params, timeout=30)
+            if r.status_code == 429:
+                time.sleep(0.7 * (i + 1))
+                continue
+            if r.status_code in (401, 403):
+                print(f"⛔ {endpoint} auth {r.status_code}: {r.text[:160]}")
+                return []
+            r.raise_for_status()
+            js = r.json()
+            return js.get("response", [])
+        except Exception as e:
+            last = e
+            time.sleep(0.7 * (i + 1))
+    if last:
+        print(f"⚠️ _apif_get {endpoint} failed: {last}")
+    return []
+
+_STAT_KEYMAP = {
+    "Shots on Goal": "shots_on_goal",
+    "Shots off Goal": "shots_off_goal",
+    "Total Shots": "shots_total",
+    "Shots insidebox": "shots_inside_box",
+    "Shots outsidebox": "shots_outside_box",
+    "Fouls": "fouls",
+    "Corner Kicks": "corners",
+    "Offsides": "offsides",
+    "Ball Possession": "ball_possession",
+    "Yellow Cards": "yellow_cards",
+    "Red Cards": "red_cards",
+    "Goalkeeper Saves": "saves",
+    "Passes %": "passes_pct",
+    "Passes accurate": "passes_accurate",
+    "expected_goals": "expected_goals",
+    "xG": "expected_goals",
+}
+
+def _to_num(v):
+    if v is None:
+        return None
+    if isinstance(v, (int, float)):
+        return float(v)
+    s = str(v).strip()
+    if s.endswith("%"):
+        try:
+            return float(s[:-1])
+        except Exception:
+            return None
+    try:
+        return float(s)
+    except Exception:
+        return None
+
+def flatten_fixture_statistics(stats_response: list) -> dict:
+    out = {}
+    if not stats_response:
+        return out
+    home_team_id = (stats_response[0].get("team") or {}).get("id") if stats_response else None
+    for side in stats_response or []:
+        team = side.get("team") or {}
+        team_id = team.get("id")
+        prefix = "home_" if home_team_id and team_id == home_team_id else "away_"
+        for it in side.get("statistics") or []:
+            name = (it.get("type") or "").strip()
+            val = it.get("value")
+            key = _STAT_KEYMAP.get(name)
+            if key:
+                out[f"{prefix}{key}"] = _to_num(val)
+            else:
+                nn = name.lower().replace(" ", "_")
+                if "possession" in nn:
+                    out[f"{prefix}ball_possession"] = _to_num(val)
+                elif "shots_on_target" in nn or "shots_on_goal" in nn:
+                    out[f"{prefix}shots_on_goal"] = _to_num(val)
+                elif "total_shots" in nn or "shots_total" in nn:
+                    out[f"{prefix}shots_total"] = _to_num(val)
+    return out
+
+def fetch_fixture_closing_odds(fid: int, tz: str = "Europe/Copenhagen") -> dict:
+    rows = _apif_get("odds", fixture=int(fid), timezone=tz)
+    best_h = best_d = best_a = None
+    bk_count = 0
+    for it in rows or []:
+        for bk in it.get("bookmakers", []) or []:
+            bk_count += 1
+            for bet in bk.get("bets", []) or []:
+                nm = (bet.get("name") or "").lower()
+                if bet.get("id") == 1 or any(k in nm for k in ("1x2","match winner","win-draw-win","fulltime result")):
+                    for v in bet.get("values", []) or []:
+                        lbl = (v.get("value") or v.get("label") or "").strip().lower()
+                        try:
+                            price = float(v.get("odd"))
+                        except Exception:
+                            price = None
+                        if price is None:
+                            continue
+                        if lbl in ("home","1","team 1","1 (home)"):
+                            best_h = max(best_h, price) if best_h is not None else price
+                        elif "draw" in lbl or lbl == "x" or "tie" in lbl:
+                            best_d = max(best_d, price) if best_d is not None else price
+                        elif lbl in ("away","2","team 2","2 (away)"):
+                            best_a = max(best_a, price) if best_a is not None else price
+    return {"closing_odds_h": best_h, "closing_odds_d": best_d, "closing_odds_a": best_a, "closing_bk_count": bk_count}
+
+def harvest_postmatch(leagues: list[int], season: int, days_back: int = 1, days_fwd: int = 0,
+                      timezone_str: str = "Europe/Copenhagen", sleep: float = 0.2):
+    """
+    Finder fixtures med status=FT i [today-days_back, today+days_fwd] for valgte ligaer,
+    henter /fixtures/statistics og 'closing' odds, fladgør og gemmer:
+      - data/postmatch/postmatch_raw_YYYYMMDD.csv
+      - data/features/postmatch_flat.parquet (upsert på fixture_id)
+    """
+    outdir = ROOT / "data" / "postmatch"
+    outdir.mkdir(parents=True, exist_ok=True)
+    flat_rows, raw_rows = [], []
+    today = datetime.now(_TZ.utc).date()
+
+    for delta in range(-abs(days_back), days_fwd + 1):
+        date = today + timedelta(days=delta)
+        for lg in leagues:
+            fixtures = _apif_get("fixtures", league=int(lg), season=int(season), date=str(date))
+            fixtures = [f for f in fixtures if (f.get("fixture") or {}).get("status", {}).get("short") == "FT"]
+            for f in fixtures:
+                fx = f.get("fixture") or {}
+                fid = fx.get("id")
+                if not fid:
+                    continue
+                home = (f.get("teams") or {}).get("home", {}).get("name")
+                away = (f.get("teams") or {}).get("away", {}).get("name")
+                dt = fx.get("date")
+                goals_h = (f.get("goals") or {}).get("home")
+                goals_a = (f.get("goals") or {}).get("away")
+
+                stats = _apif_get("fixtures/statistics", fixture=int(fid))
+                closing = fetch_fixture_closing_odds(int(fid), tz=timezone_str)
+
+                raw_rows.append({
+                    "fixture_id": fid, "league_id": lg, "season": season, "date": dt,
+                    "home": home, "away": away, "goals_h": goals_h, "goals_a": goals_a,
+                    "raw_stats": json.dumps(stats), "raw_closing": json.dumps(closing)
+                })
+
+                flat = {
+                    "fixture_id": fid, "league_id": lg, "season": season, "date": dt,
+                    "home": home, "away": away, "goals_h": goals_h, "goals_a": goals_a,
+                }
+                fstats = flatten_fixture_statistics(stats)
+                flat.update(fstats)
+                flat.update(closing)
+                flat_rows.append(flat)
+                time.sleep(sleep)
+
+    ts = datetime.now(_TZ.utc).strftime("%Y%m%d_%H%M")
+    if raw_rows:
+        pd.DataFrame(raw_rows).to_csv(outdir / f"postmatch_raw_{ts}.csv", index=False)
+
+    FEAT.mkdir(parents=True, exist_ok=True)
+    flat_path = FEAT / "postmatch_flat.parquet"
+    if flat_rows:
+        new_df = pd.DataFrame(flat_rows)
+        if flat_path.exists():
+            old = pd.read_parquet(flat_path)
+            combined = pd.concat(
+                [old[~old["fixture_id"].isin(new_df["fixture_id"])], new_df],
+                ignore_index=True,
+            )
+        else:
+            combined = new_df
+        combined.to_parquet(flat_path, index=False)
+        print(f"✅ postmatch harvested: {len(new_df)} new rows; total={len(combined)} → {flat_path}")
+    else:
+        print("ℹ️ No FT fixtures found in chosen window.")
+
+# === Simple filesystem cache for API-Football ===
+from hashlib import sha1
+
+CACHEDIR = ROOT / "data" / ".cache" / "apifootball"
+CACHEDIR.mkdir(parents=True, exist_ok=True)
+
+def _cache_key(endpoint: str, params: dict) -> str:
+    try:
+        items = sorted((params or {}).items())
+    except Exception:
+        items = []
+    payload = json.dumps([endpoint, items], ensure_ascii=True, separators=(",", ":"))
+    return sha1(payload.encode("utf-8")).hexdigest()
+
+def _cache_path(endpoint: str, params: dict):
+    safe = endpoint.replace("/", "_")
+    return CACHEDIR / f"{safe}_{_cache_key(endpoint, params)}.json"
+
+def _cache_read(path, ttl_s: float):
+    try:
+        if path.exists():
+            age = time.time() - path.stat().st_mtime
+            if ttl_s <= 0 or age <= ttl_s:
+                with open(path, "r", encoding="utf-8") as f:
+                    return json.load(f)
+    except Exception:
+        return None
+    return None
+
+def _cache_write(path, obj: dict):
+    try:
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(obj, f)
+    except Exception:
+        pass
+
+# Cached GET with retry + optional stale fallback
+def _get_cached(endpoint: str, params: dict, ttl_s: float = 600, allow_stale: bool = True):
+    path = _cache_path(endpoint, params)
+    # Try fresh cache first
+    js = _cache_read(path, ttl_s)
+    if js is not None:
+        resp = (js or {}).get("response", [])
+        if resp:
+            return resp
+    # Otherwise hit network (with the same backoff as _get)
+    backoff = 1.2
+    for attempt in range(6):
+        try:
+            r = requests.get(f"{API_BASE}/{endpoint}", headers=HEADERS, params=params, timeout=30)
+        except Exception:
+            r = None
+        if r is not None and r.status_code == 429:
+            wait = min(6.0, backoff * (attempt + 1))
+            print(f"   ↪︎ 429 rate-limited on /{endpoint} (attempt {attempt+1}), sleeping {wait:.1f}s …")
+            time.sleep(wait)
+            continue
+        try:
+            if r is None:
+                raise RuntimeError("no response")
+            r.raise_for_status()
+            js = r.json()
+            _cache_write(path, js)
+            return (js or {}).get("response", [])
+        except Exception as e:
+            code = getattr(r, "status_code", "?")
+            print(f"   ⚠️ {endpoint} HTTP {code}: {e}")
+            break
+    # If we reach here, try stale cache as a fallback
+    if allow_stale:
+        js = _cache_read(path, ttl_s=10**12)  # effectively allow any age
+        if js is not None:
+            print(f"   ℹ️ using STALE cache for /{endpoint} params={params}")
+            return (js or {}).get("response", [])
+    print(f"   ❌ cache+network failed for /{endpoint}; params={params}")
+    return []
 
 # --- robust nested getter (API may vary keys slightly) ---
 def _dig(d: dict, *keys):
@@ -103,11 +366,8 @@ def fetch_fixture_statistics(fixture_id: int, team_id: int, sleep: float = 0.25)
     """Fetch per-team statistics for a fixture from /fixtures/statistics.
     Returns a dict of normalized numeric stats (keys like 'shots_on_goal', 'possession', 'expected_goals', ...).
     """
-    url = f"{API_BASE}/fixtures/statistics"
-    r = requests.get(url, headers=_apif_headers(), params={"fixture": int(fixture_id), "team": int(team_id)}, timeout=30)
-    r.raise_for_status()
-    js = r.json()
-    resp = js.get("response", [])
+    params = {"fixture": int(fixture_id), "team": int(team_id)}
+    resp = _get_cached("fixtures/statistics", params, ttl_s=2*60*60, allow_stale=True)
     if not resp:
         if sleep:
             time.sleep(sleep)
@@ -472,11 +732,11 @@ def _compute_league_home_adv(hist_matches: pd.DataFrame) -> pd.DataFrame:
 
 
 def fetch_fixtures_for_league(league_id: int, season: int) -> pd.DataFrame:
-    league_resp = _get("leagues", {"id": league_id})
+    league_resp = _get_cached("leagues", {"id": league_id}, ttl_s=12*60*60)
     league_name = league_resp[0]["league"]["name"] if league_resp else str(league_id)
     print(f"→ Fetching fixtures: {league_name} ({league_id}) season={season}")
 
-    resp = _get("fixtures", {"league": league_id, "season": season})
+    resp = _get_cached("fixtures", {"league": league_id, "season": season}, ttl_s=6*60*60)
     print(f"   fixtures received: {len(resp)}")
     rows = []
     for it in resp:
@@ -530,7 +790,7 @@ def fetch_fixtures_for_league(league_id: int, season: int) -> pd.DataFrame:
     print(f"✅ saved {len(df)} rows → {out}")
 
     # standings
-    std = _get("standings", {"league": league_id, "season": season})
+    std = _get_cached("standings", {"league": league_id, "season": season}, ttl_s=12*60*60)
     print(f"   standings payload groups: {len(std)}")
     std_rows = []
     for item in std:
@@ -561,7 +821,7 @@ def fetch_fixtures_for_league(league_id: int, season: int) -> pd.DataFrame:
     for tid, tname in teams_df.itertuples(index=False):
         if len(ts_rows) % 5 == 0 and len(ts_rows) > 0:
             print(f"   … teamstats rows so far: {len(ts_rows)}")
-        ts = _get("teams/statistics", {"league": league_id, "season": season, "team": tid})
+        ts = _get_cached("teams/statistics", {"league": league_id, "season": season, "team": tid}, ttl_s=12*60*60)
         if not ts:
             continue
         st = ts[0] if isinstance(ts, list) and ts else ts
@@ -657,8 +917,8 @@ def fetch_fixtures_for_league(league_id: int, season: int) -> pd.DataFrame:
 
     # injuries (last 30 days)
     inj_rows = []
-    since = (datetime.now(timezone.utc) - pd.Timedelta(days=30)).strftime("%Y-%m-%d")
-    injuries = _get("injuries", {"league": league_id, "season": season, "date": since})
+    since = (datetime.now(_TZ.utc) - pd.Timedelta(days=30)).strftime("%Y-%m-%d")
+    injuries = _get_cached("injuries", {"league": league_id, "season": season, "date": since}, ttl_s=6*60*60)
     print(f"   injuries payload items: {len(injuries)} (since last 30d)")
     for it in injuries:
         team = it.get("team", {})
@@ -689,6 +949,20 @@ def main():
     ap.add_argument("--season", type=int, required=True, help="Season year, e.g. 2025")
     ap.add_argument("--leagues", type=str, default="39,140,78", help="Comma-separated league IDs to process")
     ap.add_argument("--sleep-between", type=float, default=0.3, help="Seconds to sleep between leagues")
+    ap.add_argument("--harvest-postmatch", action="store_true",
+                help="Harvest FT fixtures (stats + closing odds) til postmatch_flat.parquet og exit")
+    ap.add_argument("--pm-leagues", type=str, default="39,140,78",
+                help="Comma-separerede league IDs (default EPL, LaLiga, Bundesliga)")
+    ap.add_argument("--pm-season", type=int, default=datetime.utcnow().year,
+                help="Sæson for harvest")
+    ap.add_argument("--pm-days-back", type=int, default=1,
+                help="Dage bagud (default 1)")
+    ap.add_argument("--pm-days-fwd", type=int, default=0,
+                help="Dage frem (default 0)")
+    ap.add_argument("--pm-timezone", type=str, default="Europe/Copenhagen",
+                help="Timezone for odds-kald")
+    ap.add_argument("--pm-sleep", type=float, default=0.2,
+                help="Sleep mellem fixture-kald")
     ap.add_argument("--with-stats", action="store_true",
                 help="Fetch /fixtures/statistics for upcoming fixtures (home/away) and merge as features (shots, possession, xG, etc.)")
     ap.add_argument("--with-stats-limit", type=int, default=60, help="Max fixtures to fetch per run for /fixtures/statistics (0 = no cap)")
@@ -699,6 +973,17 @@ def main():
     ap.add_argument("--with-stats-train-limit", type=int, default=400,
                 help="Max finished fixtures to fetch stats for (0 = no cap).")
     args = ap.parse_args()
+    if args.harvest_postmatch:
+        leagues = [int(x) for x in args.pm_leagues.replace(";", ",").split(",") if x.strip()]
+        harvest_postmatch(
+            leagues=leagues,
+            season=args.pm_season,
+            days_back=args.pm_days_back,
+            days_fwd=args.pm_days_fwd,
+            timezone_str=args.pm_timezone,
+            sleep=args.pm_sleep,
+        )
+        return
     
     leagues: List[int]
     if args.leagues:
@@ -989,14 +1274,6 @@ def main():
             h2h_up = up.apply(_row_h2h_up, axis=1)
             up = pd.concat([up, h2h_up], axis=1)
 
-        # ---- Optional: fetch per-fixture team statistics for upcoming fixtures ----
-        if getattr(args, "with_stats", False):
-            up = _attach_upcoming_fixture_stats(
-                up,
-                limit=int(getattr(args, "with_stats_limit", 60) or 60),
-                per_req_sleep=float(getattr(args, "with_stats_sleep", 0.15) or 0.15),
-                timeout=float(getattr(args, "with_stats_timeout", 10.0) or 10.0),
-            )
 
         # --- Ensure stable schema for per-fixture stats: create columns as NA if missing ---
         desired_stats_cols = [
@@ -1023,6 +1300,19 @@ def main():
                 created_cols += 1
         if created_cols:
             print(f"   ensured schema: added {created_cols} empty stats columns (as NA)")
+        # mirror expected_goals into xg aliases if provided by API
+        if "home_expected_goals" in up.columns and "home_xg" in up.columns:
+            up["home_xg"] = up["home_xg"].fillna(up["home_expected_goals"])
+        if "away_expected_goals" in up.columns and "away_xg" in up.columns:
+            up["away_xg"] = up["away_xg"].fillna(up["away_expected_goals"])
+
+        # simple non-null summary for per-fixture stats
+        _stats_cols = [c for c in desired_stats_cols if c in up.columns]
+        try:
+            _nn = int(up[_stats_cols].notna().sum().sum())
+            print(f"   per-fixture stats non-nulls: {_nn} cells across {len(_stats_cols)} columns")
+        except Exception:
+            pass
         # ---- Decide which columns to keep in upcoming_set ----
         base_keep = [
             "fixture_id","league_id","league_name","season","date","days_to_match","sport_key",
@@ -1389,7 +1679,31 @@ def main():
         except Exception as e:
             print(f"   ⚠️ could not merge historic stats into TRAIN set: {e}")
 
-        train = train_set
+        train_df = train_set
+
+        pm_path = FEAT / "postmatch_flat.parquet"
+        if pm_path.exists() and "fixture_id" in train_df.columns:
+            try:
+                pm = pd.read_parquet(pm_path)
+                keep = [
+                    c for c in pm.columns
+                    if c in (
+                        "fixture_id",
+                        "closing_odds_h",
+                        "closing_odds_d",
+                        "closing_odds_a",
+                        "closing_bk_count",
+                    )
+                    or c.startswith("home_") or c.startswith("away_")
+                ]
+                pm = pm[keep].copy()
+                n_before = train_df.shape[1]
+                train_df = train_df.merge(pm, on="fixture_id", how="left")
+                print(f"➕ merged postmatch stats → train_set (+{train_df.shape[1]-n_before} kolonner)")
+            except Exception as e:
+                print(f"⚠️ postmatch merge skipped: {e}")
+
+        train = train_df
         out_tr = FEAT / "train_set.parquet"
         FEAT.mkdir(parents=True, exist_ok=True)
         train.to_parquet(out_tr, index=False)

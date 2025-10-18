@@ -53,7 +53,7 @@ fixture_id,league_id,league_name,season,date,status_short,status_long,home_id,ho
 1388360,78,Bundesliga,2025,2025-10-05 13:30:00+00:00,FT,Match Finished,172,VfB Stuttgart,180,1. FC Heidenheim,1.0,0.0,H,soccer_germany_bundesliga,vfb stuttgart,1 heidenheim
 1388358,78,Bundesliga,2025,2025-10-05 15:30:00+00:00,FT,Match Finished,175,Hamburger SV,164,FSV Mainz 05,4.0,0.0,H,soccer_germany_bundesliga,hamburger sv,fsv mainz 05
 1388355,78,Bundesliga,2025,2025-10-05 17:30:00+00:00,FT,Match Finished,163,Borussia Mönchengladbach,160,SC Freiburg,0.0,0.0,D,soccer_germany_bundesliga,borussia mönchengladbach,freiburg
-1388369,78,Bundesliga,2025,2025-10-17 18:30:00+00:00,NS,Not Started,182,Union Berlin,163,Borussia Mönchengladbach,,,,soccer_germany_bundesliga,union berlin,borussia mönchengladbach
+1388369,78,Bundesliga,2025,2025-10-17 18:30:00+00:00,FT,Match Finished,182,Union Berlin,163,Borussia Mönchengladbach,3.0,1.0,H,soccer_germany_bundesliga,union berlin,borussia mönchengladbach
 1388370,78,Bundesliga,2025,2025-10-18 13:30:00+00:00,NS,Not Started,161,VfL Wolfsburg,172,VfB Stuttgart,,,,soccer_germany_bundesliga,vfl wolfsburg,vfb stuttgart
 1388366,78,Bundesliga,2025,2025-10-18 13:30:00+00:00,NS,Not Started,164,FSV Mainz 05,168,Bayer Leverkusen,,,,soccer_germany_bundesliga,fsv mainz 05,bayer leverkusen
 1388367,78,Bundesliga,2025,2025-10-18 13:30:00+00:00,NS,Not Started,173,RB Leipzig,175,Hamburger SV,,,,soccer_germany_bundesliga,rb leipzig,hamburger sv

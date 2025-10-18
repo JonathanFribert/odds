@@ -1,7 +1,7 @@
 {
-  "n_train": 153,
-  "n_test": 51,
-  "n_features": 36,
+  "n_train": 154,
+  "n_test": 52,
+  "n_features": 42,
   "features": [
     "home_goals",
     "away_goals",
@@ -38,12 +38,18 @@
     "away_draw_rate",
     "away_cs_rate",
     "away_fts_rate",
-    "league_home_win_rate"
+    "league_home_win_rate",
+    "home_expected_goals",
+    "away_expected_goals",
+    "home_shots_on_goal",
+    "away_shots_on_goal",
+    "home_ball_possession",
+    "away_ball_possession"
   ],
-  "log_loss": 0.08999498084496357,
-  "brier": 0.017359414601958244,
+  "log_loss": 0.08149659659509442,
+  "brier": 0.014899578034607463,
   "accuracy": 1.0,
-  "created_at": "2025-10-17T00:53:48Z",
+  "created_at": "2025-10-18T18:23:37Z",
   "model": "LogisticRegression(binary)",
   "target": "label_ah_home_m0_5"
 }

@@ -5,15 +5,15 @@ team_id,team_name,rank,points,goalsDiff
 172,VfB Stuttgart,4,12,2
 168,Bayer Leverkusen,5,11,4
 192,1.FC Köln,6,10,2
-169,Eintracht Frankfurt,7,9,1
-160,SC Freiburg,8,8,0
-175,Hamburger SV,9,8,-2
-186,FC St. Pauli,10,7,-1
-167,1899 Hoffenheim,11,7,-3
-162,Werder Bremen,12,7,-5
-182,Union Berlin,13,7,-5
+182,Union Berlin,7,10,-4
+169,Eintracht Frankfurt,8,9,1
+160,SC Freiburg,9,8,0
+175,Hamburger SV,10,8,-2
+186,FC St. Pauli,11,7,-1
+167,1899 Hoffenheim,12,7,-3
+162,Werder Bremen,13,7,-5
 170,FC Augsburg,14,6,-2
 161,VfL Wolfsburg,15,5,-2
 164,FSV Mainz 05,16,4,-5
-163,Borussia Mönchengladbach,17,3,-7
-180,1. FC Heidenheim,18,3,-7
+180,1. FC Heidenheim,17,3,-7
+163,Borussia Mönchengladbach,18,3,-8

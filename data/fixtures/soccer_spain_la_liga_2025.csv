@@ -79,7 +79,7 @@ fixture_id,league_id,league_name,season,date,status_short,status_long,home_id,ho
 1390892,140,La Liga,2025,2025-10-05 16:30:00+00:00,FT,Match Finished,540,Espanyol,543,Real Betis,1.0,2.0,A,soccer_spain_la_liga,espanyol,real betis
 1390896,140,La Liga,2025,2025-10-05 16:30:00+00:00,FT,Match Finished,548,Real Sociedad,728,Rayo Vallecano,0.0,1.0,A,soccer_spain_la_liga,real sociedad,rayo vallecano
 1390891,140,La Liga,2025,2025-10-05 19:00:00+00:00,FT,Match Finished,538,Celta Vigo,530,Atletico Madrid,1.0,1.0,D,soccer_spain_la_liga,celta vigo,atletico madrid
-1390906,140,La Liga,2025,2025-10-17 19:00:00+00:00,NS,Not Started,718,Oviedo,540,Espanyol,,,,soccer_spain_la_liga,oviedo,espanyol
+1390906,140,La Liga,2025,2025-10-17 19:00:00+00:00,FT,Match Finished,718,Oviedo,540,Espanyol,0.0,2.0,A,soccer_spain_la_liga,oviedo,espanyol
 1390907,140,La Liga,2025,2025-10-18 12:00:00+00:00,NS,Not Started,536,Sevilla,798,Mallorca,,,,soccer_spain_la_liga,sevilla,mallorca
 1390901,140,La Liga,2025,2025-10-18 14:15:00+00:00,NS,Not Started,529,Barcelona,547,Girona,,,,soccer_spain_la_liga,barcelona,girona
 1390908,140,La Liga,2025,2025-10-18 16:30:00+00:00,NS,Not Started,533,Villarreal,543,Real Betis,,,,soccer_spain_la_liga,villarreal,real betis

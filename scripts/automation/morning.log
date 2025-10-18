@@ -1,0 +1,43 @@
+DB OK: 2025-10-18 17:59:35.602512+00:00
+DB OK: 2025-10-18 18:05:52.989161+00:00
+[debug] rows after date filter: 57
+[debug] sport_key counts: {'soccer_spain_la_liga': 20, 'soccer_epl': 19, 'soccer_germany_bundesliga': 18}
+[debug] date range in up: 2025-10-18 19:00:00+00:00 → 2025-11-01 17:30:00+00:00
+[debug] rows with any odds after API-Football merge: 40
+[proba] using models/model_1x2.pkl (features from artifact)
+⚠️ Upcoming missing 2 training features (e.g., ['home_goals', 'away_goals']). Filling 0.
+[debug] rows with full p_hat after scoring: 57
+⚠️ OddsAPI soccer_epl HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=YOUR_O…)
+⚠️ OddsAPI soccer_germany_bundesliga HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=YOUR_O…)
+⚠️ OddsAPI soccer_spain_la_liga HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=YOUR_O…)
+⚠️ No live odds returned from OddsAPI. Falling back to any existing entry odds as implied.
+[debug] rows with any_odds: 40, with full_p: 57, with both: 40
+⚠️ OddsAPI spreads soccer_epl HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=YOUR_O…)
+⚠️ OddsAPI spreads soccer_germany_bundesliga HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=YOUR_O…)
+⚠️ OddsAPI spreads soccer_spain_la_liga HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=YOUR_O…)
+[pg] ✅ logged 25 picks → picks
+🏦 also logged picks to Postgres (table=picks)
+ℹ️ picks by source: {'apifootball': 25}
+✅ saved picks → /Users/mycomputer/Desktop/odds_value_ai/data/picks/picks_20251018_1805.csv (rows=25)
+🗄️  also logged 25 picks to SQLite → data/db/picks.sqlite
+DB OK: 2025-10-18 18:10:08.578698+00:00
+[debug] rows after date filter: 57
+[debug] sport_key counts: {'soccer_spain_la_liga': 20, 'soccer_epl': 19, 'soccer_germany_bundesliga': 18}
+[debug] date range in up: 2025-10-18 19:00:00+00:00 → 2025-11-01 17:30:00+00:00
+[debug] rows with any odds after API-Football merge: 40
+[proba] using models/model_1x2.pkl (features from artifact)
+⚠️ Upcoming missing 2 training features (e.g., ['home_goals', 'away_goals']). Filling 0.
+[debug] rows with full p_hat after scoring: 57
+⚠️ OddsAPI soccer_epl HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI soccer_germany_bundesliga HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI soccer_spain_la_liga HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=7a9e62…)
+⚠️ No live odds returned from OddsAPI. Falling back to any existing entry odds as implied.
+[debug] rows with any_odds: 40, with full_p: 57, with both: 40
+⚠️ OddsAPI spreads soccer_epl HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI spreads soccer_germany_bundesliga HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=7a9e62…)
+⚠️ OddsAPI spreads soccer_spain_la_liga HTTP 401: {"message":"API key is not valid. Get an API key at https://the-odds-api.com","error_code":"INVALID_KEY","details_url":"https://the-odds-api.com/liveapi/guides/ (ODDSAPI_KEY=7a9e62…)
+[pg] ✅ logged 25 picks → picks
+🏦 also logged picks to Postgres (table=picks)
+ℹ️ picks by source: {'apifootball': 25}
+✅ saved picks → /Users/mycomputer/Desktop/odds_value_ai/data/picks/picks_20251018_1810.csv (rows=25)
+🗄️  also logged 25 picks to SQLite → data/db/picks.sqlite

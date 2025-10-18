@@ -221,83 +221,200 @@ def _append_ledger(path: Path, df: pd.DataFrame, pick_ts_utc: str) -> None:
 # -------------------- Postgres logging (optional) --------------------
 
 def _append_postgres_picks(db_url: str, df: pd.DataFrame, pick_ts_utc: str) -> bool:
-    """Append picks to Postgres (opretter tabel hvis den mangler). Returnerer True ved succes."""
+    """Map picks DataFrame to normalized Postgres schema and upsert.
+
+    Target table schema (already created via migrations):
+        picks(
+          pick_id uuid primary key default gen_random_uuid(),
+          created_at timestamptz not null default now(),
+          fixture_id bigint not null,
+          league_id int,
+          season int,
+          kick_off timestamptz,
+          home text,
+          away text,
+          market text not null default '1x2',
+          selection text not null check (selection in ('H','D','A')),
+          model_prob double precision,
+          best_odds double precision,
+          ev double precision,
+          kelly double precision,
+          stake_units double precision,
+          source text,
+          model_tag text,
+          unique (fixture_id, market, selection, model_tag)
+        )
+    """
     if not db_url:
         return False
     if not _HAS_SA:
         print("⚠️ SQLAlchemy not available; skipping Postgres logging.")
         return False
+
+    # Defensive copy
+    use = df.copy()
+
+    # Normalize required columns from the script's internal naming
+    # Expected input columns (best-effort):
+    #   fixture_id, league_id, season, date, home, away,
+    #   recommended_market, recommended_side, recommended_price,
+    #   model_prob, best_EV, kelly_best, stake, odds_source, model_tag
+    # We will gracefully coerce alternatives where possible.
+
+    # Ensure datetime is timezone-aware for kick_off
+    if "date" in use.columns:
+        use["date"] = pd.to_datetime(use["date"], utc=True, errors="coerce")
+
+    # Map side → selection ('H','D','A')
+    def _side_to_sel(x: str) -> Optional[str]:
+        if x is None:
+            return None
+        s = str(x).strip().lower()
+        if s in ("h", "home", "1"): return "H"
+        if s in ("d", "draw", "x"): return "D"
+        if s in ("a", "away", "2"): return "A"
+        return None
+
+    # Fallback: if recommended_* are missing, try to build them from EV columns
+    if "recommended_market" not in use.columns and {"EV_H","EV_D","EV_A"}.issubset(set(use.columns)):
+        use["recommended_market"] = "1x2"
+        # pick the best EV side
+        ev_cols = ["EV_H","EV_D","EV_A"]
+        best_idx = use[ev_cols].astype(float).idxmax(axis=1)
+        use["recommended_side"] = best_idx.str[-1].map({"H":"H","D":"D","A":"A"})
+        # price from odds_* for that side
+        def best_price_row(r):
+            m = r.get("recommended_side")
+            return {"H": r.get("odds_h"), "D": r.get("odds_d"), "A": r.get("odds_a")}.get(m)
+        use["recommended_price"] = use.apply(best_price_row, axis=1)
+        # model_prob from p_hat_*
+        def best_prob_row(r):
+            m = r.get("recommended_side")
+            return {"H": r.get("p_hat_h"), "D": r.get("p_hat_d"), "A": r.get("p_hat_a")}.get(m)
+        use["model_prob"] = use.apply(best_prob_row, axis=1)
+        # kelly (if not already computed)
+        if "kelly_best" not in use.columns:
+            def kelly_row(r):
+                p = r.get("model_prob"); o = r.get("recommended_price")
+                try:
+                    return _kelly_fraction(float(p), float(o))
+                except Exception:
+                    return None
+            use["kelly_best"] = use.apply(kelly_row, axis=1)
+
+    # Safe defaults
+    for col in [
+        "fixture_id","league_id","season","date","home","away",
+        "recommended_market","recommended_side","recommended_price",
+        "model_prob","best_EV","kelly_best","stake","odds_source","model_tag"
+    ]:
+        if col not in use.columns:
+            use[col] = pd.NA
+
+    # Normalize selection & market
+    sel = use["recommended_side"].apply(_side_to_sel)
+    use["selection"] = sel
+    # default market
+    use["market"] = use.get("recommended_market").fillna("1x2").astype(str)
+
+    # Compute EV if missing
+    if "best_EV" not in use or use["best_EV"].isna().all():
+        try:
+            p = pd.to_numeric(use["model_prob"], errors="coerce")
+            o = pd.to_numeric(use["recommended_price"], errors="coerce")
+            use["best_EV"] = p * o - 1.0
+        except Exception:
+            use["best_EV"] = pd.NA
+
+    # Kelly/stake normalization
+    use["kelly"] = pd.to_numeric(use.get("kelly_best"), errors="coerce")
+    use["stake_units"] = pd.to_numeric(use.get("stake"), errors="coerce")
+
+    # kick_off
+    use["kick_off"] = use.get("date")
+
+    # Source / tag
+    use["source"] = use.get("odds_source").fillna("mixed")
+    if "model_tag" not in use.columns or use["model_tag"].isna().all():
+        # simple default tag by UTC date
+        ts = (pd.to_datetime(pick_ts_utc, utc=True, errors="coerce") or pd.Timestamp.utcnow()).strftime("%Y-%m-%d")
+        use["model_tag"] = f"logreg_1x2_{ts}"
+
+    # Final column mapping for INSERT
+    mapped = use[[
+        "fixture_id","league_id","season","kick_off","home","away",
+        "market","selection","model_prob","recommended_price","best_EV",
+        "kelly","stake_units","source","model_tag"
+    ]].copy()
+
+    mapped = mapped.rename(columns={
+        "recommended_price": "best_odds",
+        "best_EV": "ev",
+    })
+
+    # Drop rows without essential fields
+    essential = ["fixture_id","market","selection","model_tag"]
+    for c in essential:
+        mapped = mapped[mapped[c].notna()]
+    if mapped.empty:
+        print("⚠️ No picks to log (after mapping).")
+        return False
+
     try:
-        engine = _sa.create_engine(db_url, pool_pre_ping=True)
-        with engine.begin() as conn:
-            conn.exec_driver_sql(
-                """
-                CREATE TABLE IF NOT EXISTS picks (
-                  id BIGSERIAL PRIMARY KEY,
-                  pick_ts_utc TIMESTAMPTZ,
-                  date TIMESTAMPTZ,
-                  sport_key TEXT,
-                  league_id INTEGER,
-                  season INTEGER,
-                  fixture_id BIGINT,
-                  home TEXT,
-                  away TEXT,
-                  recommended_market TEXT,
-                  recommended_side TEXT,
-                  recommended_book TEXT,
-                  recommended_price DOUBLE PRECISION,
-                  model_prob DOUBLE PRECISION,
-                  implied_prob DOUBLE PRECISION,
-                  fair_odds DOUBLE PRECISION,
-                  edge_pp DOUBLE PRECISION,
-                  edge_pct DOUBLE PRECISION,
-                  best_EV DOUBLE PRECISION,
-                  kelly_best DOUBLE PRECISION,
-                  stake DOUBLE PRECISION,
-                  odds_h DOUBLE PRECISION,
-                  odds_d DOUBLE PRECISION,
-                  odds_a DOUBLE PRECISION,
-                  p_hat_h DOUBLE PRECISION,
-                  p_hat_d DOUBLE PRECISION,
-                  p_hat_a DOUBLE PRECISION,
-                  odds_source TEXT,
-                  status TEXT,
-                  result TEXT,
-                  pnl_units DOUBLE PRECISION,
-                  closed_at_utc TIMESTAMPTZ
-                )
-                """
+        eng = _sa.create_engine(db_url, pool_pre_ping=True)
+        upsert_sql = _sa.text(
+            """
+            INSERT INTO picks (
+                fixture_id, league_id, season, kick_off, home, away,
+                market, selection, model_prob, best_odds, ev, kelly, stake_units, source, model_tag
+            ) VALUES (
+                :fixture_id, :league_id, :season, :kick_off, :home, :away,
+                :market, :selection, :model_prob, :best_odds, :ev, :kelly, :stake_units, :source, :model_tag
             )
-            use = df.copy().assign(pick_ts_utc=pick_ts_utc)
+            ON CONFLICT (fixture_id, market, selection, model_tag) DO UPDATE SET
+                model_prob = EXCLUDED.model_prob,
+                best_odds  = EXCLUDED.best_odds,
+                ev         = EXCLUDED.ev,
+                kelly      = EXCLUDED.kelly,
+                stake_units= EXCLUDED.stake_units,
+                source     = EXCLUDED.source
+            """
+        )
+        create_sql = _sa.text(
+            """
+            CREATE TABLE IF NOT EXISTS picks (
+              pick_id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+              created_at timestamptz NOT NULL DEFAULT now(),
+              fixture_id bigint NOT NULL,
+              league_id int,
+              season int,
+              kick_off timestamptz,
+              home text,
+              away text,
+              market text NOT NULL DEFAULT '1x2',
+              selection text NOT NULL CHECK (selection IN ('H','D','A')),
+              model_prob double precision,
+              best_odds double precision,
+              ev double precision,
+              kelly double precision,
+              stake_units double precision,
+              source text,
+              model_tag text,
+              UNIQUE (fixture_id, market, selection, model_tag)
+            );
+            """
+        )
 
-            # cast datetime-kolonner til rigtige tidsstempler
-            for c in ("pick_ts_utc", "date", "closed_at_utc"):
-                if c in use.columns:
-                    use[c] = pd.to_datetime(use[c], utc=True, errors="coerce")
-
-            # sørg for at alle kolonner findes
-            cols = [
-                "pick_ts_utc","date","sport_key","league_id","season","fixture_id",
-                "home","away","recommended_market","recommended_side","recommended_book","recommended_price",
-                "model_prob","implied_prob","fair_odds","edge_pp","edge_pct","best_EV","kelly_best","stake",
-                "odds_h","odds_d","odds_a","p_hat_h","p_hat_d","p_hat_a","odds_source",
-                "status","result","pnl_units","closed_at_utc"
-            ]
-            for c in cols:
-                if c not in use.columns:
-                    use[c] = pd.NA
-
-            # numerics → float
-            for c in [
-                "recommended_price","model_prob","implied_prob","fair_odds","edge_pp","edge_pct",
-                "best_EV","kelly_best","stake","odds_h","odds_d","odds_a","p_hat_h","p_hat_d","p_hat_a",
-                "pnl_units"
-            ]:
-                if c in use.columns:
-                    use[c] = pd.to_numeric(use[c], errors="coerce")
-
-            use = use[cols]
-            use.to_sql("picks", con=conn, if_exists="append", index=False)
+        with eng.begin() as conn:
+            conn.execute(create_sql)
+            # type conversions for safe execute
+            mapped["fixture_id"] = pd.to_numeric(mapped["fixture_id"], errors="coerce").astype("Int64")
+            # Execute in chunks to be safe
+            records = mapped.to_dict(orient="records")
+            for chunk_start in range(0, len(records), 500):
+                chunk = records[chunk_start:chunk_start+500]
+                conn.execute(upsert_sql, chunk)
+        print(f"[pg] ✅ logged {len(mapped)} picks → picks")
         return True
     except Exception as e:
         print(f"⚠️ Postgres logging failed: {e}")
@@ -1306,3 +1423,48 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
+# --- DB logging helpers ---
+import os
+from sqlalchemy import create_engine
+
+def _pg_url():
+    url = os.getenv("POSTGRES_URL")
+    if not url:
+        return None
+    if url.startswith("postgres://"):
+        url = url.replace("postgres://", "postgresql+psycopg://", 1)
+    elif url.startswith("postgresql://"):
+        url = url.replace("postgresql://", "postgresql+psycopg://", 1)
+    return url
+
+def log_picks_to_pg(picks_df, model_tag: str = "logreg_1x2"):
+    url = _pg_url()
+    if not url or picks_df is None or picks_df.empty:
+        return False
+    eng = create_engine(url, pool_pre_ping=True)
+    cols = ["fixture_id","league_id","season","kick_off","home","away",
+            "market","selection","model_prob","best_odds","ev","kelly",
+            "stake_units","source","model_tag"]
+    df = picks_df.copy()
+    for c in cols:
+        if c not in df.columns:
+            df[c] = None
+    df["model_tag"] = model_tag
+    with eng.begin() as conn:
+        tmp = "_picks_tmp"
+        df[cols].to_sql(tmp, conn, if_exists="replace", index=False)
+        conn.exec_driver_sql(f"""
+        insert into picks ({",".join(cols)})
+        select {",".join(cols)} from {tmp}
+        on conflict (fixture_id, market, selection, model_tag) do update
+        set model_prob = excluded.model_prob,
+            best_odds  = excluded.best_odds,
+            ev         = excluded.ev,
+            kelly      = excluded.kelly,
+            stake_units= excluded.stake_units,
+            source     = excluded.source,
+            created_at = now();
+        drop table if exists {tmp};
+        """)
+    return True

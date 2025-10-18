@@ -35,3 +35,9 @@ away_draw_rate
 away_cs_rate
 away_fts_rate
 league_home_win_rate
+home_expected_goals
+away_expected_goals
+home_shots_on_goal
+away_shots_on_goal
+home_ball_possession
+away_ball_possession
