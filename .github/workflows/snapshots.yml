@@ -2,8 +2,7 @@ name: snapshots
 
 on:
   schedule:
-    # Hver 10. min fra 06:00–23:00 DK (≈ 04–21 UTC afh. af DST)
-    - cron: "*/10 4-21 * * *"
+ - cron: "*/10 4-21 * * *"
   workflow_dispatch: {}
 
 jobs:
@@ -30,18 +29,15 @@ jobs:
           echo "APIFOOTBALL_KEY=${{ secrets.APIFOOTBALL_KEY }}" >> $GITHUB_ENV
           echo "ODDSAPI_KEY=${{ secrets.ODDSAPI_KEY }}" >> $GITHUB_ENV
 
-      # Hent odds-snapshots (best effort)
       - name: Fetch API-Football odds (imminent 180m)
         continue-on-error: true
         run: |
           python scripts/fetch_apifootball_odds.py --imminent-mins 180 || true
 
-      # Merge post-match stats fra DB og hold train_set sundt
       - name: Build features (merge-from-DB + auto-repair)
         run: |
           python scripts/build_features.py --merge-train-stats-from-db
 
-      # Lille health check så vi fanger fejl tidligt
       - name: Health check
         run: |
           python - <<'PY'
