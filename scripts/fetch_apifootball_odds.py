@@ -6,6 +6,7 @@ from argparse import ArgumentParser
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional, Iterable
+from typing import List, Dict
 import re
 import hashlib
 import json
@@ -529,6 +530,35 @@ def _snap_rows_from_1x2_df(out_df: pd.DataFrame) -> list[dict]:
                 })
     return rows
 
+
+# Emit snapshot rows for all bookmaker quotes present in the raw per-bookmaker 1X2 dataframe
+def _snap_rows_from_1x2_book_df(df_rows: pd.DataFrame) -> List[Dict]:
+    """
+    Build snapshot rows for all bookmaker quotes present in the raw per-bookmaker 1X2 dataframe.
+    Expected columns: fixture_id, bookmaker_name, odds_h/odds_d/odds_a, and fetched_at_utc/home/away.
+    """
+    rows: List[Dict] = []
+    if df_rows is None or df_rows.empty:
+        return rows
+    for _, r in df_rows.iterrows():
+        bname = r.get("bookmaker_name") or None
+        for sel, col in (("H","odds_h"), ("D","odds_d"), ("A","odds_a")):
+            price = r.get(col)
+            if pd.notna(price):
+                rows.append({
+                    "fixture_id": int(r["fixture_id"]),
+                    "market": "1X2",
+                    "selection": sel,
+                    "line": None,
+                    "price": float(price),
+                    "bookmaker": bname if bname else None,
+                    "fetched_at_utc": pd.to_datetime(r.get("fetched_at_utc"), utc=True, errors="coerce"),
+                    "home": r.get("home"),
+                    "away": r.get("away"),
+                    "source": "apifootball",
+                })
+    return rows
+
 def _snap_rows_from_ou_df(ou_df: pd.DataFrame) -> list[dict]:
     rows: list[dict] = []
     if ou_df is None or ou_df.empty:
@@ -648,6 +678,10 @@ def main():
                     help="Preferred Over/Under goal line; closest line will be chosen when exact is unavailable.")
     ap.add_argument("--write-parquet", action="store_true", help="Also save output as Parquet alongside CSV")
     ap.add_argument("--force-all-books", action="store_true", help="Ignore shortlist and consider all bookmakers equally")
+    ap.add_argument("--all-books-snapshots", action="store_true",
+                    help="Upsert snapshots for every bookmaker quote (not just the best price).")
+    ap.add_argument("--imminent-mins", type=int, default=0,
+                    help="If >0, only process fixtures with kickoff within the next N minutes (filters base dataframe).")
     ap.add_argument("--cache-dir", type=str, default=str(DEFAULT_CACHE_DIR), help="Directory for API cache files")
     ap.add_argument("--ttl-bookmakers", type=int, default=7*24*3600, help="TTL seconds for odds/bookmakers cache (default 7 days)")
     ap.add_argument("--ttl-mapping", type=int, default=6*3600, help="TTL seconds for odds/mapping cache (default 6h)")
@@ -666,6 +700,12 @@ def main():
         return
 
     base = load_upcoming_fixture_ids(args.days)
+    if args.imminent_mins and "date" in base.columns:
+        now = pd.Timestamp.now(tz="UTC")
+        horizon = now + pd.Timedelta(minutes=int(args.imminent_mins))
+        before = len(base)
+        base = base[(base["date"] >= now - pd.Timedelta(minutes=1)) & (base["date"] <= horizon)].copy()
+        print(f"ℹ️ imminent filter: {len(base)}/{before} fixtures within next {args.imminent_mins} mins")
     leagues_in_base = set(pd.to_numeric(base.get("league_id"), errors="coerce").dropna().astype(int).tolist())
     if args.use_mapping:
         season_infer = None
@@ -749,6 +789,8 @@ def main():
                 df["home"] = row.get("home")
                 df["away"] = row.get("away")
                 df = add_normalized_teams(df, "home", "away")
+                df_book = df.copy()
+                df_book["fetched_at_utc"] = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
                 best = best_of(df, wanted_bids)
                 if best:
                     best.update({
@@ -888,8 +930,21 @@ def main():
 
     # Upsert 1X2 snapshots to Postgres (optional)
     try:
-        _upsert_snapshots(_snap_rows_from_1x2_df(out))
-        print("🧾 upserted 1X2 snapshots → Postgres")
+        if args.all_books_snapshots:
+            try:
+                # join minimal context (home/away) from 'out' back into df_book if needed
+                if "home" in df_book.columns and "away" in df_book.columns:
+                    pass
+                else:
+                    df_book["home"] = out["home"].iloc[0] if not out.empty else None
+                    df_book["away"] = out["away"].iloc[0] if not out.empty else None
+                _upsert_snapshots(_snap_rows_from_1x2_book_df(df_book))
+                print("🧾 upserted 1X2 snapshots (all bookmakers) → Postgres")
+            except Exception as e:
+                print(f"[snapshots-1x2-allbooks] skip: {e}")
+        else:
+            _upsert_snapshots(_snap_rows_from_1x2_df(out))
+            print("🧾 upserted 1X2 snapshots → Postgres")
     except Exception as e:
         print(f"[snapshots-1x2] skip: {e}")
 

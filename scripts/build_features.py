@@ -484,6 +484,183 @@ def _attach_historic_fixture_stats(hist_df: pd.DataFrame, limit: int = 400, per_
         return pd.DataFrame(columns=["fixture_id"])
     return pd.DataFrame(rows)
 
+# ---- DB merge helpers: enrich train_set.parquet with outcomes stats from Postgres ----
+def _pg_engine():
+    """Create a SQLAlchemy engine from POSTGRES_URL if available, else return None."""
+    try:
+        from sqlalchemy import create_engine  # lazy import so script works without SA
+    except Exception:
+        return None
+    url = os.getenv("POSTGRES_URL")
+    if not url:
+        return None
+    try:
+        return create_engine(url, pool_pre_ping=True)
+    except Exception:
+        return None
+
+def _coalesce_variants(df: pd.DataFrame, bases: list[str]) -> pd.DataFrame:
+    """For each base name, coalesce any variant columns (e.g., _x/_y/_left/_right/_train/_db)
+    into a single `base` column, preferring the first non-null values in order of appearance.
+    Drops the variant columns after coalescing. Returns the modified df.
+    """
+    if df is None or df.empty:
+        return df
+    for base in bases:
+        cand = []
+        for suf in ["", "_x", "_y", "_left", "_right", "_train", "_db"]:
+            col = f"{base}{suf}" if suf else base
+            if col in df.columns:
+                cand.append(col)
+        if len(cand) <= 1:
+            continue
+        s = None
+        for cn in cand:
+            v = pd.to_numeric(df[cn], errors="coerce") if df[cn].dtype != "O" else df[cn]
+            s = v if s is None else s.combine_first(v)
+        df[base] = s
+        for cn in cand:
+            if cn != base and cn in df.columns:
+                df.drop(columns=[cn], inplace=True, errors="ignore")
+    return df
+
+def _merge_train_stats_from_db(train_path: Path, batch: int = 2000) -> int:
+    """
+    Load data/features/train_set.parquet, look up matching fixture_ids in outcomes (Postgres),
+    and merge numeric stats like shots_on_goal, possession, expected_goals as
+    home_*/away_* columns. Saves back to the same parquet.
+    Returns number of rows enriched.
+    """
+    if not train_path.exists():
+        print(f"ℹ️ train_set missing → {train_path}; nothing to merge.")
+        return 0
+    eng = _pg_engine()
+    if eng is None:
+        print("ℹ️ POSTGRES_URL or SQLAlchemy missing — skipping DB merge of train stats.")
+        return 0
+
+    df = pd.read_parquet(train_path)
+    if "fixture_id" not in df.columns or df.empty:
+        print("ℹ️ train_set has no fixture_id or is empty — skipping DB merge.")
+        return 0
+
+    # FULL desired outcomes schema for training merge (will be filtered to existing cols at runtime)
+    wanted = [
+        "fixture_id", "result", "goals_h", "goals_a",
+        "home_shots_on_goal","away_shots_on_goal",
+        "home_ball_possession","away_ball_possession",
+        "home_expected_goals","away_expected_goals",
+        # extended granular stats (shots/pass/corners/cards/fouls/offsides/saves)
+        "home_shots_total","away_shots_total",
+        "home_shots_off_goal","away_shots_off_goal",
+        "home_shots_inside_box","away_shots_inside_box",
+        "home_shots_outside_box","away_shots_outside_box",
+        "home_passes_pct","away_passes_pct",
+        "home_passes_accurate","away_passes_accurate",
+        "home_corners","away_corners",
+        "home_yellow_cards","away_yellow_cards",
+        "home_red_cards","away_red_cards",
+        "home_fouls","away_fouls",
+        "home_offsides","away_offsides",
+        "home_saves","away_saves",
+    ]
+    from sqlalchemy import text  # late import to avoid hard dependency
+
+    # Discover which of the wanted columns actually exist in outcomes
+    with eng.connect() as c:
+        rows = c.execute(text("""
+            SELECT column_name
+            FROM information_schema.columns
+            WHERE table_name='outcomes' AND column_name = ANY(:cols)
+        """), {"cols": [w for w in wanted if w != "fixture_id"]}).fetchall()
+    existing = {"fixture_id"} | {r[0] for r in rows}
+    cols = [c for c in wanted if c in existing]
+    if len(cols) <= 1:
+        print("ℹ️ outcomes has none of the requested stat columns — skipping DB merge.")
+        return 0
+    cols_sql = ", ".join(cols)
+    # Pull only fixture_ids we actually have in train_set
+    fids = df["fixture_id"].dropna().astype("int64").unique().tolist()
+    if not fids:
+        print("ℹ️ no fixture_ids in train_set — skipping DB merge.")
+        return 0
+
+    merged = df.copy()
+    # Clean up any legacy duplicates that may already exist in train_set
+    merged = _coalesce_variants(merged, [
+        # core
+        "home_shots_on_goal","away_shots_on_goal",
+        "home_ball_possession","away_ball_possession",
+        "home_expected_goals","away_expected_goals",
+        # extended
+        "home_shots_total","away_shots_total",
+        "home_shots_off_goal","away_shots_off_goal",
+        "home_shots_inside_box","away_shots_inside_box",
+        "home_shots_outside_box","away_shots_outside_box",
+        "home_passes_pct","away_passes_pct",
+        "home_passes_accurate","away_passes_accurate",
+        "home_corners","away_corners",
+        "home_yellow_cards","away_yellow_cards",
+        "home_red_cards","away_red_cards",
+        "home_fouls","away_fouls",
+        "home_offsides","away_offsides",
+        "home_saves","away_saves",
+    ])
+    enriched = 0
+    # Chunk to keep IN () manageable
+    for i in range(0, len(fids), batch):
+        chunk = fids[i:i+batch]
+        with eng.connect() as c:
+            rows = pd.DataFrame(
+                c.execute(
+                    text(f"SELECT {cols_sql} FROM outcomes WHERE fixture_id = ANY(:ids)"),
+                    {"ids": chunk},
+                ).mappings().all()
+            )
+        if rows.empty:
+            continue
+        # Coerce numeric columns
+        for col in rows.columns:
+            if col == "fixture_id":
+                continue
+            rows[col] = pd.to_numeric(rows[col], errors="coerce")
+        # Merge
+        before_na = merged.filter(regex=r'^(home|away)_(shots|ball|expected|passes|corners|yellow|red|fouls|offsides)').isna().sum().sum() if any(
+            c.startswith(("home_","away_")) for c in merged.columns) else None
+        # Avoid overlapping 'result' column during merge (train_set already has it)
+        cols = [c for c in cols if c != "result"]
+        merged = merged.merge(rows, on="fixture_id", how="left", suffixes=("_train", "_db"))
+
+        # Coalesce potential duplicate suffix variants into a single canonical column
+        merged = _coalesce_variants(merged, [
+            # core
+            "home_shots_on_goal","away_shots_on_goal",
+            "home_ball_possession","away_ball_possession",
+            "home_expected_goals","away_expected_goals",
+            # extended
+            "home_shots_total","away_shots_total",
+            "home_shots_off_goal","away_shots_off_goal",
+            "home_shots_inside_box","away_shots_inside_box",
+            "home_shots_outside_box","away_shots_outside_box",
+            "home_passes_pct","away_passes_pct",
+            "home_passes_accurate","away_passes_accurate",
+            "home_corners","away_corners",
+            "home_yellow_cards","away_yellow_cards",
+            "home_red_cards","away_red_cards",
+            "home_fouls","away_fouls",
+            "home_offsides","away_offsides",
+            "home_saves","away_saves",
+        ])
+        enriched += len(rows)
+
+    # Save back if anything merged
+    if enriched:
+        merged.to_parquet(train_path, index=False)
+        print(f"✅ train_set enriched with DB stats for {enriched} rows → {train_path}")
+    else:
+        print("ℹ️ no matching outcomes rows merged into train_set.")
+    return int(enriched)
+
 # default leagues we use in this project (EPL, La Liga, Bundesliga)
 LEAGUES = [39, 140, 78]
 
@@ -946,15 +1123,16 @@ def main():
     _check_key()
     from argparse import ArgumentParser
     ap = ArgumentParser()
-    ap.add_argument("--season", type=int, required=True, help="Season year, e.g. 2025")
+    ap.add_argument("--season", type=int, default=datetime.now(_TZ.utc).year,
+                help="Primary season (defaults to current UTC year).")
     ap.add_argument("--leagues", type=str, default="39,140,78", help="Comma-separated league IDs to process")
     ap.add_argument("--sleep-between", type=float, default=0.3, help="Seconds to sleep between leagues")
     ap.add_argument("--harvest-postmatch", action="store_true",
                 help="Harvest FT fixtures (stats + closing odds) til postmatch_flat.parquet og exit")
     ap.add_argument("--pm-leagues", type=str, default="39,140,78",
                 help="Comma-separerede league IDs (default EPL, LaLiga, Bundesliga)")
-    ap.add_argument("--pm-season", type=int, default=datetime.utcnow().year,
-                help="Sæson for harvest")
+    ap.add_argument("--pm-season", type=int, default=datetime.now(_TZ.utc).year,
+                help="Season for post-match harvest (defaults to current UTC year).")
     ap.add_argument("--pm-days-back", type=int, default=1,
                 help="Dage bagud (default 1)")
     ap.add_argument("--pm-days-fwd", type=int, default=0,
@@ -972,7 +1150,15 @@ def main():
                 help="Fetch /fixtures/statistics for FINISHED fixtures (per-team) and merge into TRAIN set features.")
     ap.add_argument("--with-stats-train-limit", type=int, default=400,
                 help="Max finished fixtures to fetch stats for (0 = no cap).")
+    ap.add_argument("--merge-train-stats-from-db", action="store_true",
+                help="Merge outcomes stats from Postgres into data/features/train_set.parquet (home/away SOG, possession, xG, etc.) and exit.")
     args = ap.parse_args()
+    # Fast path: only merge DB stats into existing train_set and exit
+    if getattr(args, "merge_train_stats_from_db", False):
+        FEAT.mkdir(parents=True, exist_ok=True)
+        train_path = FEAT / "train_set.parquet"
+        _merge_train_stats_from_db(train_path)
+        return
     if args.harvest_postmatch:
         leagues = [int(x) for x in args.pm_leagues.replace(";", ",").split(",") if x.strip()]
         harvest_postmatch(
