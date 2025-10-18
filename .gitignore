@@ -2,3 +2,13 @@
 # macOS junk
 .DS_Store
 **/.DS_Store
+
+data/
+models/
+logs/
+__pycache__/
+*.pyc
+*.pkl
+*.parquet
+*.csv
+*.db
