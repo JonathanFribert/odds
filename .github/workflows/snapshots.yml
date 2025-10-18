@@ -1,6 +1,6 @@
 name: snapshots
 on:
-  schedule: [{ cron: "*/10 6-23 * * *" }]  # 08:00–23:59 DK (UTC+2 i sommer, +1 i vinter)
+  schedule: [{ cron: "*/10 6-21 * * *" }]  # ≈ 08:00–23:00 DK (UTC+2 sommertid), 07–22 DK (vintertid)
   workflow_dispatch:
 jobs:
   run:
@@ -51,3 +51,148 @@ jobs:
             pct = (covered/total*100.0) if total else 0.0
             print(f"pre-KO coverage today: {covered}/{total} ({pct:.1f}%)")
           PY
+
+      - name: Health — train_set sanity
+        run: |
+          python - <<'PY'
+          import os, pandas as pd
+          p = "data/features/train_set.parquet"
+          try:
+            df = pd.read_parquet(p)
+          except Exception as e:
+            print(f"ℹ️ {p} not present on runner (ok): {e}")
+            raise SystemExit(0)
+          have_result = "result" in df.columns
+          nonnull = int(df["result"].notna().sum()) if have_result else 0
+          keys = ["shots_on_goal","shots_total","passes","corners","yellow","red","fouls","offsides","saves","expected_goals","ball_possession"]
+          stat_cols = sorted([c for c in df.columns if any(k in c.lower() for k in keys)])
+          print(f"train_set rows={len(df)} result_nonnull={nonnull} stat_cols={len(stat_cols)}")
+          if not have_result or nonnull < 50:
+            print("⚠️ WARNING: low label coverage in train_set (result).")
+          if len(stat_cols) < 10:
+            print("⚠️ WARNING: few stat columns present.")
+          PY
+import numpy as np
+from pathlib import Path
+
+def _repair_train_set(train_path: Path):
+    """
+    Ensure train_set has a non-null 'result' label and no duplicate suffix columns.
+    - Backfills 'result' from Postgres outcomes for all fixture_ids in train_set.
+    - Falls back to reconstructing 'result' from goals_h/goals_a or goals_home/goals_away.
+    - Coalesces duplicate variants (_x/_y/_left/_right/_train/_db) and folds goalkeeper_saves -> saves.
+    """
+    try:
+        df = pd.read_parquet(train_path)
+    except Exception as e:
+        print(f"ℹ️ could not read {train_path}: {e}")
+        return
+
+    # Backfill labels from DB
+    eng = _pg_engine()
+    if eng is not None and "fixture_id" in df.columns and not df.empty:
+        fids = df["fixture_id"].dropna().astype("int64").unique().tolist()
+        if fids:
+            from sqlalchemy import text
+            with eng.connect() as c:
+                lab = pd.DataFrame(
+                    c.execute(text("SELECT fixture_id, result, goals_h, goals_a FROM outcomes WHERE fixture_id = ANY(:ids)"),
+                             {"ids": fids}).mappings().all()
+                )
+            if not lab.empty:
+                lab["fixture_id"] = pd.to_numeric(lab["fixture_id"], errors="coerce").astype("Int64")
+                df = df.merge(lab, on="fixture_id", how="left", suffixes=("", "_db"))
+
+    # Coalesce result from any variants into a single Series
+    def _ser(col):
+        return df[col] if (col in df.columns and not isinstance(df[col], pd.DataFrame)) else pd.Series(index=df.index, dtype="object")
+    res = _ser("result").copy() if "result" in df.columns else pd.Series(index=df.index, dtype="object")
+    for cand in ["result_db","result_x","result_y","result_left","result_right","result_train"]:
+        if cand in df.columns and not isinstance(df[cand], pd.DataFrame):
+            res = res.where(res.notna(), df[cand])
+    # Fallback from goals
+    gh = df.get("goals_h", df.get("goals_home", df.get("goals_h_db")))
+    ga = df.get("goals_a", df.get("goals_away", df.get("goals_a_db")))
+    if gh is not None and ga is not None and res.isna().any():
+        def _rf(h,a):
+            try:
+                h,a = int(h), int(a)
+            except Exception:
+                return np.nan
+            return "H" if h>a else ("A" if a>h else "D")
+        need = res.isna()
+        ghv = pd.to_numeric(gh, errors="coerce")
+        gav = pd.to_numeric(ga, errors="coerce")
+        res.loc[need] = [ _rf(h,a) for h,a in zip(ghv[need], gav[need]) ]
+    df["result"] = res
+
+    # Fold goalkeeper_saves -> saves
+    for side in ("home","away"):
+        gk = f"{side}_goalkeeper_saves"
+        sv = f"{side}_saves"
+        if gk in df.columns:
+            if sv in df.columns:
+                df[sv] = pd.to_numeric(df[sv], errors="coerce").combine_first(pd.to_numeric(df[gk], errors="coerce"))
+            else:
+                df.rename(columns={gk: sv}, inplace=True)
+
+    # Drop all suffix variants
+    suffixes = ("_x","_y","_left","_right","_train","_db")
+    dup_cols = [c for c in df.columns if c.endswith(suffixes)]
+    if dup_cols:
+        df.drop(columns=dup_cols, inplace=True, errors="ignore")
+
+    try:
+        df.to_parquet(train_path, index=False)
+    except Exception as e:
+        print(f"ℹ️ could not write repaired train_set: {e}")
+    else:
+        nn = int(df["result"].notna().sum()) if "result" in df.columns else 0
+        print(f"✅ repaired train_set: result non-null rows={nn}; cols={df.shape[1]}; rows={df.shape[0]}")
+
+def _merge_train_stats_from_db(train_path: Path, batch: int = 2000):
+    import pandas as pd
+    eng = _pg_engine()
+    if eng is None:
+        print("ℹ️ No Postgres engine available, skipping merge.")
+        return
+    try:
+        df = pd.read_parquet(train_path)
+    except Exception as e:
+        print(f"ℹ️ could not read {train_path}: {e}")
+        return
+    if df.empty or "fixture_id" not in df.columns:
+        print("ℹ️ Empty dataframe or no fixture_id column, skipping merge.")
+        return
+
+    fids = df["fixture_id"].dropna().astype("int64").unique().tolist()
+    if not fids:
+        print("ℹ️ No fixture_ids available, skipping merge.")
+        return
+
+    from sqlalchemy import text
+
+    all_stats = []
+    for i in range(0, len(fids), batch):
+        batch_ids = fids[i:i+batch]
+        with eng.connect() as c:
+            res = c.execute(text(
+                "SELECT fixture_id, team_side, shots_on_goal, shots_total, passes, corners, yellow, red, fouls, offsides, saves, expected_goals, ball_possession FROM match_stats WHERE fixture_id = ANY(:ids)"
+            ), {"ids": batch_ids})
+            batch_df = pd.DataFrame(res.mappings().all())
+            all_stats.append(batch_df)
+    if all_stats:
+        stats_df = pd.concat(all_stats, ignore_index=True)
+        # Pivot or merge as needed
+        # For simplicity, just merge on fixture_id and team_side
+        # Assuming train_set has columns to match team_side or similar
+        merged = df.merge(stats_df, on="fixture_id", how="left", suffixes=("", "_db"))
+    else:
+        merged = df
+
+    try:
+        merged.to_parquet(train_path, index=False)
+    except Exception as e:
+        print(f"ℹ️ could not write merged train_set: {e}")
+    else:
+        _repair_train_set(train_path)
