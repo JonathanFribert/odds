@@ -1024,7 +1024,14 @@ def fetch_fixtures_for_league(league_id: int, season: int) -> pd.DataFrame:
         })
     df = pd.DataFrame(rows)
     if df.empty:
-        print(f"   ⚠️ no fixtures parsed for league={league_id} season={season}")
+        print(f"   ⚠️ no fixtures parsed for league={league_id} season={season} — returning empty frame")
+        # Return an empty frame with expected schema so downstream code won't crash on missing columns
+        empty_cols = [
+            "fixture_id","league_id","league_name","season","date","status_short","status_long",
+            "home_id","home","away_id","away","goals_home","goals_away","result","sport_key",
+            "home_norm","away_norm",
+        ]
+        return pd.DataFrame(columns=empty_cols)
 
     if "fixture_id" in df.columns:
         df["fixture_id"] = pd.to_numeric(df["fixture_id"], errors="coerce").astype("Int64")
