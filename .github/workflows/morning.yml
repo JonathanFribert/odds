@@ -50,20 +50,26 @@ jobs:
             --days 2 \
             --include-ou25 --include-ah --write-parquet
 
-      - name: Build features (harvest + write train set)
+      - name: Build features — show CLI
+        run: |
+          python scripts/build_features.py --help || true
+
+      - name: Build features (harvest → merge+write)
         env:
           APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
         run: |
-          python scripts/build_features.py \
-            --harvest-postmatch --merge-train-stats-from-db --write-train-set
+          set -e
+          python scripts/build_features.py --harvest-postmatch
+          python scripts/build_features.py --merge-train-stats-from-db --write-train-set
 
       - name: "Health: train_set.parquet exists"
         run: |
+          ls -R data || true
           python - <<'PY'
           import os, pandas as pd
           p = "data/features/train_set.parquet"
           if not os.path.exists(p):
-              raise SystemExit(f"❌ {p} not found after build_features.py. Check flags.")
+              raise SystemExit(f"❌ {p} not found after build_features.py. Check flags shown in --help above.")
           df = pd.read_parquet(p)
           print("✅ train_set rows:", len(df))
           PY
