@@ -568,9 +568,13 @@ def _append_postgres_picks_v2(db_url: str, df: pd.DataFrame, pick_ts_utc: str) -
         if x is None:
             return None
         s = str(x).strip().lower()
+        # 1x2
         if s in ("h", "home", "1"): return "H"
         if s in ("d", "draw", "x"): return "D"
         if s in ("a", "away", "2"): return "A"
+        # OU (schema only allows H/D/A → encode OVER/UNDER)
+        if s in ("o", "over", "over2.5"): return "H"   # OVER → H
+        if s in ("u", "under", "under2.5"): return "A" # UNDER → A
         return None
 
     # Fallback: if recommended_* are missing, try to build them from EV columns
@@ -1153,6 +1157,55 @@ def main():
                 if _col not in up.columns:
                     up[_col] = pd.NA
 
+    # --- Merge latest API-Football OU(2.5) and AH(-0.5) snapshots into `up` by fixture_id ---
+    for col in ["ou25_over_odds","ou25_under_odds","ah_home_m0_5_odds","ah_away_p0_5_odds","odds_source"]:
+        if col not in up.columns:
+            up[col] = np.nan
+
+    try:
+        _ou = _load_apifootball_ou25()
+    except Exception as _e:
+        print(f"[warn] OU snapshot load error: {_e}")
+        _ou = pd.DataFrame()
+    try:
+        _ah = _load_apifootball_ah(target_line=-0.5)
+    except Exception as _e:
+        print(f"[warn] AH snapshot load error: {_e}")
+        _ah = pd.DataFrame()
+
+    # OU merge
+    if not _ou.empty and "fixture_id" in up.columns and "fixture_id" in _ou.columns:
+        _ou["fixture_id"] = pd.to_numeric(_ou["fixture_id"], errors="coerce").astype("Int64")
+        for col in ("ou25_over_odds","ou25_under_odds"):
+            if col in _ou.columns:
+                tmp = col + "__tmp"
+                old_nan = up[col].isna()
+                up = up.merge(_ou[["fixture_id", col]].rename(columns={col: tmp}), on="fixture_id", how="left")
+                if tmp in up.columns:
+                    fill = old_nan & up[tmp].notna()
+                    up.loc[fill, col] = up.loc[fill, tmp]
+                    up.loc[fill & up["odds_source"].isna(), "odds_source"] = "apifootball_ou"
+                    up.drop(columns=[tmp], inplace=True)
+
+    # AH merge
+    if not _ah.empty and "fixture_id" in up.columns and "fixture_id" in _ah.columns:
+        _ah["fixture_id"] = pd.to_numeric(_ah["fixture_id"], errors="coerce").astype("Int64")
+        for col in ("ah_home_m0_5_odds","ah_away_p0_5_odds"):
+            if col in _ah.columns:
+                tmp = col + "__tmp"
+                old_nan = up[col].isna()
+                up = up.merge(_ah[["fixture_id", col]].rename(columns={col: tmp}), on="fixture_id", how="left")
+                if tmp in up.columns:
+                    fill = old_nan & up[tmp].notna()
+                    up.loc[fill, col] = up.loc[fill, tmp]
+                    up.loc[fill & up["odds_source"].isna(), "odds_source"] = "apifootball_ah"
+                    up.drop(columns=[tmp], inplace=True)
+
+    # Debug counts after merge
+    _ou_n = int(up[["ou25_over_odds","ou25_under_odds"]].notna().any(axis=1).sum())
+    _ah_n = int(up[["ah_home_m0_5_odds","ah_away_p0_5_odds"]].notna().any(axis=1).sum())
+    print(f"[debug] after OU/AH merge: OU rows with odds={_ou_n}, AH rows with odds={_ah_n}")
+
     # === BEGIN: model scoring & pick selection ===
     # Attach model probabilities
     scored = _score_1x2(up)
@@ -1165,7 +1218,30 @@ def main():
     n_any_odds = any_odds.notna().any(axis=1).sum() if not any_odds.empty else 0
     print(f"[debug] rows with any_odds: {n_any_odds}, with full_p: {(scored[['p_hat_h','p_hat_d','p_hat_a']].notna().all(axis=1)).sum() if set(['p_hat_h','p_hat_d','p_hat_a']).issubset(scored.columns) else 0}")
 
+    # Debug: probability availability per market before selection
+    try:
+        n_1x2_proba = int((scored[["p_hat_h","p_hat_d","p_hat_a"]].notna().all(axis=1)).sum()) if {"p_hat_h","p_hat_d","p_hat_a"} <= set(scored.columns) else 0
+    except Exception:
+        n_1x2_proba = 0
+    try:
+        n_ou_proba = int((scored[["p_over_25","p_under_25"]].notna().all(axis=1)).sum()) if {"p_over_25","p_under_25"} <= set(scored.columns) else 0
+    except Exception:
+        n_ou_proba = 0
+    try:
+        n_ah_proba = int(scored["p_home_cover"].notna().sum()) if "p_home_cover" in scored.columns else 0
+    except Exception:
+        n_ah_proba = 0
+    print(f"[debug] proba availability — 1x2 full={n_1x2_proba}, ou25 full={n_ou_proba}, ahm05 avail={n_ah_proba}")
+
     picks = _select_picks(scored, args)
+
+    # Debug: selection outcome per market
+    if isinstance(picks, pd.DataFrame) and not picks.empty and "recommended_market" in picks.columns:
+        try:
+            cnt = picks["recommended_market"].value_counts().to_dict()
+            print(f"[debug] picks by market after filters: {cnt}")
+        except Exception:
+            pass
     if picks.empty:
         print("No picks selected with current filters.")
         return
