@@ -30,18 +30,23 @@ def _kelly_fraction(p: float, o: float) -> float:
     f = (b * p - q) / b
     return max(0.0, float(f))
 
-def _ev(p: float, o: float) -> float:
-    if not np.isfinite(p) or not np.isfinite(o):
-        return np.nan
+def _ev(p, o):
+    """Vectorized expected value function: supports scalars or arrays."""
+    p = pd.to_numeric(p, errors="coerce")
+    o = pd.to_numeric(o, errors="coerce")
     return p * o - 1.0
 
 # -------------------- Model scoring helpers --------------------
 def _load_model_safe(path: Path):
-    """Load a sklearn model saved with joblib, return (estimator, feature_names) or (None, None)."""
+    """Load a sklearn model saved with joblib, handling dict-wrapped models."""
     try:
-        est = joblib.load(path)
-        # sklearn estimators often expose feature_names_in_
-        feat = getattr(est, "feature_names_in_", None)
+        obj = joblib.load(path)
+        if isinstance(obj, dict) and "model" in obj:
+            est = obj["model"]
+            feat = obj.get("features") or obj.get("feature_names_in_")
+        else:
+            est = obj
+            feat = getattr(est, "feature_names_in_", None)
         if isinstance(feat, np.ndarray):
             feat = list(feat)
         return est, feat
@@ -1047,6 +1052,25 @@ def main():
         return
 
     up = pd.read_parquet(up_path)
+    # --- Normalize upcoming feature frame handle and basic visibility ---
+    up_var = None
+    for _name in ("up", "features", "upcoming"):
+        if _name in locals() and isinstance(locals()[_name], pd.DataFrame):
+            up_var = _name
+            break
+    if up_var is None:
+        _p = FEAT / "upcoming_set.parquet"
+        if _p.exists():
+            up = pd.read_parquet(_p)
+            up_var = "up"
+        else:
+            print("⚠️ No upcoming features found (data/features/upcoming_set.parquet missing). Exiting.")
+            return
+    up = locals()[up_var]
+    print(f"[debug] upcoming rows loaded: {len(up)}; cols={len(up.columns)}")
+    if "fixture_id" not in up.columns:
+        print("⚠️ upcoming frame missing 'fixture_id' — cannot merge odds; exiting.")
+        return
     # ---- Harden upcoming filter: ensure dates are UTC and rows are truly upcoming ----
     if "date" in up.columns:
         up["date"] = pd.to_datetime(up["date"], utc=True, errors="coerce")
@@ -1174,7 +1198,7 @@ def main():
         _ah = pd.DataFrame()
 
     # OU merge
-    if not _ou.empty and "fixture_id" in up.columns and "fixture_id" in _ou.columns:
+    if not _ou.empty and "fixture_id" in _ou.columns:
         _ou["fixture_id"] = pd.to_numeric(_ou["fixture_id"], errors="coerce").astype("Int64")
         for col in ("ou25_over_odds","ou25_under_odds"):
             if col in _ou.columns:
@@ -1188,7 +1212,7 @@ def main():
                     up.drop(columns=[tmp], inplace=True)
 
     # AH merge
-    if not _ah.empty and "fixture_id" in up.columns and "fixture_id" in _ah.columns:
+    if not _ah.empty and "fixture_id" in _ah.columns:
         _ah["fixture_id"] = pd.to_numeric(_ah["fixture_id"], errors="coerce").astype("Int64")
         for col in ("ah_home_m0_5_odds","ah_away_p0_5_odds"):
             if col in _ah.columns:
@@ -1296,3 +1320,410 @@ def main():
 
     # Return to avoid running any legacy code paths below (if any)
     return
+
+# -------------------- Minimal CLI main (safe fallback) --------------------
+try:
+    _HAS_MAIN = callable(globals().get("main"))
+except Exception:
+    _HAS_MAIN = False
+
+if not _HAS_MAIN:
+    from argparse import ArgumentParser
+
+    def main():
+        ap = ArgumentParser(description="Predict upcoming picks and (optionally) log to Postgres")
+        ap.add_argument("--days", type=int, default=2)
+        ap.add_argument("--offline-only", action="store_true")
+        ap.add_argument("--no-oddsapi", action="store_true")
+        ap.add_argument("--markets", type=str, default="1x2,ou25,ahm05")
+        ap.add_argument("--min-ev", type=float, default=-9999)
+        ap.add_argument("--top-k", type=int, default=500)
+        ap.add_argument("--bankroll", type=float, default=None)
+        ap.add_argument("--stake-kelly-frac", type=float, default=1.0)
+        ap.add_argument("--log-bets", action="store_true")
+        ap.add_argument("--postgres-url", type=str, default=os.getenv("POSTGRES_URL", ""))
+        args = ap.parse_args()
+
+        print("[predict] start")
+        p_up = FEAT / "upcoming_set.parquet"
+        if not p_up.exists():
+            print(f"⚠️ missing {p_up} — cannot predict.")
+            return
+        up = pd.read_parquet(p_up)
+        print(f"[debug] upcoming rows loaded: {len(up)}; cols={len(up.columns)}")
+        if "fixture_id" not in up.columns:
+            print("⚠️ upcoming missing 'fixture_id' — cannot merge odds.")
+            return
+
+        # --- Ensure OU/AH & 1x2 odds columns exist ---
+        for col in ["ou25_over_odds","ou25_under_odds","ah_home_m0_5_odds","ah_away_p0_5_odds","odds_source","odds_h","odds_d","odds_a"]:
+            if col not in up.columns:
+                up[col] = np.nan
+
+        # --- Merge latest API-Football OU(2.5) and AH(-0.5) snapshots into `up` by fixture_id ---
+        try:
+            _ou = _load_apifootball_ou25()
+        except Exception as _e:
+            print(f"[warn] OU snapshot load error: {_e}")
+            _ou = pd.DataFrame()
+        try:
+            _ah = _load_apifootball_ah(target_line=-0.5)
+        except Exception as _e:
+            print(f"[warn] AH snapshot load error: {_e}")
+            _ah = pd.DataFrame()
+
+        # OU merge
+        if not _ou.empty and "fixture_id" in up.columns and "fixture_id" in _ou.columns:
+            _ou["fixture_id"] = pd.to_numeric(_ou["fixture_id"], errors="coerce").astype("Int64")
+            for col in ("ou25_over_odds","ou25_under_odds"):
+                if col in _ou.columns:
+                    tmp = col + "__tmp"
+                    old_nan = up[col].isna()
+                    up = up.merge(_ou[["fixture_id", col]].rename(columns={col: tmp}), on="fixture_id", how="left")
+                    if tmp in up.columns:
+                        fill = old_nan & up[tmp].notna()
+                        up.loc[fill, col] = up.loc[fill, tmp]
+                        up.loc[fill & up["odds_source"].isna(), "odds_source"] = "apifootball_ou"
+                        up.drop(columns=[tmp], inplace=True)
+
+        # AH merge
+        if not _ah.empty and "fixture_id" in up.columns and "fixture_id" in _ah.columns:
+            _ah["fixture_id"] = pd.to_numeric(_ah["fixture_id"], errors="coerce").astype("Int64")
+            for col in ("ah_home_m0_5_odds","ah_away_p0_5_odds"):
+                if col in _ah.columns:
+                    tmp = col + "__tmp"
+                    old_nan = up[col].isna()
+                    up = up.merge(_ah[["fixture_id", col]].rename(columns={col: tmp}), on="fixture_id", how="left")
+                    if tmp in up.columns:
+                        fill = old_nan & up[tmp].notna()
+                        up.loc[fill, col] = up.loc[fill, tmp]
+                        up.loc[fill & up["odds_source"].isna(), "odds_source"] = "apifootball_ah"
+                        up.drop(columns=[tmp], inplace=True)
+
+        _ou_n = int(up[["ou25_over_odds","ou25_under_odds"]].notna().any(axis=1).sum())
+        _ah_n = int(up[["ah_home_m0_5_odds","ah_away_p0_5_odds"]].notna().any(axis=1).sum())
+        print(f"[debug] after OU/AH merge: OU rows with odds={_ou_n}, AH rows with odds={_ah_n}")
+
+        # --- Score with all three models ---
+        scored = _score_1x2(up)
+        scored = _score_ou25(scored)
+        scored = _score_ahm05(scored)
+
+        # Debug: proba availability per market before selection
+        try:
+            n_1x2_proba = int((scored[["p_hat_h","p_hat_d","p_hat_a"]].notna().all(axis=1)).sum()) if {"p_hat_h","p_hat_d","p_hat_a"} <= set(scored.columns) else 0
+        except Exception:
+            n_1x2_proba = 0
+        try:
+            n_ou_proba = int((scored[["p_over_25","p_under_25"]].notna().all(axis=1)).sum()) if {"p_over_25","p_under_25"} <= set(scored.columns) else 0
+        except Exception:
+            n_ou_proba = 0
+        try:
+            n_ah_proba = int(scored["p_home_cover"].notna().sum()) if "p_home_cover" in scored.columns else 0
+        except Exception:
+            n_ah_proba = 0
+        print(f"[debug] proba availability — 1x2 full={n_1x2_proba}, ou25 full={n_ou_proba}, ahm05 avail={n_ah_proba}")
+
+        # --- Select picks with permissive filters ---
+        class _Args:
+            pass
+        sargs = _Args()
+        sargs.markets = args.markets
+        sargs.min_ev = args.min_ev
+        sargs.min_kelly = None
+        sargs.top_k = args.top_k
+        sargs.bankroll = args.bankroll
+        sargs.stake_kelly_frac = args.stake_kelly_frac
+
+        picks = _select_picks(scored, sargs)
+        if isinstance(picks, pd.DataFrame) and not picks.empty and "recommended_market" in picks.columns:
+            try:
+                cnt = picks["recommended_market"].value_counts().to_dict()
+                print(f"[debug] picks by market after filters: {cnt}")
+            except Exception:
+                pass
+        else:
+            print("[debug] no picks selected (empty frame after filters or missing probs/odds)")
+
+        # --- Log to Postgres if requested ---
+        if args.log_bets and isinstance(picks, pd.DataFrame) and len(picks) > 0:
+            ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            ok = _append_postgres_picks(args.postgres_url, picks, ts)
+            print(f"[pg] wrote={ok} rows={len(picks)}")
+
+    if __name__ == "__main__":
+        print("✅ predict_upcoming.py loaded successfully")
+
+        # Test, at vi kan loade models og evt. skrive til DB
+        print("🔍 Checking models and database connection...")
+        from pathlib import Path
+
+        # Bare en hurtig sanity check
+        model_dir = Path("models")
+        if model_dir.exists():
+            print("📂 Models found in:", model_dir)
+            print("   ", list(model_dir.glob("*.pkl")))
+        else:
+            print("⚠️ No model directory found.")
+
+        db_url = os.getenv("POSTGRES_URL")
+        if db_url:
+            print("🧠 POSTGRES_URL detected")
+        else:
+            print("⚠️ No POSTGRES_URL in env")
+
+        print("✅ Script ran successfully (placeholder).")
+# -------------------- Fallback CLI entrypoint --------------------
+try:
+    _HAS_MAIN = callable(globals().get("main"))
+except Exception:
+    _HAS_MAIN = False
+
+if not _HAS_MAIN:
+    from argparse import ArgumentParser
+
+    def main():
+        ap = ArgumentParser(description="Predict upcoming picks and optionally log to Postgres")
+        ap.add_argument("--days", type=int, default=2)
+        ap.add_argument("--offline-only", action="store_true")
+        ap.add_argument("--no-oddsapi", action="store_true")
+        ap.add_argument("--markets", type=str, default="1x2,ou25,ahm05")
+        ap.add_argument("--min-ev", type=float, default=-9999)
+        ap.add_argument("--top-k", type=int, default=500)
+        ap.add_argument("--bankroll", type=float, default=None)
+        ap.add_argument("--stake-kelly-frac", type=float, default=1.0)
+        ap.add_argument("--log-bets", action="store_true")
+        ap.add_argument("--postgres-url", type=str, default=os.getenv("POSTGRES_URL", ""))
+        args = ap.parse_args()
+
+        print("[predict] start")
+        p_up = FEAT / "upcoming_set.parquet"
+        if not p_up.exists():
+            print(f"⚠️ missing {p_up} — cannot predict.")
+            return
+        up = pd.read_parquet(p_up)
+        print(f"[debug] upcoming rows loaded: {len(up)}; cols={len(up.columns)}")
+        if "fixture_id" not in up.columns:
+            print("⚠️ upcoming missing 'fixture_id' — cannot merge odds.")
+            return
+
+        # Ensure odds columns exist
+        for col in ["odds_h","odds_d","odds_a","ou25_over_odds","ou25_under_odds","ah_home_m0_5_odds","ah_away_p0_5_odds","odds_source"]:
+            if col not in up.columns:
+                up[col] = np.nan
+
+        # Merge latest API-Football OU/AH snapshots
+        try:
+            _ou = _load_apifootball_ou25()
+        except Exception as _e:
+            print(f"[warn] OU snapshot load error: {_e}")
+            _ou = pd.DataFrame()
+        try:
+            _ah = _load_apifootball_ah(target_line=-0.5)
+        except Exception as _e:
+            print(f"[warn] AH snapshot load error: {_e}")
+            _ah = pd.DataFrame()
+
+        if not _ou.empty and "fixture_id" in _ou.columns:
+            _ou["fixture_id"] = pd.to_numeric(_ou["fixture_id"], errors="coerce").astype("Int64")
+            for col in ("ou25_over_odds","ou25_under_odds"):
+                if col in _ou.columns:
+                    tmp = col + "__tmp"
+                    old_nan = up[col].isna()
+                    up = up.merge(_ou[["fixture_id", col]].rename(columns={col: tmp}), on="fixture_id", how="left")
+                    if tmp in up.columns:
+                        fill = old_nan & up[tmp].notna()
+                        up.loc[fill, col] = up.loc[fill, tmp]
+                        up.loc[fill & up["odds_source"].isna(), "odds_source"] = "apifootball_ou"
+                        up.drop(columns=[tmp], inplace=True)
+
+        if not _ah.empty and "fixture_id" in _ah.columns:
+            _ah["fixture_id"] = pd.to_numeric(_ah["fixture_id"], errors="coerce").astype("Int64")
+            for col in ("ah_home_m0_5_odds","ah_away_p0_5_odds"):
+                if col in _ah.columns:
+                    tmp = col + "__tmp"
+                    old_nan = up[col].isna()
+                    up = up.merge(_ah[["fixture_id", col]].rename(columns={col: tmp}), on="fixture_id", how="left")
+                    if tmp in up.columns:
+                        fill = old_nan & up[tmp].notna()
+                        up.loc[fill, col] = up.loc[fill, tmp]
+                        up.loc[fill & up["odds_source"].isna(), "odds_source"] = "apifootball_ah"
+                        up.drop(columns=[tmp], inplace=True)
+
+        _ou_n = int(up[["ou25_over_odds","ou25_under_odds"]].notna().any(axis=1).sum())
+        _ah_n = int(up[["ah_home_m0_5_odds","ah_away_p0_5_odds"]].notna().any(axis=1).sum())
+        print(f"[debug] after OU/AH merge: OU rows with odds={_ou_n}, AH rows with odds={_ah_n}")
+
+        # Score all models
+        scored = _score_1x2(up)
+        scored = _score_ou25(scored)
+        scored = _score_ahm05(scored)
+
+        # Debug: probability availability
+        try:
+            n_1x2_proba = int((scored[["p_hat_h","p_hat_d","p_hat_a"]].notna().all(axis=1)).sum()) if {"p_hat_h","p_hat_d","p_hat_a"} <= set(scored.columns) else 0
+        except Exception:
+            n_1x2_proba = 0
+        try:
+            n_ou_proba = int((scored[["p_over_25","p_under_25"]].notna().all(axis=1)).sum()) if {"p_over_25","p_under_25"} <= set(scored.columns) else 0
+        except Exception:
+            n_ou_proba = 0
+        try:
+            n_ah_proba = int(scored["p_home_cover"].notna().sum()) if "p_home_cover" in scored.columns else 0
+        except Exception:
+            n_ah_proba = 0
+        print(f"[debug] proba availability — 1x2 full={n_1x2_proba}, ou25 full={n_ou_proba}, ahm05 avail={n_ah_proba}")
+
+        class _Args: pass
+        sargs = _Args()
+        sargs.markets = args.markets
+        sargs.min_ev = args.min_ev
+        sargs.min_kelly = None
+        sargs.top_k = args.top_k
+        sargs.bankroll = args.bankroll
+        sargs.stake_kelly_frac = args.stake_kelly_frac
+
+        picks = _select_picks(scored, sargs)
+        if isinstance(picks, pd.DataFrame) and not picks.empty and "recommended_market" in picks.columns:
+            try:
+                cnt = picks["recommended_market"].value_counts().to_dict()
+                print(f"[debug] picks by market after filters: {cnt}")
+            except Exception:
+                pass
+        else:
+            print("[debug] no picks selected (empty frame after filters or missing probs/odds)")
+
+        # Postgres logging
+        if args.log_bets and isinstance(picks, pd.DataFrame) and len(picks) > 0:
+            ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            ok = _append_postgres_picks(args.postgres_url, picks, ts)
+            print(f"[pg] wrote={ok} rows={len(picks)}")
+
+    if __name__ == "__main__":
+        main()
+
+# -------------------- CLI entrypoint (adds output when run directly) --------------------
+
+if __name__ == "__main__":
+    ap = ArgumentParser(description="Predict upcoming picks and optionally log to Postgres")
+    ap.add_argument("--days", type=int, default=2)
+    ap.add_argument("--offline-only", action="store_true")
+    ap.add_argument("--no-oddsapi", action="store_true")
+    ap.add_argument("--markets", type=str, default="1x2,ou25,ahm05")
+    ap.add_argument("--min-ev", type=float, default=-9999)
+    ap.add_argument("--top-k", type=int, default=500)
+    ap.add_argument("--bankroll", type=float, default=None)
+    ap.add_argument("--stake-kelly-frac", type=float, default=1.0)
+    ap.add_argument("--log-bets", action="store_true")
+    ap.add_argument("--postgres-url", type=str, default=os.getenv("POSTGRES_URL", ""))
+    args = ap.parse_args()
+
+    print("[predict] start")
+    # 1) Load upcoming features
+    p_up = FEAT / "upcoming_set.parquet"
+    if not p_up.exists():
+        print(f"⚠️ missing {p_up} — cannot predict.")
+        raise SystemExit(0)
+    up = pd.read_parquet(p_up)
+    print(f"[debug] upcoming rows loaded: {len(up)}; cols={len(up.columns)}")
+    if "fixture_id" not in up.columns:
+        print("⚠️ upcoming missing 'fixture_id' — cannot merge odds.")
+        raise SystemExit(0)
+
+    # Ensure odds columns exist
+    for col in [
+        "odds_h","odds_d","odds_a",
+        "ou25_over_odds","ou25_under_odds",
+        "ah_home_m0_5_odds","ah_away_p0_5_odds",
+        "odds_source"
+    ]:
+        if col not in up.columns:
+            up[col] = np.nan
+
+    # 2) Merge latest API-Football OU/AH snapshots
+    try:
+        _ou = _load_apifootball_ou25()
+    except Exception as _e:
+        print(f"[warn] OU snapshot load error: {_e}")
+        _ou = pd.DataFrame()
+    try:
+        _ah = _load_apifootball_ah(target_line=-0.5)
+    except Exception as _e:
+        print(f"[warn] AH snapshot load error: {_e}")
+        _ah = pd.DataFrame()
+
+    if not _ou.empty and "fixture_id" in _ou.columns:
+        _ou["fixture_id"] = pd.to_numeric(_ou["fixture_id"], errors="coerce").astype("Int64")
+        for col in ("ou25_over_odds","ou25_under_odds"):
+            if col in _ou.columns:
+                tmp = col + "__tmp"
+                old_nan = up[col].isna()
+                up = up.merge(_ou[["fixture_id", col]].rename(columns={col: tmp}), on="fixture_id", how="left")
+                if tmp in up.columns:
+                    fill = old_nan & up[tmp].notna()
+                    up.loc[fill, col] = up.loc[fill, tmp]
+                    up.loc[fill & up["odds_source"].isna(), "odds_source"] = "apifootball_ou"
+                    up.drop(columns=[tmp], inplace=True)
+
+    if not _ah.empty and "fixture_id" in _ah.columns:
+        _ah["fixture_id"] = pd.to_numeric(_ah["fixture_id"], errors="coerce").astype("Int64")
+        for col in ("ah_home_m0_5_odds","ah_away_p0_5_odds"):
+            if col in _ah.columns:
+                tmp = col + "__tmp"
+                old_nan = up[col].isna()
+                up = up.merge(_ah[["fixture_id", col]].rename(columns={col: tmp}), on="fixture_id", how="left")
+                if tmp in up.columns:
+                    fill = old_nan & up[tmp].notna()
+                    up.loc[fill, col] = up.loc[fill, tmp]
+                    up.loc[fill & up["odds_source"].isna(), "odds_source"] = "apifootball_ah"
+                    up.drop(columns=[tmp], inplace=True)
+
+    _ou_n = int(up[["ou25_over_odds","ou25_under_odds"]].notna().any(axis=1).sum())
+    _ah_n = int(up[["ah_home_m0_5_odds","ah_away_p0_5_odds"]].notna().any(axis=1).sum())
+    print(f"[debug] after OU/AH merge: OU rows with odds={_ou_n}, AH rows with odds={_ah_n}")
+
+    # 3) Score with all three models
+    scored = _score_1x2(up)
+    scored = _score_ou25(scored)
+    scored = _score_ahm05(scored)
+
+    # Debug: probability availability per market before selection
+    try:
+        n_1x2_proba = int((scored[["p_hat_h","p_hat_d","p_hat_a"]].notna().all(axis=1)).sum()) if {"p_hat_h","p_hat_d","p_hat_a"} <= set(scored.columns) else 0
+    except Exception:
+        n_1x2_proba = 0
+    try:
+        n_ou_proba = int((scored[["p_over_25","p_under_25"]].notna().all(axis=1)).sum()) if {"p_over_25","p_under_25"} <= set(scored.columns) else 0
+    except Exception:
+        n_ou_proba = 0
+    try:
+        n_ah_proba = int(scored["p_home_cover"].notna().sum()) if "p_home_cover" in scored.columns else 0
+    except Exception:
+        n_ah_proba = 0
+    print(f"[debug] proba availability — 1x2 full={n_1x2_proba}, ou25 full={n_ou_proba}, ahm05 avail={n_ah_proba}")
+
+    # 4) Select picks with permissive filters for visibility
+    class _Args: pass
+    sargs = _Args()
+    sargs.markets = args.markets
+    sargs.min_ev = args.min_ev
+    sargs.min_kelly = None
+    sargs.top_k = args.top_k
+    sargs.bankroll = args.bankroll
+    sargs.stake_kelly_frac = args.stake_kelly_frac
+
+    picks = _select_picks(scored, sargs)
+    if isinstance(picks, pd.DataFrame) and not picks.empty and "recommended_market" in picks.columns:
+        try:
+            cnt = picks["recommended_market"].value_counts().to_dict()
+            print(f"[debug] picks by market after filters: {cnt}")
+        except Exception:
+            pass
+    else:
+        print("[debug] no picks selected (empty frame after filters or missing probs/odds)")
+
+    # 5) Optional: log to Postgres
+    if args.log_bets and isinstance(picks, pd.DataFrame) and len(picks) > 0:
+        ts = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+        ok = _append_postgres_picks(args.postgres_url, picks, ts)
+        print(f"[pg] wrote={ok} rows={len(picks)}")

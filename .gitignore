@@ -12,3 +12,5 @@ __pycache__/
 *.parquet
 *.csv
 *.db
+.venv/
+*.log

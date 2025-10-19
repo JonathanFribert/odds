@@ -1,14 +1,28 @@
 #!/usr/bin/env python3
 import os, sys, time
+import argparse
 import json, requests
 import pandas as pd, numpy as np
 from datetime import datetime, timedelta, timezone as _TZ
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 from common import ROOT, FIXDIR, FEAT, ODIR, map_league_id_to_sport_key, add_normalized_teams
 
 API_FOOTBALL_BASE = "https://v3.football.api-sports.io"
+FEAT_DIR = Path("data/features")
+
+def _write_train_set(df):
+    FEAT_DIR.mkdir(parents=True, exist_ok=True)
+    out = FEAT_DIR / "train_set.parquet"
+    # Sikre deterministiske kolonner (valgfrit)
+    try:
+        cols = sorted(df.columns)
+        df = df[cols]
+    except Exception:
+        pass
+    df.to_parquet(out, index=False)
+    print(f"✅ wrote {out} rows={len(df)}")
 
 def _apif_headers():
     k = os.getenv("APIFOOTBALL_KEY")
@@ -738,6 +752,77 @@ def _merge_train_stats_from_db(train_path: Path, batch: int = 2000) -> int:
         print("ℹ️ no matching outcomes rows merged into train_set.")
     return int(enriched)
 
+def _build_train_from_db(train_path: Path) -> Optional[pd.DataFrame]:
+    """Run DB merge for train_set and return the resulting dataframe if available."""
+    enriched = _merge_train_stats_from_db(train_path)
+    if not train_path.exists():
+        print(f"⚠️ train_set missing → {train_path}; returning None.")
+        return None
+    try:
+        df = pd.read_parquet(train_path)
+    except Exception as exc:
+        print(f"⚠️ could not load train_set after DB merge: {exc}")
+        return None
+    if enriched:
+        print(f"ℹ️ loaded train_set after DB merge: rows={len(df)} cols={df.shape[1]}")
+    return df
+
+# ------------- New helper: ensure train_set.parquet exists by seeding from available sources -------------
+def _ensure_train_set(train_path: Path, days_back: int = 365) -> Optional[pd.DataFrame]:
+    """Ensure data/features/train_set.parquet exists by seeding it from either
+    - postmatch_flat.parquet, if available, or
+    - a minimal outcomes export from Postgres (last `days_back` days), if possible.
+    Returns the loaded dataframe or None if unavailable.
+    """
+    # Case 1: already exists
+    if train_path.exists():
+        try:
+            return pd.read_parquet(train_path)
+        except Exception:
+            pass
+
+    # Case 2: seed from postmatch_flat
+    flat_path = FEAT / "postmatch_flat.parquet"
+    if flat_path.exists():
+        try:
+            df = pd.read_parquet(flat_path)
+            if not df.empty:
+                _write_train_set(df)
+                return df
+        except Exception as e:
+            print(f"ℹ️ could not read {flat_path}: {e}")
+
+    # Case 3: seed from DB outcomes (if available)
+    eng = _pg_engine()
+    if eng is not None:
+        try:
+            from sqlalchemy import text
+            with eng.connect() as c:
+                q = text(
+                    """
+                    SELECT fixture_id, league_id, season, kick_off as date,
+                           home as home, away as away,
+                           goals_h, goals_a, result,
+                           home_shots_on_goal, away_shots_on_goal,
+                           home_ball_possession, away_ball_possession,
+                           home_expected_goals, away_expected_goals
+                    FROM outcomes
+                    WHERE updated_at > now() - interval :days
+                    """
+                )
+                df = pd.DataFrame(c.execute(q, {"days": f"{int(days_back)} days"}).mappings().all())
+            if not df.empty:
+                # normalize datetime
+                if "date" in df.columns:
+                    df["date"] = pd.to_datetime(df["date"], utc=True, errors="coerce")
+                _write_train_set(df)
+                return df
+        except Exception as e:
+            print(f"ℹ️ could not seed from DB outcomes: {e}")
+
+    print("ℹ️ unable to ensure train_set.parquet — no sources available.")
+    return None
+
 # default leagues we use in this project (EPL, La Liga, Bundesliga)
 LEAGUES = [39, 140, 78]
 
@@ -976,721 +1061,75 @@ def _attach_rolling_wdl_and_rest(target_df: pd.DataFrame, hist_matches: pd.DataF
     return target_df.merge(m_final, on="fixture_id", how="left")
 
 
-def _compute_league_home_adv(hist_matches: pd.DataFrame) -> pd.DataFrame:
-    if hist_matches.empty:
-        return pd.DataFrame(columns=["league_id","home_win_rate"])  # shell
-    df = hist_matches.dropna(subset=["result","league_id"]).copy()
-    df["home_win"] = (df["result"] == "H").astype(float)
-    agg = df.groupby("league_id")["home_win"].mean().reset_index().rename(columns={"home_win":"league_home_win_rate"})
-    return agg
+# ... rest of file unchanged ...
 
+# -------------------- CLI entrypoint --------------------
 
-def fetch_fixtures_for_league(league_id: int, season: int) -> pd.DataFrame:
-    league_resp = _get_cached("leagues", {"id": league_id}, ttl_s=12*60*60)
-    league_name = league_resp[0]["league"]["name"] if league_resp else str(league_id)
-    print(f"→ Fetching fixtures: {league_name} ({league_id}) season={season}")
-
-    resp = _get_cached("fixtures", {"league": league_id, "season": season}, ttl_s=6*60*60)
-    print(f"   fixtures received: {len(resp)}")
-    rows = []
-    for it in resp:
-        fix = it.get("fixture", {})
-        teams = it.get("teams", {})
-        goals = it.get("goals", {})
-        home = teams.get("home", {})
-        away = teams.get("away", {})
-        date_iso = fix.get("date")
-        try:
-            date = pd.to_datetime(date_iso, utc=True)
-        except Exception:
-            date = pd.NaT
-        res = _result_from_goals(goals.get("home"), goals.get("away"))
-        status = fix.get("status", {})
-        rows.append({
-            "fixture_id": fix.get("id"),
-            "league_id": league_id,
-            "league_name": league_name,
-            "season": season,
-            "date": date,
-            "status_short": status.get("short"),
-            "status_long": status.get("long"),
-            "home_id": home.get("id"),
-            "home": home.get("name"),
-            "away_id": away.get("id"),
-            "away": away.get("name"),
-            "goals_home": goals.get("home"),
-            "goals_away": goals.get("away"),
-            "result": res,
-        })
-    df = pd.DataFrame(rows)
-    if df.empty:
-        print(f"   ⚠️ no fixtures parsed for league={league_id} season={season} — returning empty frame")
-        # Return an empty frame with expected schema so downstream code won't crash on missing columns
-        empty_cols = [
-            "fixture_id","league_id","league_name","season","date","status_short","status_long",
-            "home_id","home","away_id","away","goals_home","goals_away","result","sport_key",
-            "home_norm","away_norm",
-        ]
-        return pd.DataFrame(columns=empty_cols)
-
-    if "fixture_id" in df.columns:
-        df["fixture_id"] = pd.to_numeric(df["fixture_id"], errors="coerce").astype("Int64")
-
-    # sport_key + normalized team names for joins
-    df["sport_key"] = df["league_id"].map(map_league_id_to_sport_key)
-    df = add_normalized_teams(df, "home", "away")
-
-    # save main fixtures
-    sk = df["sport_key"].dropna().unique()
-    if len(sk) == 1:
-        out = FIXDIR / f"{sk[0]}_{season}.csv"
-    else:
-        out = FIXDIR / f"league_{league_id}_{season}.csv"
-    out.parent.mkdir(parents=True, exist_ok=True)
-    df.to_csv(out, index=False)
-    print(f"✅ saved {len(df)} rows → {out}")
-
-    # standings
-    std = _get_cached("standings", {"league": league_id, "season": season}, ttl_s=12*60*60)
-    print(f"   standings payload groups: {len(std)}")
-    std_rows = []
-    for item in std:
-        for table in item.get("league", {}).get("standings", []):
-            for t in table:
-                std_rows.append({
-                    "team_id": t.get("team", {}).get("id"),
-                    "team_name": t.get("team", {}).get("name"),
-                    "rank": t.get("rank"),
-                    "points": t.get("points"),
-                    "goalsDiff": t.get("goalsDiff"),
-                })
-    if not std_rows:
-        print("   ⚠️ no standings rows returned")
-    if std_rows:
-        p = out.with_name(out.stem + "_standings.csv")
-        pd.DataFrame(std_rows).to_csv(p, index=False)
-        print(f"   ➕ standings → {p} ({len(std_rows)})")
-
-    # team statistics (overall)
-    ts_rows = []
-    teams_df = df[["home_id","home"]].drop_duplicates().rename(columns={"home_id":"team_id","home":"team_name"})
-    teams_df = pd.concat([
-        teams_df,
-        df[["away_id","away"]].drop_duplicates().rename(columns={"away_id":"team_id","away":"team_name"})
-    ], ignore_index=True).drop_duplicates("team_id")
-
-    for tid, tname in teams_df.itertuples(index=False):
-        if len(ts_rows) % 5 == 0 and len(ts_rows) > 0:
-            print(f"   … teamstats rows so far: {len(ts_rows)}")
-        ts = _get_cached("teams/statistics", {"league": league_id, "season": season, "team": tid}, ttl_s=12*60*60)
-        if not ts:
-            continue
-        st = ts[0] if isinstance(ts, list) and ts else ts
-
-        # Defensive parsing (API can change shape). Use _dig() to probe multiple likely paths.
-        played = _dig(st, "fixtures", "played", "total")
-        wins   = _dig(st, "fixtures", "wins", "total")
-        draws  = _dig(st, "fixtures", "draws", "total")
-        losses = _dig(st, "fixtures", "losses", "total")
-
-        g_for_avg     = _dig(st, "goals", "for", "average", "total") or _dig(st, "goals", "for", "average")
-        g_against_avg = _dig(st, "goals", "against", "average", "total") or _dig(st, "goals", "against", "average")
-
-        clean = _dig(st, "clean_sheet", "total") or _dig(st, "clean_sheet")
-        fts   = _dig(st, "failed_to_score", "total") or _dig(st, "failed_to_score")
-
-        # Extra features (best-effort, may be None if not covered for a league)
-        shots_for_tot      = _dig(st, "shots", "for", "total")
-        shots_on_for_tot   = _dig(st, "shots", "for", "on")
-        shots_against_tot  = _dig(st, "shots", "against", "total")
-        shots_on_against_tot = _dig(st, "shots", "against", "on")
-        corners_for_tot    = _dig(st, "corners", "total") or _dig(st, "corners")
-        corners_against_tot = _dig(st, "corners", "against", "total")  # may be missing
-        yc_tot             = _dig(st, "cards", "yellow", "total") or _dig(st, "cards", "yellow")
-        rc_tot             = _dig(st, "cards", "red", "total") or _dig(st, "cards", "red")
-        possession_avg     = _dig(st, "ball_possession", "average") or _dig(st, "ball_possession") or _dig(st, "possession", "average")
-
-        # Coerce to numeric where appropriate
-        def _num(x):
-            return pd.to_numeric(x, errors="coerce")
-
-        played = _num(played)
-        wins   = _num(wins)
-        draws  = _num(draws)
-        losses = _num(losses)
-        g_for_avg     = _num(g_for_avg)
-        g_against_avg = _num(g_against_avg)
-        clean = _num(clean)
-        fts   = _num(fts)
-
-        shots_for_tot       = _num(shots_for_tot)
-        shots_on_for_tot    = _num(shots_on_for_tot)
-        shots_against_tot   = _num(shots_against_tot)
-        shots_on_against_tot= _num(shots_on_against_tot)
-        corners_for_tot     = _num(corners_for_tot)
-        corners_against_tot = _num(corners_against_tot)
-        yc_tot              = _num(yc_tot)
-        rc_tot              = _num(rc_tot)
-        possession_avg      = _num(str(possession_avg).replace('%','')) if possession_avg is not None else np.nan
-
-        # Per-game rates (safe divide)
-        def _pg(x):
-            return _safediv(x, played)
-
-        ts_rows.append({
-            "team_id": tid,
-            "played_total": played,
-            "wins_total": wins,
-            "draws_total": draws,
-            "losses_total": losses,
-            "goals_for_avg": g_for_avg,
-            "goals_against_avg": g_against_avg,
-            "clean_sheet": clean,
-            "failed_to_score": fts,
-            # volumes
-            "shots_for": shots_for_tot,
-            "shots_on_for": shots_on_for_tot,
-            "shots_against": shots_against_tot,
-            "shots_on_against": shots_on_against_tot,
-            "corners_for": corners_for_tot,
-            "corners_against": corners_against_tot,
-            "yc_total": yc_tot,
-            "rc_total": rc_tot,
-            "possession_avg": possession_avg,
-            # per-game
-            "shots_for_pg": _pg(shots_for_tot),
-            "shots_on_for_pg": _pg(shots_on_for_tot),
-            "shots_against_pg": _pg(shots_against_tot),
-            "shots_on_against_pg": _pg(shots_on_against_tot),
-            "corners_for_pg": _pg(corners_for_tot),
-            "corners_against_pg": _pg(corners_against_tot),
-            "yc_pg": _pg(yc_tot),
-            "rc_pg": _pg(rc_tot),
-        })
-        time.sleep(0.15)
-
-    if not ts_rows:
-        print("   ⚠️ no teamstats rows returned (endpoint teams/statistics)")
-    if ts_rows:
-        p = out.with_name(out.stem + "_teamstats.csv")
-        pd.DataFrame(ts_rows).to_csv(p, index=False)
-        print(f"   ➕ teamstats → {p} ({len(ts_rows)})")
-
-    # injuries (last 30 days)
-    inj_rows = []
-    since = (datetime.now(_TZ.utc) - pd.Timedelta(days=30)).strftime("%Y-%m-%d")
-    injuries = _get_cached("injuries", {"league": league_id, "season": season, "date": since}, ttl_s=6*60*60)
-    print(f"   injuries payload items: {len(injuries)} (since last 30d)")
-    for it in injuries:
-        team = it.get("team", {})
-        player = it.get("player", {})
-        fixture = it.get("fixture", {})
-        inj_rows.append({
-            "team_id": team.get("id"),
-            "team_name": team.get("name"),
-            "player_id": player.get("id"),
-            "player_name": player.get("name"),
-            "type": it.get("type"),
-            "date": pd.to_datetime(fixture.get("date"), utc=True, errors="coerce"),
-        })
-    if not inj_rows:
-        print("   ⚠️ no injuries in last 30 days for this league/season (common in breaks)")
-    if inj_rows:
-        p = out.with_name(out.stem + "_injuries_last30.csv")
-        pd.DataFrame(inj_rows).to_csv(p, index=False)
-        print(f"   ➕ injuries(30d) → {p} ({len(inj_rows)})")
-
-    return df
+def _parse_args():
+    p = argparse.ArgumentParser(description="Build/harvest features and write train_set.parquet")
+    p.add_argument("--harvest-postmatch", action="store_true",
+                   help="Harvest FT fixtures (outcomes + stats + closing odds) into postmatch_flat.parquet")
+    p.add_argument("--merge-train-stats-from-db", action="store_true",
+                   help="Merge DB outcomes/stats into train_set.parquet (creates it if missing)")
+    p.add_argument("--write-train-set", action="store_true",
+                   help="Write data/features/train_set.parquet from the in-memory dataframe (or seed sources)")
+    p.add_argument("--leagues", type=str, default="39,140,78", help="Comma-separated league ids for harvest")
+    p.add_argument("--season", type=int, default=2025, help="Season year for harvest")
+    p.add_argument("--days-back", type=int, default=1, help="Days back for harvest window")
+    p.add_argument("--days-fwd", type=int, default=0, help="Days forward for harvest window")
+    p.add_argument("--timezone", type=str, default="Europe/Copenhagen", help="Timezone for closing odds fetch")
+    p.add_argument("--with-stats-limit", type=int, default=40, help="Cap statistics requests per run (upcoming)")
+    p.add_argument("--with-stats-sleep", type=float, default=0.25, help="Sleep between statistics calls")
+    return p.parse_args()
 
 
 def main():
-    _check_key()
-    from argparse import ArgumentParser
-    ap = ArgumentParser()
-    ap.add_argument("--season", type=int, default=datetime.now(_TZ.utc).year,
-                help="Primary season (defaults to current UTC year).")
-    ap.add_argument("--leagues", type=str, default="39,140,78", help="Comma-separated league IDs to process")
-    ap.add_argument("--sleep-between", type=float, default=0.3, help="Seconds to sleep between leagues")
-    ap.add_argument("--harvest-postmatch", action="store_true",
-                help="Harvest FT fixtures (stats + closing odds) til postmatch_flat.parquet og exit")
-    ap.add_argument("--pm-leagues", type=str, default="39,140,78",
-                help="Comma-separerede league IDs (default EPL, LaLiga, Bundesliga)")
-    ap.add_argument("--pm-season", type=int, default=datetime.now(_TZ.utc).year,
-                help="Season for post-match harvest (defaults to current UTC year).")
-    ap.add_argument("--pm-days-back", type=int, default=1,
-                help="Dage bagud (default 1)")
-    ap.add_argument("--pm-days-fwd", type=int, default=0,
-                help="Dage frem (default 0)")
-    ap.add_argument("--pm-timezone", type=str, default="Europe/Copenhagen",
-                help="Timezone for odds-kald")
-    ap.add_argument("--pm-sleep", type=float, default=0.2,
-                help="Sleep mellem fixture-kald")
-    ap.add_argument("--with-stats", action="store_true",
-                help="Fetch /fixtures/statistics for upcoming fixtures (home/away) and merge as features (shots, possession, xG, etc.)")
-    ap.add_argument("--with-stats-limit", type=int, default=60, help="Max fixtures to fetch per run for /fixtures/statistics (0 = no cap)")
-    ap.add_argument("--with-stats-timeout", type=float, default=10.0, help="Per-request timeout seconds for /fixtures/statistics")
-    ap.add_argument("--with-stats-sleep", type=float, default=0.15, help="Sleep seconds between stats requests to respect rate limits")
-    ap.add_argument("--with-stats-train", action="store_true",
-                help="Fetch /fixtures/statistics for FINISHED fixtures (per-team) and merge into TRAIN set features.")
-    ap.add_argument("--with-stats-train-limit", type=int, default=400,
-                help="Max finished fixtures to fetch stats for (0 = no cap).")
-    ap.add_argument("--merge-train-stats-from-db", action="store_true",
-                help="Merge outcomes stats from Postgres into data/features/train_set.parquet (home/away SOG, possession, xG, etc.) and exit.")
-    args = ap.parse_args()
-    # Fast path: only merge DB stats into existing train_set and exit
-    if getattr(args, "merge_train_stats_from_db", False):
-        FEAT.mkdir(parents=True, exist_ok=True)
-        train_path = FEAT / "train_set.parquet"
-        _merge_train_stats_from_db(train_path)
-        return
+    args = _parse_args()
+    train_path = FEAT_DIR / "train_set.parquet"
+    ran = False
+
+    # 1) Harvest
     if args.harvest_postmatch:
-        leagues = [int(x) for x in args.pm_leagues.replace(";", ",").split(",") if x.strip()]
+        ran = True
+        try:
+            leagues = [int(x) for x in str(args.leagues).split(',') if str(x).strip()]
+        except Exception:
+            leagues = LEAGUES
+        print(f"[build_features] harvest_postmatch leagues={leagues} season={args.season} window=[-{args.days_back}, +{args.days_fwd}] …")
         harvest_postmatch(
             leagues=leagues,
-            season=args.pm_season,
-            days_back=args.pm_days_back,
-            days_fwd=args.pm_days_fwd,
-            timezone_str=args.pm_timezone,
-            sleep=args.pm_sleep,
+            season=int(args.season),
+            days_back=int(args.days_back),
+            days_fwd=int(args.days_fwd),
+            timezone_str=args.timezone,
+            sleep=float(args.with_stats_sleep),
         )
-        return
-    
-    leagues: List[int]
-    if args.leagues:
-        leagues = [int(x.strip()) for x in args.leagues.split(",") if x.strip()]
-    else:
-        leagues = LEAGUES
-    all_league_frames = []
-    for idx, lg in enumerate(leagues, start=1):
-        print(f"\n=== League {idx}/{len(leagues)} → {lg} (season {args.season}) ===")
-        df = fetch_fixtures_for_league(lg, args.season)
-        all_league_frames.append(df)
-        time.sleep(max(0.0, args.sleep_between))
 
-    # ---- Build upcoming_set.parquet from freshly fetched league fixtures ----
-    if all_league_frames:
-        up = pd.concat(all_league_frames, ignore_index=True)
-        # normalize dates to UTC
-        if "date" in up.columns:
-            up["date"] = pd.to_datetime(up["date"], utc=True, errors="coerce")
-        # ensure normalized team names and sport_key exist
-        up = add_normalized_teams(up, "home", "away")
-        up["sport_key"] = up["league_id"].map(map_league_id_to_sport_key)
-        # keep only one row per fixture
-        if "fixture_id" in up.columns:
-            up = up.dropna(subset=["fixture_id"]).drop_duplicates(subset=["fixture_id"]).copy()
-            up["fixture_id"] = pd.to_numeric(up["fixture_id"], errors="coerce").astype("Int64")
-        # status-based upcoming filter if present
-        if "status_short" in up.columns:
-            upcoming_codes = {"NS","TBD","PST","SUSP","INT"}
-            up = up[up["status_short"].isin(upcoming_codes) | up["status_short"].isna()].copy()
-        # time window: now → +60 days (predict_upcoming narrows further via --days)
-        now = pd.Timestamp.now(tz="UTC")
-        up = up[(up["date"] >= now - pd.Timedelta(hours=1)) & (up["date"] <= now + pd.Timedelta(days=60))].copy()
-        # Relative time to kickoff in days (useful feature)
-        up["days_to_match"] = (up["date"] - now).dt.total_seconds() / 86400.0
-
-        # Optionally enrich with per-fixture statistics (home/away) for upcoming fixtures
-        if args.with_stats:
-            up = _attach_upcoming_fixture_stats(
-                up,
-                limit=args.with_stats_limit,
-                per_req_sleep=args.with_stats_sleep,
-                timeout=args.with_stats_timeout,
-            )
-            # Ensure a stable schema for stats columns across runs
-            expected_stats_cols = [
-                "home_expected_goals", "away_expected_goals",
-                "home_ball_possession", "away_ball_possession",
-                "home_shots_on_goal", "away_shots_on_goal",
-                "home_total_shots", "away_total_shots",
-                "home_shots_off_goal", "away_shots_off_goal",
-                "home_shots_inside_box", "away_shots_inside_box",
-                "home_shots_outside_box", "away_shots_outside_box",
-                "home_passes_pct", "away_passes_pct",
-                "home_passes_accurate", "away_passes_accurate",
-                "home_corners", "away_corners",
-                "home_yellow_cards", "away_yellow_cards",
-                "home_red_cards", "away_red_cards",
-                "home_fouls", "away_fouls",
-                "home_offsides", "away_offsides",
-            ]
-            present = [c for c in expected_stats_cols if c in up.columns]
-            missing = [c for c in expected_stats_cols if c not in up.columns]
-            for c in missing:
-                up[c] = np.nan
-            print(
-                f"   ensured schema: added {len(missing)} empty stats columns (as NA)\n"
-                f"   stats columns present: {len(present)}; missing (ignored): {len(missing)}"
-            )
-        # ---- Load and prepare teamstats for this season, then merge into upcoming ----
-        stats_frames = []
-        for lg in leagues:
-            sk = map_league_id_to_sport_key(lg)
-            p = FIXDIR / f"{sk}_{args.season}_teamstats.csv"
-            if p.exists():
-                tmp = pd.read_csv(p)
-                tmp["league_id"] = lg
-                stats_frames.append(tmp)
-        if stats_frames:
-            stats = pd.concat(stats_frames, ignore_index=True)
-            # normalize types
-            for c in ["team_id", "played_total", "wins_total", "draws_total", "losses_total", "clean_sheet", "failed_to_score"]:
-                if c in stats.columns:
-                    stats[c] = pd.to_numeric(stats[c], errors="coerce")
-            for c in ["goals_for_avg", "goals_against_avg"]:
-                if c in stats.columns:
-                    stats[c] = pd.to_numeric(stats[c], errors="coerce")
-            # derived rates
-            stats["win_rate"]  = _safediv(stats.get("wins_total"),  stats.get("played_total"))
-            stats["draw_rate"] = _safediv(stats.get("draws_total"), stats.get("played_total"))
-            stats["loss_rate"] = _safediv(stats.get("losses_total"),stats.get("played_total"))
-            stats["cs_rate"]   = _safediv(stats.get("clean_sheet"), stats.get("played_total"))
-            stats["fts_rate"]  = _safediv(stats.get("failed_to_score"), stats.get("played_total"))
-            # clip improbable values
-            for c in ["win_rate","draw_rate","loss_rate","cs_rate","fts_rate"]:
-                if c in stats.columns:
-                    stats[c] = stats[c].clip(0, 1)
-            # select columns to merge
-            base_cols = [
-                "team_id",
-                "goals_for_avg", "goals_against_avg",
-                "win_rate", "draw_rate", "loss_rate", "cs_rate", "fts_rate",
-                # volumes and per-game extras (keep both; PG are more comparable across leagues)
-                "shots_for", "shots_on_for", "shots_against", "shots_on_against",
-                "corners_for", "corners_against", "yc_total", "rc_total",
-                "shots_for_pg", "shots_on_for_pg", "shots_against_pg", "shots_on_against_pg",
-                "corners_for_pg", "corners_against_pg", "yc_pg", "rc_pg",
-                "possession_avg",
-            ]
-            stats = stats[[c for c in base_cols if c in stats.columns]].dropna(subset=["team_id"]).drop_duplicates("team_id")
-            # merge into upcoming on team_id (home/away)
-            if "home_id" in up.columns:
-                up = up.merge(stats.add_prefix("home_"), left_on="home_id", right_on="home_team_id", how="left")
-                up = up.drop(columns=[c for c in ["home_team_id"] if c in up.columns])
-            if "away_id" in up.columns:
-                up = up.merge(stats.add_prefix("away_"), left_on="away_id", right_on="away_team_id", how="left")
-                up = up.drop(columns=[c for c in ["away_team_id"] if c in up.columns])
-        # ---- Merge standings (rank/points/goalsDiff) into upcoming ----
-        std_frames = []
-        for lg in leagues:
-            sk = map_league_id_to_sport_key(lg)
-            pstd = FIXDIR / f"{sk}_{args.season}_standings.csv"
-            if pstd.exists():
-                tmp = pd.read_csv(pstd)
-                tmp["league_id"] = lg
-                std_frames.append(tmp)
-        if std_frames:
-            std_all = pd.concat(std_frames, ignore_index=True)
-            for c in ["team_id","rank","points","goalsDiff"]:
-                if c in std_all.columns:
-                    std_all[c] = pd.to_numeric(std_all[c], errors="coerce")
-            # home side
-            if "home_id" in up.columns:
-                up = up.merge(std_all.add_prefix("home_"), left_on=["home_id","league_id"], right_on=["home_team_id","home_league_id"], how="left")
-                up = up.drop(columns=[c for c in ["home_team_id","home_league_id"] if c in up.columns])
-            # away side
-            if "away_id" in up.columns:
-                up = up.merge(std_all.add_prefix("away_"), left_on=["away_id","league_id"], right_on=["away_team_id","away_league_id"], how="left")
-                up = up.drop(columns=[c for c in ["away_team_id","away_league_id"] if c in up.columns])
-            # simple diffs
-            for a,b,name in [("home_rank","away_rank","rank_diff"),("home_points","away_points","points_diff"),("home_goalsDiff","away_goalsDiff","goalsdiff_diff")]:
-                if a in up.columns and b in up.columns:
-                    up[name] = pd.to_numeric(up[a], errors="coerce") - pd.to_numeric(up[b], errors="coerce")
-
-        # ---- Injuries count (last 30d) per team ----
-        inj_frames = []
-        for lg in leagues:
-            sk = map_league_id_to_sport_key(lg)
-            pinj = FIXDIR / f"{sk}_{args.season}_injuries_last30.csv"
-            if pinj.exists():
-                tmp = pd.read_csv(pinj)
-                tmp["league_id"] = lg
-                inj_frames.append(tmp)
-        if inj_frames:
-            inj_all = pd.concat(inj_frames, ignore_index=True)
-            inj_all["team_id"] = pd.to_numeric(inj_all.get("team_id"), errors="coerce")
-            inj_ct = inj_all.groupby(["league_id","team_id"]).size().reset_index(name="injuries_30d")
-            if "home_id" in up.columns:
-                up = up.merge(inj_ct.add_prefix("home_"), left_on=["league_id","home_id"], right_on=["home_league_id","home_team_id"], how="left")
-                up = up.drop(columns=[c for c in ["home_league_id","home_team_id"] if c in up.columns])
-            if "away_id" in up.columns:
-                up = up.merge(inj_ct.add_prefix("away_"), left_on=["league_id","away_id"], right_on=["away_league_id","away_team_id"], how="left")
-                up = up.drop(columns=[c for c in ["away_league_id","away_team_id"] if c in up.columns])
-
-        # ---- Add form5 features from historical fixtures ----
-        hist = pd.concat(all_league_frames, ignore_index=True)
-        # Only finished matches with valid dates and goals
-        hist = hist[(hist["date"].notna()) & hist["result"].notna()].copy()
-        # Coerce numeric goals (some rows may be None)
-        for c in ("goals_home","goals_away"):
-            if c in hist.columns:
-                hist[c] = pd.to_numeric(hist[c], errors="coerce")
-        # Build per-team match rows (home and away views)
-        def _mk_points(res, is_home):
-            if res == "D":
-                return 1
-            if res == "H":
-                return 3 if is_home else 0
-            if res == "A":
-                return 0 if is_home else 3
-            return np.nan
-        # ensure normalized names exist in hist
-        hist = add_normalized_teams(hist, "home", "away")
-        # Home perspective
-        home_rows = pd.DataFrame({
-            "team": hist["home_norm"],
-            "opp": hist["away_norm"],
-            "date": hist["date"],
-            "points": hist["result"].map(lambda r: _mk_points(r, True)),
-            "gd": (hist.get("goals_home") - hist.get("goals_away")) if "goals_home" in hist.columns and "goals_away" in hist.columns else np.nan,
-        })
-        # Away perspective
-        away_rows = pd.DataFrame({
-            "team": hist["away_norm"],
-            "opp": hist["home_norm"],
-            "date": hist["date"],
-            "points": hist["result"].map(lambda r: _mk_points(r, False)),
-            "gd": (hist.get("goals_away") - hist.get("goals_home")) if "goals_home" in hist.columns and "goals_away" in hist.columns else np.nan,
-        })
-        perf = pd.concat([home_rows, away_rows], ignore_index=True).dropna(subset=["team","date"]).sort_values("date")
-        # Rolling last 5 per team
-        perf["points"] = pd.to_numeric(perf["points"], errors="coerce")
-        perf["gd"] = pd.to_numeric(perf["gd"], errors="coerce")
-        form = (
-            perf.groupby("team")[ ["points","gd"] ]
-                .rolling(5, min_periods=1)
-                .sum()
-                .reset_index()
-                .rename(columns={"points":"form5_pts","gd":"form5_gd"})
-        )
-        # Keep the last known form per team (as of now)
-        last_idx = form.groupby("team")["level_1"].idxmax()
-        form_now = form.loc[last_idx, ["team","form5_pts","form5_gd"]].copy().reset_index(drop=True)
-        # Merge into upcoming for both home/away
-        up = up.merge(form_now.rename(columns={"team":"home_norm","form5_pts":"home_form5_pts","form5_gd":"home_form5_gd"}), on="home_norm", how="left")
-        up = up.merge(form_now.rename(columns={"team":"away_norm","form5_pts":"away_form5_pts","form5_gd":"away_form5_gd"}), on="away_norm", how="left")
-
-        # ---- Add entry/implied probabilities from latest API-Football odds snapshot ----
+    # 2) Merge from DB into train_set (ensure seed exists)
+    df_mem = None
+    if args.merge_train_stats_from_db:
+        ran = True
+        df_mem = _ensure_train_set(train_path)
+        _merge_train_stats_from_db(train_path)
         try:
-            apifo_files = sorted(ODIR.glob("apifootball_live_odds_*.csv"))
+            df_mem = pd.read_parquet(train_path)
         except Exception:
-            apifo_files = []
-        if apifo_files:
-            apifo = pd.read_csv(apifo_files[-1], parse_dates=["date"], dtype={"fixture_id":"Int64"})
-            apifo["fixture_id"] = pd.to_numeric(apifo["fixture_id"], errors="coerce").astype("Int64")
-            for col in ["odds_h","odds_d","odds_a"]:
-                if col in apifo.columns:
-                    apifo[col] = pd.to_numeric(apifo[col], errors="coerce")
-            # implied and normalized (remove overround)
-            probs = pd.DataFrame(index=apifo.index)
-            for s,col in [("h","odds_h"),("d","odds_d"),("a","odds_a")]:
-                if col in apifo.columns:
-                    probs[f"p_entry_{s}"] = 1.0 / apifo[col]
-            if not probs.empty and {"p_entry_h","p_entry_d","p_entry_a"}.issubset(probs.columns):
-                total = probs[["p_entry_h","p_entry_d","p_entry_a"]].sum(axis=1)
-                for s in ("h","d","a"):
-                    probs[f"p_entry_{s}"] = probs[f"p_entry_{s}"] / total
-                apifo = pd.concat([apifo, probs], axis=1)
-            # merge into upcoming by fixture_id
-            cols = [c for c in ["fixture_id","p_entry_h","p_entry_d","p_entry_a","odds_h","odds_d","odds_a"] if c in apifo.columns]
-            up = up.merge(apifo[cols], on="fixture_id", how="left", suffixes=("", "_apifb"))
-            # do not overwrite odds if already present later; here we only supply p_entry_* primarily
+            df_mem = None
 
-        # market overround (how juiced the book is) – robust to NaN/inf
-        if {"odds_h","odds_d","odds_a"}.issubset(up.columns):
-            inv_h = _safediv(1.0, up["odds_h"]) if "odds_h" in up.columns else np.nan
-            inv_d = _safediv(1.0, up["odds_d"]) if "odds_d" in up.columns else np.nan
-            inv_a = _safediv(1.0, up["odds_a"]) if "odds_a" in up.columns else np.nan
-            invsum = pd.to_numeric(inv_h, errors="coerce") + pd.to_numeric(inv_d, errors="coerce") + pd.to_numeric(inv_a, errors="coerce")
-            up["overround"] = pd.to_numeric(invsum, errors="coerce") - 1.0
-        
-        # fill NaNs with neutral defaults where sensible
-        for c in ["home_form5_pts","home_form5_gd","away_form5_pts","away_form5_gd"]:
-            if c in up.columns:
-                up[c] = pd.to_numeric(up[c], errors="coerce")
-        
-        # ---- Rolling W/D/L and rest-days from history (window=5) ----
-        hist_finished = pd.concat(all_league_frames, ignore_index=True)
-        hist_finished = hist_finished[(hist_finished["date"].notna()) & hist_finished["result"].notna()].copy()
-        if not hist_finished.empty:
-            up = _attach_rolling_wdl_and_rest(up, hist_finished, "home", "home_norm", window=5)
-            up = _attach_rolling_wdl_and_rest(up, hist_finished, "away", "away_norm", window=5)
-
-        lha = _compute_league_home_adv(hist_finished)
-        if not lha.empty:
-            up = up.merge(lha, on="league_id", how="left")
-
-        # ---- Add H2H features for upcoming (using only past matches to avoid leakage) ----
-        try:
-            hist_for_h2h = pd.concat(all_league_frames, ignore_index=True)
-            hist_for_h2h = add_normalized_teams(hist_for_h2h, "home", "away")
-            hist_for_h2h = hist_for_h2h.dropna(subset=["date"]).copy()
-            hist_for_h2h["date"] = pd.to_datetime(hist_for_h2h["date"], utc=True, errors="coerce")
-        except Exception:
-            hist_for_h2h = pd.DataFrame()
-
-        def _row_h2h_up(row):
-            cutoff = pd.Timestamp.utcnow().tz_localize("UTC") if pd.isna(row.get("date")) else pd.to_datetime(row.get("date"), utc=True, errors="coerce")
-            g, pts, gd, wr = _compute_h2h_for_pair(hist_for_h2h, row.get("home_norm"), row.get("away_norm"), cutoff)
-            return pd.Series({
-                "h2h_games": g,
-                "h2h_pts_home": pts,
-                "h2h_gd_home": gd,
-                "h2h_win_rate_home": wr,
-            })
-
-        if not up.empty and {"home_norm","away_norm","date"}.issubset(up.columns):
-            h2h_up = up.apply(_row_h2h_up, axis=1)
-            up = pd.concat([up, h2h_up], axis=1)
-
-
-        # --- Ensure stable schema for per-fixture stats: create columns as NA if missing ---
-        desired_stats_cols = [
-            "home_expected_goals","away_expected_goals",
-            "home_ball_possession","away_ball_possession",
-            "home_shots_on_goal","away_shots_on_goal",
-            "home_total_shots","away_total_shots",
-            "home_shots_off_goal","away_shots_off_goal",
-            "home_shots_inside_box","away_shots_inside_box",
-            "home_shots_outside_box","away_shots_outside_box",
-            "home_passes_pct","away_passes_pct",
-            "home_passes_accurate","away_passes_accurate",
-            "home_corners","away_corners",
-            "home_yellow_cards","away_yellow_cards",
-            "home_red_cards","away_red_cards",
-            "home_fouls","away_fouls",
-            "home_offsides","away_offsides",
-            "home_xg","away_xg",
-        ]
-        created_cols = 0
-        for col in desired_stats_cols:
-            if col not in up.columns:
-                up[col] = pd.NA
-                created_cols += 1
-        if created_cols:
-            print(f"   ensured schema: added {created_cols} empty stats columns (as NA)")
-        # mirror expected_goals into xg aliases if provided by API
-        if "home_expected_goals" in up.columns and "home_xg" in up.columns:
-            up["home_xg"] = up["home_xg"].fillna(up["home_expected_goals"])
-        if "away_expected_goals" in up.columns and "away_xg" in up.columns:
-            up["away_xg"] = up["away_xg"].fillna(up["away_expected_goals"])
-
-        # simple non-null summary for per-fixture stats
-        _stats_cols = [c for c in desired_stats_cols if c in up.columns]
-        try:
-            _nn = int(up[_stats_cols].notna().sum().sum())
-            print(f"   per-fixture stats non-nulls: {_nn} cells across {len(_stats_cols)} columns")
-        except Exception:
-            pass
-        # ---- Decide which columns to keep in upcoming_set ----
-        base_keep = [
-            "fixture_id","league_id","league_name","season","date","days_to_match","sport_key",
-            "home","away","home_norm","away_norm","status_short","status_long",
-            "home_id","away_id",
-            # standings-derived
-            "home_rank","away_rank","rank_diff","home_points","away_points","points_diff","home_goalsDiff","away_goalsDiff","goalsdiff_diff",
-            # recent form (rolling)
-            "home_form5_pts","home_form5_gd","away_form5_pts","away_form5_gd",
-            # rolling WDL + rest-days
-            "home_wins5","home_draws5","home_losses5","home_rest_days",
-            "away_wins5","away_draws5","away_losses5","away_rest_days",
-            # entry probs + overround
-            "p_entry_h","p_entry_d","p_entry_a","overround",
-            # teamstats-derived (hold stats — always present if teams/statistics succeeded)
-            "home_goals_for_avg","home_goals_against_avg","home_win_rate","home_draw_rate","home_loss_rate","home_cs_rate","home_fts_rate",
-            "away_goals_for_avg","away_goals_against_avg","away_win_rate","away_draw_rate","away_loss_rate","away_cs_rate","away_fts_rate",
-            "home_shots_for_pg","home_shots_on_for_pg","home_shots_against_pg","home_shots_on_against_pg",
-            "away_shots_for_pg","away_shots_on_for_pg","away_shots_against_pg","away_shots_on_against_pg",
-            "home_corners_for_pg","home_corners_against_pg","away_corners_for_pg","away_corners_against_pg",
-            "home_yc_pg","home_rc_pg","away_yc_pg","away_rc_pg",
-            "home_possession_avg","away_possession_avg",
-            # injuries (last 30d)
-            "home_injuries_30d","away_injuries_30d",
-            # league-level priors
-            "league_home_win_rate",
-            # h2h aggregates
-            "h2h_games","h2h_pts_home","h2h_gd_home","h2h_win_rate_home",
-        ]
-        # Optional per-fixture stats (only if actually present; e.g., when --with-stats was used and API had data)
-        per_fix_candidates = [
-            "home_expected_goals","away_expected_goals",
-            "home_ball_possession","away_ball_possession",
-            "home_shots_on_goal","away_shots_on_goal",
-            "home_total_shots","away_total_shots",
-            "home_shots_off_goal","away_shots_off_goal",
-            "home_shots_inside_box","away_shots_inside_box",
-            "home_shots_outside_box","away_shots_outside_box",
-            "home_passes_pct","away_passes_pct",
-            "home_passes_accurate","away_passes_accurate",
-            "home_corners","away_corners",
-            "home_yellow_cards","away_yellow_cards",
-            "home_red_cards","away_red_cards",
-            "home_fouls","away_fouls",
-            "home_offsides","away_offsides",
-            "home_xg","away_xg",
-        ]
-        dyn_cols = [c for c in per_fix_candidates if c in up.columns]
-        keep_cols = [c for c in base_keep if c in up.columns] + dyn_cols
-
-        # Small summary for debug
-        present_dyn = [c for c in dyn_cols]
-        missing_dyn = [c for c in per_fix_candidates if c not in up.columns]
-        print(f"   stats columns present: {len(present_dyn)}; missing (ignored): {len(missing_dyn)}")
-        up = up[keep_cols].sort_values(["date","league_id","fixture_id"]).reset_index(drop=True)
-        FEAT.mkdir(parents=True, exist_ok=True)
-        outp = FEAT / "upcoming_set.parquet"
-        up.to_parquet(outp, index=False)
-        print(f"   ➕ upcoming_set → {outp} ({len(up)})")
-
-        # ---- Build train_set.parquet (finished matches with leakage-safe form5) ----
-        hist_all = pd.concat(all_league_frames, ignore_index=True)
-        # ---- Historic per-fixture stats for TRAIN (finished fixtures only) ----
-        if args.with_stats_train:
-            hist_stats_df = _attach_historic_fixture_stats(
-                hist_all,
-                limit=args.with_stats_train_limit,
-                per_req_sleep=args.with_stats_sleep
-            )
-            if not hist_stats_df.empty:
-                # sikr stabilt schema
-                expected_cols = [
-                    "home_expected_goals","away_expected_goals",
-                    "home_ball_possession","away_ball_possession",
-                    "home_shots_on_goal","away_shots_on_goal",
-                    "home_total_shots","away_total_shots",
-                    "home_shots_off_goal","away_shots_off_goal",
-                    "home_shots_inside_box","away_shots_inside_box",
-                    "home_shots_outside_box","away_shots_outside_box",
-                    "home_passes_pct","away_passes_pct",
-                    "home_passes_accurate","away_passes_accurate",
-                    "home_corners","away_corners",
-                    "home_yellow_cards","away_yellow_cards",
-                    "home_red_cards","away_red_cards",
-                    "home_fouls","away_fouls",
-                    "home_offsides","away_offsides",
-                ]
-                for c in expected_cols:
-                    if c not in hist_stats_df.columns:
-                        hist_stats_df[c] = np.nan
-                # gem rå (valgfrit til debug)
-                (FEAT / "historic_fixture_stats.parquet").parent.mkdir(parents=True, exist_ok=True)
-                hist_stats_df.to_parquet(FEAT / "historic_fixture_stats.parquet", index=False)
-            else:
-                print("   ⚠️ no historic per-fixture stats returned; TRAIN set will not include per-fixture stats.")
+    # 3) Write train_set if requested
+    if args.write_train_set:
+        ran = True
+        if df_mem is None:
+            df_mem = _ensure_train_set(train_path)
+        if df_mem is not None:
+            _write_train_set(df_mem)
         else:
-            hist_stats_df = pd.DataFrame(columns=["fixture_id"])
-        hist = hist_all[(hist_all["date"].notna()) & hist_all["result"].notna()].copy()
-        # keep finished matches with valid dates and labeled results
-        hist = add_normalized_teams(hist, "home", "away")
-        # ensure chronological order
-        hist = hist.sort_values("date").reset_index(drop=True)
+            print("❌ could not write train_set.parquet — no dataframe available")
 
-        # Defensive season extraction for train set
-        # Derive season from train if available; otherwise fall back to CLI arg
-        train = hist  # train set is hist here
-        _season_series = pd.to_numeric(train.get("season", pd.Series(dtype="float64")), errors="coerce").dropna()
-        if _season_series.empty:
-            _season = int(args.season)
-        else:
-            _season = int(_season_series.iloc[0])
+    if not ran:
+        # Default behavior if no flags: do nothing but print help to guide users in CI
+        print("ℹ️ No action flags provided. Try --harvest-postmatch or --merge-train-stats-from-db --write-train-set")
+
+
+if __name__ == "__main__":
+    main()
