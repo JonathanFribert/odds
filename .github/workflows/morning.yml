@@ -51,11 +51,22 @@ jobs:
             --include-ou25 --include-ah --write-parquet
 
       - name: Build features (harvest + write train set)
+        env:
+          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
         run: |
           python scripts/build_features.py \
-            --season 2025 --leagues 39,140,78 \
-            --with-stats --with-stats-limit 40 --with-stats-sleep 0.25 \
-            --write-train-set
+            --harvest-postmatch --merge-train-stats-from-db --write-train-set
+
+      - name: Health: train_set.parquet exists
+        run: |
+          python - <<'PY'
+          import os, pandas as pd
+          p = "data/features/train_set.parquet"
+          if not os.path.exists(p):
+              raise SystemExit(f"❌ {p} not found after build_features.py. Check flags.")
+          df = pd.read_parquet(p)
+          print("✅ train_set rows:", len(df))
+          PY
 
       - name: Train models (1x2 / ou25 / ahm05)
         run: python scripts/train_models.py
