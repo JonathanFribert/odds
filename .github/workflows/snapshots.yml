@@ -9,9 +9,14 @@ on:
 jobs:
   snapshots:
     runs-on: ubuntu-latest
+    concurrency:
+      group: snapshots
+      cancel-in-progress: false
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -30,10 +35,24 @@ jobs:
           echo "APIFOOTBALL_KEY=${{ secrets.APIFOOTBALL_KEY }}" >> $GITHUB_ENV
           echo "ODDSAPI_KEY=${{ secrets.ODDSAPI_KEY }}" >> $GITHUB_ENV
 
+      - name: DB sanity
+        run: |
+          python - <<'PY'
+          import os
+          from sqlalchemy import create_engine
+          url=os.environ["POSTGRES_URL"]
+          print("URL prefix:", url.split("@")[0])
+          e=create_engine(url, pool_pre_ping=True)
+          with e.connect() as c:
+              print("now():", c.exec_driver_sql("select now()").scalar())
+          PY
+
       - name: Fetch API-Football odds (imminent 180m)
         continue-on-error: true
         run: |
-          python scripts/fetch_apifootball_odds.py --imminent-mins 180 || true
+          python scripts/fetch_apifootball_odds.py \
+            --imminent-mins 180 \
+            --include-ou25 --include-ah --write-parquet || true
 
       - name: Build features (merge-from-DB + auto-repair)
         run: |
