@@ -15,25 +15,59 @@ jobs:
       group: morning
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Install deps
         run: |
           python -m pip install -U pip
           pip install -r requirements.txt
-          pip install "psycopg[binary]" "sqlalchemy>=2.0"
+
+      - name: DB sanity
+        run: |
+          python - <<'PY'
+          import os
+          from sqlalchemy import create_engine
+          url=os.environ["POSTGRES_URL"]
+          print("URL prefix:", url.split("@")[0])
+          e=create_engine(url, pool_pre_ping=True)
+          with e.connect() as c:
+              print("now():", c.exec_driver_sql("select now()\n").scalar())
+          PY
+
+      - name: Fetch API-Football odds (next 2 days incl. OU/AH)
+        env:
+          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+        run: |
+          python scripts/fetch_apifootball_odds.py \
+            --days 2 \
+            --include-ou25 --include-ah --write-parquet
+
       - name: Build features
         run: |
           python scripts/build_features.py \
             --season 2025 --leagues 39,140,78 \
             --with-stats --with-stats-limit 40 --with-stats-sleep 0.25
-      - name: Train models
+
+      - name: Train models (1x2 / ou25 / ahm05)
         run: python scripts/train_models.py
-      - name: Picks + log to Postgres
+
+      - name: Predict upcoming + log picks (1x2, OU2.5, AH-0.5)
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
         run: |
           python scripts/predict_upcoming.py \
-            --days 21 --require-real-odds \
-            --min-ev 0.02 --min-kelly 0.01 --top-k 25 \
+            --days 2 \
+            --offline-only \
+            --no-oddsapi \
+            --markets 1x2,ou25,ahm05 \
+            --min-ev 0.00 --min-kelly 0.00 --top-k 100 \
             --export-md --log-bets \
             --postgres-url "$POSTGRES_URL"
