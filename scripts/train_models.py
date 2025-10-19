@@ -14,6 +14,7 @@ from pathlib import Path
 from datetime import datetime
 from typing import List, Tuple
 import sqlite3
+import sys, subprocess
 
 import numpy as np
 import pandas as pd
@@ -381,6 +382,28 @@ def _train_binary(df: pd.DataFrame, label_col: str, tag: str, model_path: Path, 
     return True
 
 
+
+def _auto_build_train_set() -> bool:
+    """Try to build data/features/train_set.parquet by invoking build_features.py
+    with a few fallback flag combinations. Returns True if the file appears."""
+    cand_cmds = [
+        [sys.executable, "scripts/build_features.py", "--harvest-postmatch", "--merge-train-stats-from-db", "--write-train-set"],
+        [sys.executable, "scripts/build_features.py", "--merge-train-stats-from-db", "--write-train-set"],
+        [sys.executable, "scripts/build_features.py", "--write-train-set"],
+    ]
+    p = FEAT_DIR / "train_set.parquet"
+    for cmd in cand_cmds:
+        try:
+            print("[auto-build] trying:", " ".join(cmd))
+            subprocess.check_call(cmd)
+            if p.exists():
+                print("[auto-build] ✅ created:", p)
+                return True
+        except Exception as e:
+            print("[auto-build] warn:", e)
+    print("[auto-build] ❌ could not create", p)
+    return False
+
 # -------------------- Main --------------------
 
 def main():
@@ -388,8 +411,10 @@ def main():
     _ensure_db()
     p = FEAT_DIR / "train_set.parquet"
     if not p.exists():
-        print("❌ train_set.parquet not found. Run build_features.py first.")
-        return
+        print("❌ train_set.parquet not found. Attempting to build via build_features.py …")
+        if not _auto_build_train_set():
+            print("❌ still missing train_set.parquet. Run scripts/build_features.py manually.")
+            return
 
     df = pd.read_parquet(p)
     print(f"✅ train_set loaded: shape={df.shape}")
