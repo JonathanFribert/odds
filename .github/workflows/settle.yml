@@ -16,6 +16,24 @@ jobs:
       - run: |
           python -m pip install --upgrade pip
           python -m pip install "sqlalchemy>=2" "psycopg[binary]" pandas numpy pyarrow joblib requests
+      - name: API-Football sanity
+        run: |
+          python - <<'PY'
+          import os, requests
+          key = os.environ.get("APIFOOTBALL_KEY", "")
+          print("APIFOOTBALL_KEY length:", len(key))
+          if not key:
+            raise SystemExit("APIFOOTBALL_KEY is empty. Add it as a GitHub Actions secret.")
+          headers = {"x-apisports-key": key}
+          try:
+              r = requests.get("https://v3.football.api-sports.io/status", headers=headers, timeout=20)
+              print("/status code:", r.status_code)
+              print("/status body (first 800 chars):", r.text[:800])
+              if r.status_code == 403:
+                  raise SystemExit("403 from /status — check that the key is correct and not quoted.")
+          except Exception as e:
+              raise SystemExit(f"Sanity call failed: {e}")
+          PY
       - name: Upsert outcomes (last 3 days)
         run: |
           python - <<'PY'
@@ -32,7 +50,25 @@ jobs:
           """)
           def res(h,a): return None if (h is None or a is None) else ("H" if h>a else ("A" if a>h else "D"))
           def upsert(date):
-              r=requests.get("https://v3.football.api-sports.io/fixtures", params={"date":date,"timezone":"UTC"}, headers=headers, timeout=30)
+              r = requests.get(
+                  "https://v3.football.api-sports.io/fixtures",
+                  params={"date": date, "timezone": "UTC"},
+                  headers=headers,
+                  timeout=30,
+              )
+              if r.status_code == 403:
+                  print(f"[fixtures] 403 Forbidden for date={date}. Body (first 400): {r.text[:400]}")
+                  raise SystemExit(0)
+              if r.status_code == 429:
+                  print("[fixtures] 429 rate limited — sleeping 10s and retrying once…")
+                  import time
+                  time.sleep(10)
+                  r = requests.get(
+                      "https://v3.football.api-sports.io/fixtures",
+                      params={"date": date, "timezone": "UTC"},
+                      headers=headers,
+                      timeout=30,
+                  )
               r.raise_for_status()
               resp=r.json().get("response",[])
               with e.begin() as c:
