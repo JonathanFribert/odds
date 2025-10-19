@@ -165,6 +165,22 @@ def load_upcoming_fixture_ids(days=14):
         df["league_id"] = pd.to_numeric(df["league_id"], errors="coerce").astype("Int64")
     return df.dropna(subset=["fixture_id"]).drop_duplicates("fixture_id")
 
+# --- helpers: robust set extraction from a column-like ---
+
+def _unique_int_set(col_like) -> set[int]:
+    """Return a set of ints from a Series-like; robust against scalars/None."""
+    try:
+        s = pd.to_numeric(col_like, errors="coerce")
+        # if scalar, s won't have dropna
+        if not hasattr(s, "dropna"):
+            return set()
+        s = s.dropna()
+        if s.empty:
+            return set()
+        return set(s.astype(int).tolist())
+    except Exception:
+        return set()
+
 # ------------------- Bookmakers -------------------
 
 def discover_bookmakers(targets: Optional[Iterable[str]] = None, ttl_seconds: int = 7*24*3600):
@@ -706,10 +722,13 @@ def main():
         before = len(base)
         base = base[(base["date"] >= now - pd.Timedelta(minutes=1)) & (base["date"] <= horizon)].copy()
         print(f"ℹ️ imminent filter: {len(base)}/{before} fixtures within next {args.imminent_mins} mins")
-    leagues_in_base = set(pd.to_numeric(base.get("league_id"), errors="coerce").dropna().astype(int).tolist())
+    if (base is not None) and (not base.empty) and ("league_id" in base.columns):
+        leagues_in_base = _unique_int_set(base["league_id"])  # robust against scalar/None
+    else:
+        leagues_in_base = set()
     if args.use_mapping:
         season_infer = None
-        if "season" in base.columns and base["season"].notna().any():
+        if (base is not None) and (not base.empty) and ("season" in base.columns) and base["season"].notna().any():
             try:
                 season_infer = int(pd.to_numeric(base["season"], errors="coerce").dropna().mode().iloc[0])
             except Exception:
