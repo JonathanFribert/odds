@@ -80,5 +80,4 @@ jobs:
             --markets 1x2,ou25,ahm05 \
             --min-ev 0.00 --top-k 100 \
             --log-bets \
-            --postgres-url "$POSTGRES_URL" \
-            --verbose
+            --postgres-url "$POSTGRES_URL"
