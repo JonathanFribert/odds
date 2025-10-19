@@ -57,7 +57,7 @@ jobs:
           python scripts/build_features.py \
             --harvest-postmatch --merge-train-stats-from-db --write-train-set
 
-      - name: Health: train_set.parquet exists
+      - name: "Health: train_set.parquet exists"
         run: |
           python - <<'PY'
           import os, pandas as pd
