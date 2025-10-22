@@ -46,6 +46,7 @@ jobs:
         env:
           APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
         run: |
+          set -e
           python scripts/fetch_apifootball_odds.py \
             --days 2 \
             --include-ou25 --include-ah --write-parquet
@@ -62,6 +63,13 @@ jobs:
           python scripts/build_features.py --harvest-postmatch
           python scripts/build_features.py --merge-train-stats-from-db --write-train-set
 
+      - name: Sanity: check train_set.parquet
+        run: |
+          python - <<'PY'
+          import os
+          p = "data/features/train_set.parquet"
+          print("✅ Found:", os.path.exists(p), "| Path:", p)
+          PY
 
       - name: Train models (1x2 / ou25 / ahm05)
         env:
