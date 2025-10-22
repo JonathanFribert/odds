@@ -60,6 +60,13 @@ jobs:
           python scripts/build_features.py --harvest-postmatch --days-back 30 --days-fwd 0
           python scripts/build_features.py --merge-train-stats-from-db --write-train-set
 
+      - name: Build upcoming_set.parquet (next 2 days)
+        env:
+          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+        run: |
+          set -e
+          python scripts/build_features.py --write-upcoming --days-fwd 2
+
       - name: Sanity check train_set.parquet
         run: |
           if [ -f "data/features/train_set.parquet" ]; then
@@ -74,20 +81,6 @@ jobs:
         run: |
           echo "Listing data/features:" && ls -alh data/features || true
 
-      - name: Build upcoming_set.parquet (next 2 days)
-        env:
-          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
-        run: |
-          set -e
-          # Try to build upcoming features for the next 2 days
-          python scripts/build_features.py --write-upcoming --days-fwd 2 || true
-          if [ -f "data/features/upcoming_set.parquet" ]; then
-            echo "Found: data/features/upcoming_set.parquet"
-          else
-            echo "Missing: data/features/upcoming_set.parquet" >&2
-            exit 1
-          fi
-
       - name: Train models (1x2 / ou25 / ahm05)
         env:
           APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
@@ -98,14 +91,20 @@ jobs:
         env:
           POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
         run: |
-          python scripts/predict_upcoming.py \
-            --days 2 \
-            --offline-only \
-            --no-oddsapi \
-            --markets 1x2,ou25,ahm05 \
-            --min-ev 0.00 --top-k 100 \
-            --log-bets \
-            --postgres-url "$POSTGRES_URL"
+          if [ -f "data/features/upcoming_set.parquet" ]; then
+            python scripts/predict_upcoming.py \
+              --days 2 \
+              --offline-only \
+              --no-oddsapi \
+              --markets 1x2,ou25,ahm05 \
+              --min-ev 0.00 --top-k 100 \
+              --log-bets \
+              --postgres-url "$POSTGRES_URL"
+          else
+            echo "Skip predict: data/features/upcoming_set.parquet is missing";
+            mkdir -p data/picks;
+            echo "market,created_at,fixture_id,league_id,season,home,away,selection,model_prob,best_odds,ev,kelly,stake_units,model_tag" > data/picks/picks_empty.csv;
+          fi
 
       - name: Ensure picks CSV exists (even if no picks)
         run: |

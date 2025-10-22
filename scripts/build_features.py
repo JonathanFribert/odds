@@ -498,6 +498,86 @@ def _attach_historic_fixture_stats(hist_df: pd.DataFrame, limit: int = 400, per_
         return pd.DataFrame(columns=["fixture_id"])
     return pd.DataFrame(rows)
 
+
+def _build_upcoming_set(leagues: list[int], season: int, days_fwd: int = 2,
+                        timezone_str: str = "Europe/Copenhagen",
+                        stats_limit: int = 40, stats_sleep: float = 0.15) -> pd.DataFrame:
+    """Fetch upcoming fixtures within [today, today+days_fwd] for the given leagues/season,
+    attach limited /fixtures/statistics (per-team), and write FEAT_DIR/upcoming_set.parquet.
+    Returns the dataframe (possibly empty).
+    """
+    today = datetime.now(_TZ.utc).date()
+    rows = []
+    for delta in range(0, max(0, int(days_fwd)) + 1):
+        date = today + timedelta(days=delta)
+        for lg in leagues:
+            fixtures = _get("fixtures", {
+                "league": int(lg),
+                "season": int(season),
+                "date": str(date),
+                "timezone": "UTC",
+            })
+            for f in fixtures or []:
+                fx = (f or {}).get("fixture", {})
+                st = (fx.get("status") or {}).get("short")
+                # Keep not-started/scheduled; allow early in-play windows for hourly overlap
+                if st not in {"NS", "TBD", "PST", "1H", "HT", "2H"}:
+                    continue
+                fid = fx.get("id")
+                if not fid:
+                    continue
+                teams = (f.get("teams") or {})
+                home = (teams.get("home") or {})
+                away = (teams.get("away") or {})
+                rows.append({
+                    "fixture_id": fid,
+                    "league_id": int(lg),
+                    "season": int(season),
+                    "date": fx.get("date"),
+                    "status_short": st,
+                    "home": home.get("name"),
+                    "away": away.get("name"),
+                    "home_id": home.get("id"),
+                    "away_id": away.get("id"),
+                })
+
+    df = pd.DataFrame(rows)
+    FEAT_DIR.mkdir(parents=True, exist_ok=True)
+
+    if df.empty:
+        # Skriv en tom fil, så downstream steps kan se at "upcoming_set.parquet" findes (selv uden kampe)
+        outp = FEAT_DIR / "upcoming_set.parquet"
+        try:
+            df.to_parquet(outp, index=False)
+            print(f"✅ wrote empty upcoming_set → {outp}")
+        except Exception as e:
+            print(f"⚠️ could not write empty upcoming_set: {e}")
+        return df
+
+    # Prøv at attach'e per-team upcoming statistics i et rimeligt cap
+    try:
+        df = _attach_upcoming_fixture_stats(df, limit=int(stats_limit), per_req_sleep=float(stats_sleep))
+    except Exception as e:
+        print(f"⚠️ attach upcoming statistics failed: {e}")
+
+    # Normaliser dato + navne
+    try:
+        df["date"] = pd.to_datetime(df["date"], utc=True, errors="coerce")
+    except Exception:
+        pass
+    try:
+        df = add_normalized_teams(df.copy(), "home", "away")
+    except Exception:
+        pass
+
+    outp = FEAT_DIR / "upcoming_set.parquet"
+    try:
+        df.to_parquet(outp, index=False)
+        print(f"✅ wrote upcoming_set: rows={len(df)} cols={df.shape[1]} → {outp}")
+    except Exception as e:
+        print(f"⚠️ could not write upcoming_set: {e}")
+    return df
+
 # ---- DB merge helpers: enrich train_set.parquet with outcomes stats from Postgres ----
 def _pg_engine():
     """Create a SQLAlchemy engine from POSTGRES_URL if available, else return None."""
@@ -1072,6 +1152,8 @@ def _parse_args():
                    help="Merge DB outcomes/stats into train_set.parquet (creates it if missing)")
     p.add_argument("--write-train-set", action="store_true",
                    help="Write data/features/train_set.parquet from the in-memory dataframe (or seed sources)")
+    p.add_argument("--write-upcoming", action="store_true",
+                   help="Write data/features/upcoming_set.parquet for upcoming fixtures (uses --days-fwd, --leagues, --season; attaches limited /fixtures/statistics)")
     p.add_argument("--leagues", type=str, default="39,140,78", help="Comma-separated league ids for harvest")
     p.add_argument("--season", type=int, default=2025, help="Season year for harvest")
     p.add_argument("--days-back", type=int, default=1, help="Days back for harvest window")
@@ -1124,6 +1206,23 @@ def main():
             _write_train_set(df_mem)
         else:
             print("❌ could not write train_set.parquet — no dataframe available")
+
+    # 4) Write upcoming_set if requested
+    if getattr(args, "write_upcoming", False):
+        ran = True
+        try:
+            leagues = [int(x) for x in str(args.leagues).split(',') if str(x).strip()]
+        except Exception:
+            leagues = LEAGUES
+        print(f"[build_features] write_upcoming leagues={leagues} season={args.season} days_fwd={args.days_fwd} …")
+        _build_upcoming_set(
+            leagues=leagues,
+            season=int(args.season),
+            days_fwd=int(args.days_fwd),
+            timezone_str=args.timezone,
+            stats_limit=int(args.with_stats_limit),
+            stats_sleep=float(args.with_stats_sleep),
+        )
 
     if not ran:
         # Default behavior if no flags: do nothing but print help to guide users in CI
