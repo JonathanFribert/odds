@@ -1,7 +1,7 @@
 name: morning-run
 on:
   schedule:
-    - cron: "10 6 * * *"   # 08:10 Europe/Copenhagen (UTC i Actions)
+    - cron: "10 6 * * *"
   workflow_dispatch: {}
 jobs:
   morning:
@@ -39,7 +39,7 @@ jobs:
         run: |
           echo "Using POSTGRES_URL prefix: ${POSTGRES_URL%%@*}"
 
-      - name: Fetch API-Football odds (next 2 days incl. OU/AH)
+      - name: Fetch API-Football odds (next 2 days incl OU/AH)
         env:
           APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
         run: |
@@ -48,11 +48,11 @@ jobs:
             --days 2 \
             --include-ou25 --include-ah --write-parquet
 
-      - name: Build features — show CLI
+      - name: Build features show CLI
         run: |
           python scripts/build_features.py --help || true
 
-      - name: Build features (harvest → merge+write)
+      - name: Build features harvest and merge
         env:
           APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
         run: |
@@ -60,16 +60,16 @@ jobs:
           python scripts/build_features.py --harvest-postmatch --days-back 30 --days-fwd 0
           python scripts/build_features.py --merge-train-stats-from-db --write-train-set
 
-      - name: Sanity: check train_set.parquet
+      - name: Sanity check train_set.parquet
         run: |
           if [ -f "data/features/train_set.parquet" ]; then
-            echo "✅ Found: data/features/train_set.parquet"
+            echo "Found: data/features/train_set.parquet"
           else
-            echo "❌ Missing: data/features/train_set.parquet"
+            echo "Missing: data/features/train_set.parquet" >&2
             exit 1
           fi
 
-      - name: Diagnose missing train_set (if any)
+      - name: Diagnose missing train_set
         if: ${{ failure() }}
         run: |
           echo "Listing data/features:" && ls -alh data/features || true
@@ -80,7 +80,7 @@ jobs:
           POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
         run: python scripts/train_models.py
 
-      - name: Predict upcoming + log picks (1x2, OU2.5, AH-0.5)
+      - name: Predict upcoming and log picks
         env:
           POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
         run: |
