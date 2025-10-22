@@ -57,7 +57,7 @@ jobs:
           APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
         run: |
           set -e
-          python scripts/build_features.py --harvest-postmatch --days-back 30 --days-fwd 0
+          python scripts/build_features.py --harvest-postmatch --days-back 70 --days-fwd 0
           python scripts/build_features.py --merge-train-stats-from-db --write-train-set
 
       - name: Build upcoming_set.parquet (next 2 days)
