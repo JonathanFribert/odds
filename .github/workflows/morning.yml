@@ -106,3 +106,20 @@ jobs:
             --min-ev 0.00 --top-k 100 \
             --log-bets \
             --postgres-url "$POSTGRES_URL"
+
+      - name: Ensure picks CSV exists (even if no picks)
+        run: |
+          mkdir -p data/picks
+          if ls data/picks/*.csv 1>/dev/null 2>&1; then
+            echo "Found picks CSV(s)."
+          else
+            echo "Creating empty picks CSV for artifact upload…"
+            echo "market,created_at,fixture_id,league_id,season,home,away,selection,model_prob,best_odds,ev,kelly,stake_units,model_tag" > data/picks/picks_empty.csv
+          fi
+
+      - name: Upload picks artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: picks-csv
+          path: data/picks/*.csv
+          if-no-files-found: warn
