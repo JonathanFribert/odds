@@ -35,17 +35,9 @@ jobs:
           mkdir -p data/features data/odds_history data/picks data/ledger
           ls -alh data || true
 
-      - name: DB sanity
+      - name: DB sanity (echo only)
         run: |
-          python - <<'PY'
-          import os
-          from sqlalchemy import create_engine
-          url=os.environ["POSTGRES_URL"]
-          print("URL prefix:", url.split("@")[0])
-          e=create_engine(url, pool_pre_ping=True)
-          with e.connect() as c:
-              print("now():", c.exec_driver_sql("select now()\n").scalar())
-          PY
+          echo "Using POSTGRES_URL prefix: ${POSTGRES_URL%%@*}"
 
       - name: Fetch API-Football odds (next 2 days incl. OU/AH)
         env:
@@ -70,25 +62,17 @@ jobs:
 
       - name: Sanity: check train_set.parquet
         run: |
-          python - <<'PY'
-          import os
-          p = "data/features/train_set.parquet"
-          print("✅ Found:", os.path.exists(p), "| Path:", p)
-          PY
+          if [ -f "data/features/train_set.parquet" ]; then
+            echo "✅ Found: data/features/train_set.parquet"
+          else
+            echo "❌ Missing: data/features/train_set.parquet"
+            exit 1
+          fi
 
       - name: Diagnose missing train_set (if any)
-        if: ${{ always() }}
+        if: ${{ failure() }}
         run: |
-          python - <<'PY'
-          import os, glob
-          p = 'data/features/train_set.parquet'
-          if not os.path.exists(p):
-              print('❌ train_set.parquet still missing. Listing data/features:')
-              for f in glob.glob('data/features/*'):
-                  print(' -', f)
-          else:
-              print('✅ train_set.parquet present')
-          PY
+          echo "Listing data/features:" && ls -alh data/features || true
 
       - name: Train models (1x2 / ou25 / ahm05)
         env:
