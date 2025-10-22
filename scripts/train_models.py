@@ -258,6 +258,13 @@ def _train_multiclass_1x2(df: pd.DataFrame, model_path: Path, metrics_path: Path
     X = df.loc[mask, X_cols].copy()
     y = y.loc[mask].astype(int)
 
+    # class diagnostics
+    cls_counts = y.value_counts().to_dict()
+    print(f"[1x2] class distribution (H/D/A as 0/1/2): {cls_counts}")
+    if y.nunique() < 2:
+        print("[1x2] ❌ Not enough distinct classes to train → skip")
+        return False
+
     # drop zero-variance columns (constant after clipping/imputation risk)
     nunique = X.nunique(dropna=False)
     zero_var = nunique[nunique <= 1].index.tolist()
@@ -266,14 +273,23 @@ def _train_multiclass_1x2(df: pd.DataFrame, model_path: Path, metrics_path: Path
         X_cols = [c for c in X_cols if c not in zero_var]
         print(f"[1x2] dropping {len(zero_var)} zero-variance cols (e.g., {zero_var[:5]})")
 
-    if len(X) < 100:
-        print(f"[1x2] ❌ Not enough rows to train (n={len(X)}) → skip")
+    if len(X) < 50:
+        print(f"[1x2] ❌ Not enough rows to train (n={len(X)} < 50) → skip")
         return False
 
     # clip extremes to avoid overflow in solver
     X = _clip_extremes(X)
 
-    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)
+    # Use stratify only if each class has at least 2 samples
+    _ok_strat = True
+    for k, cnt in cls_counts.items():
+        if cnt < 2:
+            _ok_strat = False
+            break
+    strat_arg = y if _ok_strat else None
+    if not _ok_strat:
+        print("[1x2] note: falling back to non-stratified split due to tiny class counts")
+    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.25, random_state=42, stratify=strat_arg)
 
     pipe = Pipeline([
         ("impute", SimpleImputer(strategy="median")),
@@ -322,6 +338,13 @@ def _train_binary(df: pd.DataFrame, label_col: str, tag: str, model_path: Path, 
     X = df.loc[mask, X_cols].copy()
     y = y.loc[mask].astype(int)
 
+    # ensure both classes are present and not extremely tiny
+    vc = y.value_counts().to_dict()
+    print(f"[{tag}] class distribution (0/1): {vc}")
+    if y.nunique() < 2 or min(vc.get(0,0), vc.get(1,0)) < 5:
+        print(f"[{tag}] ❌ Insufficient class balance to train → skip")
+        return False
+
     nunique = X.nunique(dropna=False)
     zero_var = nunique[nunique <= 1].index.tolist()
     if zero_var:
@@ -329,13 +352,17 @@ def _train_binary(df: pd.DataFrame, label_col: str, tag: str, model_path: Path, 
         X_cols = [c for c in X_cols if c not in zero_var]
         print(f"[{tag}] dropping {len(zero_var)} zero-variance cols (e.g., {zero_var[:5]})")
 
-    if len(X) < 100:
-        print(f"[{tag}] ❌ Not enough rows to train (n={len(X)}) → skip")
+    if len(X) < 50:
+        print(f"[{tag}] ❌ Not enough rows to train (n={len(X)} < 50) → skip")
         return False
 
     X = _clip_extremes(X)
 
-    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.25, random_state=42, stratify=y)
+    # safe stratification
+    strat_arg = y if min(vc.get(0,0), vc.get(1,0)) >= 2 else None
+    if strat_arg is None:
+        print(f"[{tag}] note: falling back to non-stratified split due to tiny class counts")
+    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.25, random_state=42, stratify=strat_arg)
 
     pipe = Pipeline([
         ("impute", SimpleImputer(strategy="median")),
