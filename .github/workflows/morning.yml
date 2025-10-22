@@ -30,6 +30,11 @@ jobs:
           python -m pip install -U pip
           pip install -r requirements.txt
 
+      - name: Prepare workspace dirs
+        run: |
+          mkdir -p data/features data/odds_history data/picks data/ledger
+          ls -alh data || true
+
       - name: DB sanity
         run: |
           python - <<'PY'
@@ -60,7 +65,7 @@ jobs:
           APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
         run: |
           set -e
-          python scripts/build_features.py --harvest-postmatch
+          python scripts/build_features.py --harvest-postmatch --days-back 30 --days-fwd 0
           python scripts/build_features.py --merge-train-stats-from-db --write-train-set
 
       - name: Sanity: check train_set.parquet
@@ -69,6 +74,20 @@ jobs:
           import os
           p = "data/features/train_set.parquet"
           print("✅ Found:", os.path.exists(p), "| Path:", p)
+          PY
+
+      - name: Diagnose missing train_set (if any)
+        if: ${{ always() }}
+        run: |
+          python - <<'PY'
+          import os, glob
+          p = 'data/features/train_set.parquet'
+          if not os.path.exists(p):
+              print('❌ train_set.parquet still missing. Listing data/features:')
+              for f in glob.glob('data/features/*'):
+                  print(' -', f)
+          else:
+              print('✅ train_set.parquet present')
           PY
 
       - name: Train models (1x2 / ou25 / ahm05)
