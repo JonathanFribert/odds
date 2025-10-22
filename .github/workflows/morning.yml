@@ -74,6 +74,20 @@ jobs:
         run: |
           echo "Listing data/features:" && ls -alh data/features || true
 
+      - name: Build upcoming_set.parquet (next 2 days)
+        env:
+          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+        run: |
+          set -e
+          # Try to build upcoming features for the next 2 days
+          python scripts/build_features.py --write-upcoming --days-fwd 2 || true
+          if [ -f "data/features/upcoming_set.parquet" ]; then
+            echo "Found: data/features/upcoming_set.parquet"
+          else
+            echo "Missing: data/features/upcoming_set.parquet" >&2
+            exit 1
+          fi
+
       - name: Train models (1x2 / ou25 / ahm05)
         env:
           APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
