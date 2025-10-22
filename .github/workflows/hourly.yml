@@ -1,32 +1,129 @@
-name: hourly-picks
+name: hourly-run
 on:
   schedule:
-    - cron: "0 6-20 * * *"   # hver time 08–22 CPH ≈ 06–20 UTC
+    - cron: "0 * * * *"
   workflow_dispatch: {}
 jobs:
   hourly:
     runs-on: ubuntu-latest
     env:
       TZ: Europe/Copenhagen
-      ODDSAPI_KEY: ${{ secrets.ODDSAPI_KEY }}
       APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
       POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+      LEAGUES: "39,140,78"
+      HOURS_AHEAD: "18"
     concurrency:
       group: hourly
-      cancel-in-progress: true
+      cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with: { python-version: "3.11" }
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
       - name: Install deps
         run: |
           python -m pip install -U pip
           pip install -r requirements.txt
-          pip install "psycopg[binary]" "sqlalchemy>=2.0"
-      - name: Picks only (save credits)
+
+      - name: Decide if fixtures are near (gate)
+        id: gate
+        env:
+          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+          LEAGUES: ${{ env.LEAGUES }}
+          HOURS_AHEAD: ${{ env.HOURS_AHEAD }}
+        run: |
+          python - <<'PY'
+          import os, requests, datetime as dt
+          key=os.environ['APIFOOTBALL_KEY']
+          leagues=[s.strip() for s in os.environ.get('LEAGUES','39,140,78').split(',') if s.strip()]
+          hours=int(os.environ.get('HOURS_AHEAD','18'))
+          url='https://v3.football.api-sports.io/fixtures'
+          headers={'x-apisports-key': key}
+          now=dt.datetime.utcnow()
+          have=False
+          for d in (0,1):
+              day=(now+dt.timedelta(days=d)).date().isoformat()
+              for lg in leagues:
+                  r=requests.get(url, headers=headers, params={'date': day, 'league': lg, 'timezone': 'UTC'}, timeout=30)
+                  data=r.json().get('response', []) if r.ok else []
+                  for fx in data:
+                      t=fx.get('fixture',{}).get('date')
+                      st=fx.get('fixture',{}).get('status',{}).get('short')
+                      if not t: continue
+                      try:
+                          ko=dt.datetime.fromisoformat(t.replace('Z','+00:00'))
+                      except Exception:
+                          continue
+                      dtsec=(ko-now).total_seconds()
+                      if 0 <= dtsec <= hours*3600 and st in ('NS','TBD'):
+                          have=True
+                          break
+                  if have: break
+              if have: break
+          with open(os.environ['GITHUB_OUTPUT'],'a') as fh:
+              fh.write(f"have_matches={'true' if have else 'false'}\n")
+          print("have_matches:", have)
+          PY
+
+      - name: DB sanity
+        if: steps.gate.outputs.have_matches == 'true'
+        run: |
+          python - <<'PY'
+          import os
+          from sqlalchemy import create_engine
+          url=os.environ["POSTGRES_URL"]
+          print("URL prefix:", url.split("@")[0])
+          e=create_engine(url, pool_pre_ping=True)
+          with e.connect() as c:
+              print("now():", c.exec_driver_sql("select now()\n").scalar())
+          PY
+
+      - name: Fetch API-Football odds (next 2 days incl. OU/AH)
+        if: steps.gate.outputs.have_matches == 'true'
+        env:
+          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+        run: |
+          python scripts/fetch_apifootball_odds.py \
+            --days 2 \
+            --include-ou25 --include-ah --write-parquet
+
+      - name: Build features — show CLI
+        if: steps.gate.outputs.have_matches == 'true'
+        run: |
+          python scripts/build_features.py --help || true
+
+      - name: Build features (harvest → merge+write)
+        if: steps.gate.outputs.have_matches == 'true'
+        env:
+          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+        run: |
+          set -e
+          python scripts/build_features.py --harvest-postmatch
+          python scripts/build_features.py --merge-train-stats-from-db --write-train-set
+
+      - name: Train models (1x2 / ou25 / ahm05)
+        if: steps.gate.outputs.have_matches == 'true'
+        env:
+          APIFOOTBALL_KEY: ${{ secrets.APIFOOTBALL_KEY }}
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
+        run: python scripts/train_models.py
+
+      - name: Predict upcoming + log picks (1x2, OU2.5, AH-0.5)
+        if: steps.gate.outputs.have_matches == 'true'
+        env:
+          POSTGRES_URL: ${{ secrets.POSTGRES_URL }}
         run: |
           python scripts/predict_upcoming.py \
-            --days 14 --require-real-odds \
-            --min-ev 0.02 --min-kelly 0.01 --top-k 20 \
-            --export-md --log-bets \
+            --days 2 \
+            --offline-only \
+            --no-oddsapi \
+            --markets 1x2,ou25,ahm05 \
+            --min-ev 0.00 --top-k 100 \
+            --log-bets \
             --postgres-url "$POSTGRES_URL"
