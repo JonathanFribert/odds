@@ -796,21 +796,20 @@ def _ensure_train_set(train_path: Path, days_back: int = 365) -> Optional[pd.Dat
     eng = _pg_engine()
     if eng is not None:
         try:
-            from sqlalchemy import text
+            sql = """
+                SELECT fixture_id, league_id, season, kick_off as date,
+                       home as home, away as away,
+                       goals_h, goals_a, result,
+                       home_shots_on_goal, away_shots_on_goal,
+                       home_ball_possession, away_ball_possession,
+                       home_expected_goals, away_expected_goals
+                FROM outcomes
+                WHERE updated_at > (now() - %(days)s::interval)
+            """
             with eng.connect() as c:
-                q = text(
-                    """
-                    SELECT fixture_id, league_id, season, kick_off as date,
-                           home as home, away as away,
-                           goals_h, goals_a, result,
-                           home_shots_on_goal, away_shots_on_goal,
-                           home_ball_possession, away_ball_possession,
-                           home_expected_goals, away_expected_goals
-                    FROM outcomes
-                    WHERE updated_at > now() - interval :days
-                    """
-                )
-                df = pd.DataFrame(c.execute(q, {"days": f"{int(days_back)} days"}).mappings().all())
+                outc = pd.read_sql(sql, c, params={"days": f"{int(days_back)} days"})
+                print(f"[merge-db] outcomes fetched from PG: {len(outc)} rows")
+            df = outc
             if not df.empty:
                 # normalize datetime
                 if "date" in df.columns:
