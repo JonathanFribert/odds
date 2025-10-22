@@ -669,6 +669,25 @@ def _repair_train_set(train_path: Path):
         res.loc[need] = [ _rf(h,a) for h,a in zip(ghv[need], gav[need]) ]
     df["result"] = res
 
+    # --- derive training labels ---
+    # Goals sources (prefer canonical, then variants from DB/train)
+    gh_src = df.get("goals_h", df.get("goals_home", df.get("goals_h_db")))
+    ga_src = df.get("goals_a", df.get("goals_away", df.get("goals_a_db")))
+    ghv = pd.to_numeric(gh_src, errors="coerce") if gh_src is not None else pd.Series(index=df.index, dtype="float64")
+    gav = pd.to_numeric(ga_src, errors="coerce") if ga_src is not None else pd.Series(index=df.index, dtype="float64")
+
+    # OU 2.5: 1 if total goals > 2.5 else 0
+    tot = ghv.add(gav, fill_value=np.nan)
+    ou = np.where(tot > 2.5, 1.0, 0.0)
+    ou[~np.isfinite(tot.values)] = np.nan  # keep NaN where goals missing
+    df["label_ou25"] = ou
+
+    # AH home -0.5: 1 if home wins by any margin else 0
+    diff = ghv - gav
+    ah = np.where(diff > 0, 1.0, 0.0)
+    ah[~np.isfinite(diff.values)] = np.nan
+    df["label_ah_home_m0_5"] = ah
+
     # Fold goalkeeper_saves -> saves
     for side in ("home","away"):
         gk = f"{side}_goalkeeper_saves"
@@ -691,7 +710,9 @@ def _repair_train_set(train_path: Path):
         print(f"ℹ️ could not write repaired train_set: {e}")
     else:
         nn = int(df["result"].notna().sum()) if "result" in df.columns else 0
-        print(f"✅ repaired train_set: result non-null rows={nn}; cols={df.shape[1]}; rows={df.shape[0]}")
+        ou_ok = int(pd.notna(df.get("label_ou25")).sum()) if "label_ou25" in df.columns else 0
+        ah_ok = int(pd.notna(df.get("label_ah_home_m0_5")).sum()) if "label_ah_home_m0_5" in df.columns else 0
+        print(f"✅ repaired train_set: result non-null rows={nn}; ou25 labels={ou_ok}; ah(-0.5) labels={ah_ok}; cols={df.shape[1]}; rows={df.shape[0]}")
 
 def _merge_train_stats_from_db(train_path: Path, batch: int = 2000) -> int:
     """
